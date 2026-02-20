@@ -14,7 +14,7 @@
   --color-white:           #ffffff;
 
   /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  --font-sans: 'Cormorant Garamond', Georgia, serif;
   --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   --font-size-base: 16px;   /* mobile default, bumped to 17px at 768px+ */
   --line-height: 1.6;
@@ -46,7 +46,7 @@
   /* Layout */
   --container-width: 980px;
   --reading-width:   720px;
-  --header-height:   52px;
+  --header-height:   64px;
 
   /* Radii */
   --radius-sm:   4px;
@@ -97,7 +97,7 @@ img, video {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--line-height-heading);
   color: var(--color-text);
   letter-spacing: -0.02em;
@@ -356,7 +356,7 @@ th {
 
 .site-nav__link[aria-current="page"] {
   color: var(--color-black);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* ============================================================
@@ -403,7 +403,7 @@ th {
 
 .hero__title {
   font-size: var(--text-2xl);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.03em;
   color: var(--color-text);
@@ -460,7 +460,7 @@ th {
 
 .recent-posts__heading {
   font-size: var(--text-xl);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   margin-bottom: var(--space-8);
   text-align: center;
@@ -532,7 +532,7 @@ th {
 
 .page-header__title {
   font-size: var(--text-2xl);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.05;
   margin-bottom: var(--space-3);
@@ -576,7 +576,7 @@ th {
 
 .list-header__title {
   font-size: var(--text-2xl);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.05;
   margin-bottom: var(--space-3);
@@ -898,7 +898,8 @@ th {
   }
 
   .site-nav__link {
-    display: inline;
+    display: inline-flex;
+    align-items: center;
     padding: 0;
     font-size: var(--text-sm);
     font-weight: 400;
