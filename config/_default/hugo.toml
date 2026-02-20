@@ -1,4 +1,4 @@
-theme = "blowfish"
+theme = "lpgn"
 baseURL = "https://leplusgrandnombre.fr"
 defaultContentLanguage = "fr"
 
@@ -21,4 +21,5 @@ buildFuture = false
   priority = 0.5
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS"]
+

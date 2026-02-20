@@ -1,0 +1,13 @@
+{{- $href := .Get "href" -}}
+{{- $target := .Get "target" | default "" -}}
+{{- $rel := "" -}}
+{{- if eq $target "_blank" -}}{{- $rel = "noopener noreferrer" -}}{{- end -}}
+
+<div class="btn-wrapper">
+  <a
+    href="{{ $href }}"
+    class="btn"
+    {{- with $target }} target="{{ . }}"{{ end -}}
+    {{- with $rel }} rel="{{ . }}"{{ end -}}
+  >{{- .Inner | markdownify | plainify | strings.TrimSpace -}}</a>
+</div>

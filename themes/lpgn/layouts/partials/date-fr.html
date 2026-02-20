@@ -1,0 +1,7 @@
+{{/*
+  Usage: {{ partial "date-fr.html" .Date }}
+  Outputs a French-formatted date, e.g. "20 février 2026"
+  Go's time.Format does not translate month names, so we use a slice lookup.
+*/}}
+{{- $months := slice "" "janvier" "février" "mars" "avril" "mai" "juin" "juillet" "août" "septembre" "octobre" "novembre" "décembre" -}}
+{{- . | time.Format "2" }} {{ index $months (int (. | time.Format "1")) }} {{ . | time.Format "2006" -}}

@@ -1,0 +1,8 @@
+name = "LPGN"
+license = "MIT"
+description = "Custom theme for leplusgrandnombre.fr — Apple-like, flat, sober."
+homepage = "https://leplusgrandnombre.fr"
+min_version = "0.120.0"
+
+[author]
+  name = "Le Plus Grand Nombre"

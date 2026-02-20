@@ -1,0 +1,52 @@
+{{ define "main" }}
+
+{{/* ===== HERO ===== */}}
+<section class="hero">
+  <div class="container">
+
+    <h1 class="hero__title">{{ .Title }}</h1>
+
+    {{- with .Description -}}
+    <p class="hero__subtitle">{{ . }}</p>
+    {{- end -}}
+
+    {{- with .Content -}}
+    <div class="hero__body">
+      {{ . }}
+    </div>
+    {{- end -}}
+
+  </div>
+</section>
+
+{{/* ===== RECENT POSTS ===== */}}
+{{- $mainSections := .Site.Params.mainSections | default (slice "blog") -}}
+{{- $recentPosts := where .Site.RegularPages "Section" "in" $mainSections | first 3 -}}
+
+{{- if $recentPosts -}}
+<section class="recent-posts">
+  <div class="container">
+
+    <h2 class="recent-posts__heading">{{ i18n "recentArticles" | default "Articles récents" }}</h2>
+
+    <div class="posts-grid">
+      {{- range $recentPosts -}}
+      <a href="{{ .RelPermalink }}" class="post-card">
+        <div class="post-card__date">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">
+            {{- partial "date-fr.html" .Date -}}
+          </time>
+        </div>
+        <h3 class="post-card__title">{{ .Title }}</h3>
+        {{- with .Summary -}}
+        <p class="post-card__excerpt">{{ . | plainify }}</p>
+        {{- end -}}
+      </a>
+      {{- end -}}
+    </div>
+
+  </div>
+</section>
+{{- end -}}
+
+{{ end }}

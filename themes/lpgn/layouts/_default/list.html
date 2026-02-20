@@ -1,0 +1,33 @@
+{{ define "main" }}
+<div class="container">
+
+  <header class="list-header reading-width">
+    <h1 class="list-header__title">{{ .Title }}</h1>
+    {{- with .Description -}}
+    <p class="list-header__description">{{ . }}</p>
+    {{- end -}}
+  </header>
+
+  <div class="posts-list reading-width">
+    {{- range .Pages -}}
+    <a href="{{ .RelPermalink }}" class="post-card post-card--list">
+
+      <div>
+        <h2 class="post-card__title">{{ .Title }}</h2>
+        {{- with .Summary -}}
+        <p class="post-card__excerpt">{{ . | plainify }}</p>
+        {{- end -}}
+      </div>
+
+      <div class="post-card__date">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">
+          {{- partial "date-fr.html" .Date -}}
+        </time>
+      </div>
+
+    </a>
+    {{- end -}}
+  </div>
+
+</div>
+{{ end }}
