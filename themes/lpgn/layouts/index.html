@@ -1,6 +1,5 @@
 {{ define "main" }}
 
-{{/* ===== HERO ===== */}}
 <section class="hero">
   <div class="container">
 
@@ -9,41 +8,20 @@
     <p class="hero__phrase">{{ $phrase | safeHTML }}</p>
     {{- end -}}
 
-    {{- with .Content -}}
-    <div class="hero__body">
-      {{ . }}
-    </div>
-    {{- end -}}
-
   </div>
 </section>
 
-{{/* ===== RECENT POSTS ===== */}}
-{{- $mainSections := .Site.Params.mainSections | default (slice "blog") -}}
-{{- $recentPosts := where .Site.RegularPages "Section" "in" $mainSections | first 3 -}}
-
-{{- if $recentPosts -}}
-<section class="recent-posts">
+{{- with .Site.Data.apps -}}
+<section class="apps">
   <div class="container">
-
-    <h2 class="recent-posts__heading">Articles récents</h2>
-
-    <div class="posts-grid">
-      {{- range $recentPosts -}}
-      <a href="{{ .RelPermalink }}" class="post-card">
-        <div class="post-card__date">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">
-            {{- partial "date-fr.html" .Date -}}
-          </time>
-        </div>
-        <h3 class="post-card__title">{{ .Title }}</h3>
-        {{- with .Summary -}}
-        <p class="post-card__excerpt">{{ . | plainify }}</p>
-        {{- end -}}
+    <div class="apps-grid">
+      {{- range . -}}
+      <a href="{{ .href }}" class="app-tile" target="_blank" rel="noopener noreferrer">
+        <span class="app-tile__name">{{ .name }}</span>
+        {{- with .tagline -}}<span class="app-tile__tagline">{{ . }}</span>{{- end -}}
       </a>
       {{- end -}}
     </div>
-
   </div>
 </section>
 {{- end -}}

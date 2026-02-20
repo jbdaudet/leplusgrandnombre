@@ -14,7 +14,7 @@
   --color-white:           #ffffff;
 
   /* Typography */
-  --font-sans: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Raleway', 'Segoe UI', sans-serif;
   --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   --font-size-base: 16px;   /* mobile default, bumped to 17px at 768px+ */
   --line-height: 1.6;
@@ -450,6 +450,52 @@ th {
 }
 
 /* ============================================================
+   HOMEPAGE — APPS
+   ============================================================ */
+
+.apps {
+  padding: var(--space-10) 0 var(--space-16);
+  border-top: 1px solid var(--color-border);
+}
+
+.apps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.app-tile:hover {
+  border-color: var(--color-text-tertiary);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  opacity: 1;
+}
+
+.app-tile__name {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.app-tile__tagline {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+/* ============================================================
    HOMEPAGE — RECENT POSTS
    ============================================================ */
 
@@ -791,6 +837,11 @@ th {
 
   .hero__phrase {
     font-size: var(--text-2xl);
+  }
+
+  .apps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
   }
 
   .hero__title {
