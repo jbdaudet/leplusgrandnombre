@@ -13,15 +13,24 @@
 
 {{- with .Site.Data.apps -}}
 <section class="apps">
-  <div class="container">
-    <div class="apps-grid">
-      {{- range . -}}
-      <a href="{{ .href }}" class="app-tile" target="_blank" rel="noopener noreferrer">
-        <span class="app-tile__name">{{ .name }}</span>
-        {{- with .tagline -}}<span class="app-tile__tagline">{{ . }}</span>{{- end -}}
-      </a>
+  <div class="apps-grid">
+    {{- range . -}}
+    <div class="app-tile">
+      {{- with .image -}}
+      <div class="app-tile__visual">
+        <img src="{{ . }}" alt="{{ $.name }}" class="app-tile__img">
+      </div>
       {{- end -}}
+      <div class="app-tile__content">
+        <p class="app-tile__name">{{ .name }}</p>
+        {{- with .tagline -}}<p class="app-tile__tagline">{{ . }}</p>{{- end -}}
+        <div class="app-tile__actions">
+          <a href="{{ .href_learn }}" class="app-btn app-btn--outline">En savoir plus</a>
+          <a href="{{ .href_try }}" class="app-btn app-btn--solid" target="_blank" rel="noopener noreferrer">Essayer</a>
+        </div>
+      </div>
     </div>
+    {{- end -}}
   </div>
 </section>
 {{- end -}}

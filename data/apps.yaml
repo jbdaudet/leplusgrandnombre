@@ -1,3 +1,5 @@
 - name: artisans.ai
   tagline: ""
-  href: "https://artisans.ai"
+  image: ""
+  href_learn: "/applications#artisans-ai"
+  href_try: "https://artisans.leplusgrandnombre.fr"

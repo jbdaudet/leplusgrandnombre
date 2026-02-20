@@ -6,6 +6,7 @@
     <a href="/blog/" class="back-link">&#8592; Blog</a>
     {{- end -}}
 
+    {{- if not .Params.hideTitle -}}
     <header class="page-header">
       <h1 class="page-header__title">{{ .Title }}</h1>
 
@@ -23,6 +24,7 @@
       </p>
       {{- end -}}
     </header>
+    {{- end -}}
 
     <div class="page-content">
       {{ .Content }}
