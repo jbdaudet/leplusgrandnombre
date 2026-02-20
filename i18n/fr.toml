@@ -1,0 +1,14 @@
+[readMore]
+other = "Lire la suite"
+
+[newerPosts]
+other = "Articles plus récents"
+
+[olderPosts]
+other = "Articles plus anciens"
+
+[pageNotFound]
+other = "Page non trouvée"
+
+[recentArticles]
+other = "Articles récents"

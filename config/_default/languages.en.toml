@@ -1,0 +1,20 @@
+languageCode = "en"
+languageName = "English"
+weight = 2
+title = "Le Plus Grand Nombre"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+  rtl = false
+  dateFormat = "2 January 2006"
+  description = "Digital solutions for craftsmen and professionals. Project management, quotes, inventory and scheduling."
+
+[params.author]
+  name = "Le Plus Grand Nombre"
+  headline = "Digital solutions for craftsmen"
+  bio = "We build digital tools tailored to the needs of craftsmen and building professionals."
+  links = [
+    { github = "https://github.com/leplusgrandnombre" },
+    { email = "mailto:contact@leplusgrandnombre.fr" },
+  ]
