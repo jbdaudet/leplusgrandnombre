@@ -29,4 +29,4 @@ Nos applications sont :
 
 ## Contact
 
-Une question ? Un besoin spécifique ? [Contactez-nous](/fr/contact/).
+Une question ? Un besoin spécifique ? [Contactez-nous](/contact/).

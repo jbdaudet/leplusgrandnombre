@@ -31,4 +31,4 @@ Nous travaillons déjà sur de nouvelles fonctionnalités et de nouvelles applic
 
 ---
 
-*Vous avez des questions ou des suggestions ? [Contactez-nous](/fr/contact/).*
+*Vous avez des questions ou des suggestions ? [Contactez-nous](/contact/).*

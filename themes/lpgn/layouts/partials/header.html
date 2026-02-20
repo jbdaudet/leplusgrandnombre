@@ -1,11 +1,24 @@
 <header class="site-header" role="banner">
   <div class="container site-header__inner">
 
-    <a href="{{ "/" | relLangURL }}" class="site-header__brand">
-      {{ .Site.Title }}
+    <a href="/" class="site-header__brand" aria-label="{{ .Site.Title }}">
+      <img src="/logo_lpgn.png" alt="{{ .Site.Title }}" class="site-header__logo">
     </a>
 
-    <nav role="navigation" aria-label="Menu principal">
+    {{/* Burger — visible on mobile only (hidden via CSS at 768px+) */}}
+    <button
+      class="burger"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="main-nav"
+      type="button"
+    >
+      <span class="burger__line"></span>
+      <span class="burger__line"></span>
+      <span class="burger__line"></span>
+    </button>
+
+    <nav id="main-nav" class="site-nav__wrapper" role="navigation" aria-label="Menu principal">
       <ul class="site-nav">
         {{- range .Site.Menus.main -}}
         <li>

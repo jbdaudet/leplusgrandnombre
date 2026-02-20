@@ -4,10 +4,9 @@
 <section class="hero">
   <div class="container">
 
-    <h1 class="hero__title">{{ .Title }}</h1>
-
-    {{- with .Description -}}
-    <p class="hero__subtitle">{{ . }}</p>
+    {{- with .Params.phrase -}}
+    {{- $phrase := replace . "le plus grand nombre" "<span class=\"hero__brand\">le plus grand nombre</span>" -}}
+    <p class="hero__phrase">{{ $phrase | safeHTML }}</p>
     {{- end -}}
 
     {{- with .Content -}}
@@ -27,7 +26,7 @@
 <section class="recent-posts">
   <div class="container">
 
-    <h2 class="recent-posts__heading">{{ i18n "recentArticles" | default "Articles récents" }}</h2>
+    <h2 class="recent-posts__heading">Articles récents</h2>
 
     <div class="posts-grid">
       {{- range $recentPosts -}}

@@ -2,16 +2,14 @@
 <form action="https://formspree.io/f/xkovvejd" method="POST" class="contact-form">
 
   <div class="form-group">
-    <label for="contact-name" class="form-label">
-      {{ if eq .Page.Lang "fr" }}Nom{{ else }}Name{{ end }} *
-    </label>
+    <label for="contact-name" class="form-label">Nom *</label>
     <input
       type="text"
       id="contact-name"
       name="name"
       required
       class="form-input"
-      placeholder="{{ if eq .Page.Lang "fr" }}Votre nom{{ else }}Your name{{ end }}"
+      placeholder="Votre nom"
     />
   </div>
 
@@ -23,20 +21,18 @@
       name="email"
       required
       class="form-input"
-      placeholder="{{ if eq .Page.Lang "fr" }}votre@email.fr{{ else }}your@email.com{{ end }}"
+      placeholder="votre@email.fr"
     />
   </div>
 
   <div class="form-group">
-    <label for="contact-subject" class="form-label">
-      {{ if eq .Page.Lang "fr" }}Sujet{{ else }}Subject{{ end }}
-    </label>
+    <label for="contact-subject" class="form-label">Sujet</label>
     <input
       type="text"
       id="contact-subject"
       name="_subject"
       class="form-input"
-      placeholder="{{ if eq .Page.Lang "fr" }}Sujet de votre message{{ else }}Subject of your message{{ end }}"
+      placeholder="Sujet de votre message"
     />
   </div>
 
@@ -48,7 +44,7 @@
       required
       rows="6"
       class="form-textarea"
-      placeholder="{{ if eq .Page.Lang "fr" }}Votre message...{{ else }}Your message...{{ end }}"
+      placeholder="Votre message..."
     ></textarea>
   </div>
 
@@ -56,9 +52,7 @@
   <input type="text" name="_gotcha" style="display:none" aria-hidden="true" />
 
   <div>
-    <button type="submit" class="form-submit">
-      {{ if eq .Page.Lang "fr" }}Envoyer{{ else }}Send{{ end }}
-    </button>
+    <button type="submit" class="form-submit">Envoyer</button>
   </div>
 
 </form>
