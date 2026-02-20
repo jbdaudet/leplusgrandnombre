@@ -10,7 +10,7 @@
   {{- end -}}
 </title>
 
-{{- $desc := coalesce .Description .Site.Params.description -}}
+{{- $desc := .Description | default .Site.Params.description -}}
 {{ with $desc }}<meta name="description" content="{{ . }}">{{ end }}
 <meta name="author" content="{{ .Site.Title }}">
 
