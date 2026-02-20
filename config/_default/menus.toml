@@ -1,15 +1,15 @@
 [[main]]
-  name = "À propos"
+  name = "Nos convictions"
   pageRef = "about"
   weight = 10
 
 [[main]]
-  name = "Applications"
+  name = "Quelques idées"
   pageRef = "applications"
   weight = 20
 
 [[main]]
-  name = "Blog"
+  name = "Points de vue"
   pageRef = "blog"
   weight = 30
 
