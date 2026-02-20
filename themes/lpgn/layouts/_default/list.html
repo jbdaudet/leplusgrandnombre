@@ -1,13 +1,6 @@
 {{ define "main" }}
 <div class="container">
 
-  <header class="list-header reading-width">
-    <h1 class="list-header__title">{{ .Title }}</h1>
-    {{- with .Description -}}
-    <p class="list-header__description">{{ . }}</p>
-    {{- end -}}
-  </header>
-
   <div class="posts-list reading-width">
     {{- range .Pages -}}
     <a href="{{ .RelPermalink }}" class="post-card post-card--list">

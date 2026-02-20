@@ -3,27 +3,7 @@
   <div class="reading-width">
 
     {{- if eq .Section "blog" -}}
-    <a href="/blog/" class="back-link">&#8592; Blog</a>
-    {{- end -}}
-
-    {{- if not .Params.hideTitle -}}
-    <header class="page-header">
-      <h1 class="page-header__title">{{ .Title }}</h1>
-
-      {{- if eq .Section "blog" -}}
-      <p class="page-header__meta">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">
-          {{- partial "date-fr.html" .Date -}}
-        </time>
-        {{- with .Params.tags -}}
-          &ensp;&middot;&ensp;
-          {{- range $i, $tag := . -}}
-            {{- if $i }}, {{ end -}}{{ $tag }}
-          {{- end -}}
-        {{- end -}}
-      </p>
-      {{- end -}}
-    </header>
+    <a href="/blog/" class="back-link">&#8592; Retour</a>
     {{- end -}}
 
     <div class="page-content">
