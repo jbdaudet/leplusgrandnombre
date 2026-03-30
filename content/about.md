@@ -32,7 +32,7 @@ Cinq problèmes différents, cinq secteurs différents, cinq approches différen
 
 On ne croit pas au produit miracle qui marche pour tout le monde. On croit à la solution construite pour un contexte précis — et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
-Nos [démonstrateurs](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
+Nos [applications](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
 
 ## Pourquoi "Le Plus Grand Nombre" ?
 
