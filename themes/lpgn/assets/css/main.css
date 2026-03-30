@@ -528,12 +528,17 @@ th {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
+  transition: background var(--transition-base);
+}
+
+.step:not(.step--soon):hover .step__marker {
+  background: var(--color-accent);
 }
 
 .step--soon .step__marker {
@@ -557,13 +562,13 @@ th {
   padding: var(--space-5) var(--space-6);
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-accent);
+  border-left: 3px solid var(--color-border);
   border-radius: var(--radius-lg);
-  transition: border-color var(--transition-base);
+  transition: border-left-color var(--transition-base);
 }
 
 .step:not(.step--soon) .step__card:hover {
-  border-color: var(--color-accent);
+  border-left-color: var(--color-accent);
 }
 
 .step--soon .step__card {
