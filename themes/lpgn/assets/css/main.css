@@ -13,6 +13,9 @@
   --color-black:           #000000;
   --color-white:           #ffffff;
   --color-accent:          #FF6B35;
+  --color-accent-light:    #FFF0E9;
+  --color-dark:            #1a1a2e;
+  --color-dark-surface:    #22223a;
 
   /* Typography */
   --font-sans: 'Raleway', 'Segoe UI', sans-serif;
@@ -136,7 +139,7 @@ li {
 }
 
 blockquote {
-  border-left: 3px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
   padding-left: var(--space-4);
   color: var(--color-text-secondary);
   font-style: italic;
@@ -233,7 +236,7 @@ th {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background: rgba(245, 245, 247, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--color-border);
@@ -318,7 +321,7 @@ th {
   top: var(--header-height);
   left: 0;
   right: 0;
-  background: rgba(245, 245, 247, 0.97);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--color-border);
@@ -372,8 +375,8 @@ th {
    ============================================================ */
 
 .site-footer {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+  background: var(--color-dark);
+  border-top: 3px solid var(--color-accent);
   padding: var(--space-8) 0;
   margin-top: var(--space-16);
 }
@@ -386,18 +389,18 @@ th {
 
 .site-footer__copy {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .site-footer__email {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 .site-footer__email:hover {
-  color: var(--color-text);
+  color: var(--color-white);
   opacity: 1;
 }
 
@@ -406,12 +409,25 @@ th {
    ============================================================ */
 
 .hero {
-  min-height: 50vh;
+  min-height: 55vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: var(--color-surface);
+  background: var(--color-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .hero__title {
@@ -419,27 +435,30 @@ th {
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.03em;
-  color: var(--color-text);
+  color: var(--color-white);
   margin-bottom: var(--space-4);
 }
 
 .hero__phrase {
-  font-size: var(--text-xl);
-  font-weight: 400;
-  color: var(--color-text-secondary);
-  line-height: 1.45;
+  font-size: var(--text-2xl);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
   letter-spacing: -0.01em;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero__brand {
-  color: #3a3a3c;
+  color: var(--color-accent);
 }
 
 .hero__subtitle {
-  font-size: var(--text-base);
-  color: var(--color-text-secondary);
-  font-weight: 400;
+  font-size: var(--text-lg);
+  color: var(--color-accent);
+  font-weight: 500;
   margin-bottom: var(--space-8);
   line-height: 1.5;
 }
@@ -536,19 +555,20 @@ th {
 .step__card {
   flex: 1;
   padding: var(--space-5) var(--space-6);
-  background: var(--color-surface);
+  background: var(--color-white);
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
   border-radius: var(--radius-lg);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  transition: border-color var(--transition-base);
 }
 
 .step:not(.step--soon) .step__card:hover {
-  border-color: var(--color-text-tertiary);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-accent);
 }
 
 .step--soon .step__card {
-  opacity: 0.55;
+  opacity: 0.45;
+  border-left-color: var(--color-border);
 }
 
 .step__title {
@@ -639,18 +659,17 @@ th {
    ============================================================ */
 
 .post-card {
-  background: var(--color-surface);
+  background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   text-decoration: none;
   display: block;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  transition: border-color var(--transition-base);
 }
 
 .post-card:hover {
-  border-color: var(--color-text-tertiary);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-accent);
   opacity: 1;
 }
 
@@ -687,7 +706,7 @@ th {
 
 .page-header {
   padding: var(--space-10) 0 var(--space-8);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 3px solid var(--color-accent);
   margin-bottom: var(--space-8);
 }
 
@@ -915,7 +934,7 @@ th {
 
 .form-input:focus,
 .form-textarea:focus {
-  border-color: var(--color-text-secondary);
+  border-color: var(--color-accent);
 }
 
 .form-input::placeholder,
