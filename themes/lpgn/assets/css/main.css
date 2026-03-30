@@ -616,8 +616,13 @@ th {
 }
 
 .step__btn--solid {
-  background: var(--color-accent);
+  background: var(--color-text);
   color: var(--color-white);
+  transition: background var(--transition-base);
+}
+
+.step:not(.step--soon):hover .step__btn--solid {
+  background: var(--color-accent);
 }
 
 .step__btn--outline {
