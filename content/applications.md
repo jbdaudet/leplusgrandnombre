@@ -8,7 +8,7 @@ Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce so
 
 ---
 
-## Comprendre son marché {#geomarketing}
+<h2 id="geomarketing">Comprendre son marché <a href="https://geomarketing.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">geomarketing</a></h2>
 
 Avant de lancer quoi que ce soit, il faut savoir à qui on s'adresse, où ils sont, et ce qui compte pour eux.
 
@@ -24,7 +24,7 @@ Avant de lancer quoi que ce soit, il faut savoir à qui on s'adresse, où ils so
 
 ---
 
-## Trouver le bon angle {#signal}
+<h2 id="signal">Trouver le bon angle <a href="https://signal.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">signal</a></h2>
 
 Une fois qu'on connaît son marché, il faut trouver le message qui va résonner. Pas un message générique — un angle culturel, ancré dans l'actualité, qui crée une connexion authentique.
 
@@ -40,7 +40,7 @@ Une fois qu'on connaît son marché, il faut trouver le message qui va résonner
 
 ---
 
-## Créer du contenu qui me ressemble {#coaching}
+<h2 id="coaching">Créer du contenu qui me ressemble <a href="https://coaching.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">coaching</a></h2>
 
 Produire du contenu à grande échelle, c'est facile. Produire du contenu qui sonne comme soi — avec ses convictions, son vocabulaire, ses tics de langage — c'est un autre problème.
 
@@ -56,7 +56,7 @@ Produire du contenu à grande échelle, c'est facile. Produire du contenu qui so
 
 ---
 
-## Gagner du temps au quotidien {#artisans-ai}
+<h2 id="artisans-ai">Gagner du temps au quotidien <a href="https://artisans.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">artisans.ai</a></h2>
 
 Automatiser les tâches chronophages pour se concentrer sur ce qu'on sait faire — sans sacrifier la qualité.
 
@@ -72,7 +72,7 @@ Automatiser les tâches chronophages pour se concentrer sur ce qu'on sait faire 
 
 ---
 
-## Piloter par les résultats {#theshiftproject}
+<h2 id="theshiftproject">Piloter par les résultats <a href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">theshiftproject</a></h2>
 
 Quand les données sont là, encore faut-il pouvoir les interroger, les comprendre et en tirer des décisions — sans être data analyst.
 
