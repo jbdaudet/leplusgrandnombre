@@ -100,8 +100,6 @@ Ce pattern **"générer puis juger"** est ce qui fait la différence entre un pr
 
 **Le contexte de marque est injectable.** L'utilisateur peut uploader des documents (PDF, Word, texte) qui décrivent sa marque. Ces documents sont découpés, encodés en vecteurs **en mémoire** (rien n'est stocké), et consultés par similarité sémantique à chaque étape de génération. Le shower thought et l'idée créative sont ainsi ancrés dans le positionnement réel de la marque — pas dans une hallucination. Si aucun document n'est fourni, l'IA génère automatiquement un territoire de marque à partir du nom seul.
 
-**Chaque étape est rejouable indépendamment.** Trois boutons ↻ permettent de relancer : le résumé seul (re-scraping), le shower thought + idée (en gardant l'article), ou l'idée seule (en gardant le shower thought). On peut itérer sans tout recommencer.
-
 {{< button href="https://signal.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
 
 ---
