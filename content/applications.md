@@ -14,13 +14,13 @@ Avant de lancer quoi que ce soit, il faut savoir à qui on s'adresse, où ils so
 
 **Le contexte.** Un professionnel qui cherche le bon emplacement pour ouvrir un commerce en France. Ou un réseau qui veut comprendre le potentiel d'une zone avant d'investir.
 
-**Le défi.** Les données existent — démographie, revenus, transports, concurrence — mais elles sont éparpillées dans des dizaines de sources publiques, chacune avec son format et sa granularité. En pratique, personne ne les croise. On se fie à l'intuition.
+**Le défi.** Les données existent — démographie, revenus, transports, centres d'intérêt, concurrence — mais elles sont éparpillées dans des dizaines de sources publiques et privées, chacune avec son format et sa granularité. En pratique, personne ne les croise. On se fie à l'intuition.
 
-**Le résultat.** Entrez une adresse. En quelques secondes, vous obtenez un rapport complet : qui habite autour, quel pouvoir d'achat, quels transports, quels commerces, quelle concurrence — le tout comparé à la moyenne du département. La décision d'implantation devient factuelle.
+**Le résultat.** Entrez une adresse. En quelques secondes, vous obtenez un rapport complet : qui habite autour, quel pouvoir d'achat, quels transports, quels commerces, ce qui les intéresse, quelle concurrence — le tout comparé à la moyenne du département. La décision d'implantation devient factuelle.
 
 ### L'approche
 
-Cinq sections d'analyse, chacune avec sa propre logique de données, assemblées automatiquement en un rapport cohérent.
+Six sections d'analyse, chacune avec sa propre logique de données, assemblées automatiquement en un rapport cohérent.
 
 {{< mermaid >}}
 flowchart LR
@@ -29,6 +29,7 @@ flowchart LR
     B --> D["Population &\nrevenus"]
     B --> E["Transports"]
     B --> F["Commerces &\néquipements"]
+    B --> H["Centres\nd'intérêt"]
     B --> G["Concurrence"]
 
     style A fill:#FFF0E9,stroke:#FF6B35
@@ -36,6 +37,7 @@ flowchart LR
     style D fill:#ffffff,stroke:#d2d2d7
     style E fill:#ffffff,stroke:#d2d2d7
     style F fill:#ffffff,stroke:#d2d2d7
+    style H fill:#ffffff,stroke:#d2d2d7
     style G fill:#ffffff,stroke:#d2d2d7
 {{< /mermaid >}}
 
@@ -47,7 +49,9 @@ flowchart LR
 
 **Benchmarking systématique.** Chaque indicateur (densité, revenus, équipements, transports) est comparé à la **moyenne du département** et, quand c'est disponible, aux **données historiques 2016** pour détecter les tendances. Un quartier qui se gentrifie ou qui perd ses commerces, ça se voit immédiatement.
 
-**Analyse concurrentielle automatique.** L'utilisateur entre un nom de marque. L'IA identifie les 3 principaux concurrents directs et le rayon de recherche adapté au type de commerce. Google Places localise les points de vente concurrents, récupère les notes et les avis, et l'IA synthétise les forces et faiblesses de chaque concurrent. Score de pression concurrentielle de 0 à 100.
+**Profilage par centres d'intérêt.** La section la plus originale : le système interroge l'**API Meta (Facebook)** pour estimer la part d'utilisateurs dans la zone de chalandise qui s'intéressent à 12 catégories prédéfinies — réparties en 4 axes : Patrimoine & Statut, Valeurs & Éthique, Capital Culturel, Mode de vie & Densité. Chaque catégorie est convertie en **indice d'affinité** comparé à une référence nationale (moyenne de 7 grandes villes françaises, interrogées avec le même rayon pour éliminer les biais d'échelle). Un indice supérieur à 100 signifie que l'intérêt est sur-représenté localement. Résultat : on ne sait pas seulement *combien* de gens habitent là, mais *ce qui les intéresse*.
+
+**Analyse concurrentielle automatique.** L'utilisateur entre un nom de marque. L'IA identifie les 3 principaux concurrents directs et le rayon de recherche adapté au type de commerce. Google Places (API v1) localise les points de vente concurrents, récupère les notes et les avis en un seul appel par concurrent, et l'IA synthétise les forces et faiblesses de chacun. Score de pression concurrentielle de 0 à 100.
 
 {{< button href="https://geomarketing.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
 
