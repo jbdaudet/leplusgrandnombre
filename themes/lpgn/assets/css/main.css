@@ -3,7 +3,7 @@
    ============================================================ */
 
 :root {
-  /* Color palette — black / white / grey only */
+  /* Color palette */
   --color-bg:              #ffffff;
   --color-surface:         #f5f5f7;
   --color-border:          #d2d2d7;
@@ -12,7 +12,7 @@
   --color-text-tertiary:   #ababab;
   --color-black:           #000000;
   --color-white:           #ffffff;
-  --color-accent:          #0071e3;
+  --color-accent:          #FF6B35;
 
   /* Typography */
   --font-sans: 'Raleway', 'Segoe UI', sans-serif;
@@ -363,7 +363,7 @@ th {
 }
 
 .site-nav__link[aria-current="page"] {
-  color: var(--color-black);
+  color: var(--color-accent);
   font-weight: 600;
 }
 
@@ -482,7 +482,7 @@ th {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--color-border);
+  background: linear-gradient(to bottom, var(--color-accent), var(--color-border));
 }
 
 .journey__steps {
@@ -722,6 +722,17 @@ th {
   padding-bottom: var(--space-16);
 }
 
+.page-content a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity var(--transition-fast);
+}
+
+.page-content a:hover {
+  opacity: 0.7;
+}
+
 .page-content h2 {
   font-size: var(--text-xl);
   margin-top: var(--space-10);
@@ -921,7 +932,7 @@ th {
   display: inline-block;
   align-self: flex-start;
   padding: 0.75rem 1.75rem;
-  background: var(--color-black);
+  background: var(--color-accent);
   color: var(--color-white);
   font-family: var(--font-sans);
   font-size: var(--text-base);
