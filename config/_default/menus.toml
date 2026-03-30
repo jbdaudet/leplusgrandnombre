@@ -1,4 +1,9 @@
 [[main]]
+  name = "Accueil"
+  pageRef = "/"
+  weight = 5
+
+[[main]]
   name = "Nos convictions"
   pageRef = "about"
   weight = 10
