@@ -12,6 +12,7 @@
   --color-text-tertiary:   #ababab;
   --color-black:           #000000;
   --color-white:           #ffffff;
+  --color-accent:          #0071e3;
 
   /* Typography */
   --font-sans: 'Raleway', 'Segoe UI', sans-serif;
@@ -508,7 +509,7 @@ th {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--color-text);
+  background: var(--color-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -590,7 +591,7 @@ th {
 }
 
 .step__btn--solid {
-  background: var(--color-black);
+  background: var(--color-accent);
   color: var(--color-white);
 }
 
@@ -705,17 +706,16 @@ th {
 
 /* Tool name badge next to section headings */
 .tool-name {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text-secondary);
+  font-size: inherit;
+  font-weight: 300;
+  color: var(--color-accent);
   text-decoration: none;
   margin-left: var(--space-3);
-  opacity: 0.7;
   transition: opacity var(--transition-fast);
 }
 
 .tool-name:hover {
-  opacity: 1;
+  opacity: 0.7;
 }
 
 .page-content {
@@ -844,7 +844,7 @@ th {
 .btn {
   display: inline-block;
   padding: 0.75rem 1.75rem;
-  background: var(--color-black);
+  background: var(--color-accent);
   color: var(--color-white);
   font-family: var(--font-sans);
   font-size: var(--text-base);
