@@ -366,7 +366,7 @@ th {
 }
 
 .site-nav__link[aria-current="page"] {
-  color: var(--color-accent);
+  color: var(--color-text);
   font-weight: 600;
 }
 
