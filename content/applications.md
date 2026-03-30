@@ -39,7 +39,7 @@ flowchart LR
     style G fill:#ffffff,stroke:#d2d2d7
 {{< /mermaid >}}
 
-**Granularité maximale.** Toutes les données sont croisées à l'échelle de l'**IRIS** — le découpage statistique le plus fin en France, environ 2 000 habitants par zone. Pas de moyenne communale approximative : le rapport distingue un quartier résidentiel d'une zone d'activité à 500 m de distance.
+**La granularité la plus fine disponible.** Chaque donnée est exploitée à son niveau de précision maximal : population et démographie à l'**IRIS** (~2 000 habitants), revenus et pauvreté à la commune, équipements géolocalisés au point. Le rapport ne lisse pas tout à la même échelle — il tire le meilleur de chaque source.
 
 **Zone de chalandise intelligente.** Le rayon ne se fixe pas au doigt mouillé. Le système identifie la **classification urbaine INSEE** de la commune (ville-centre, banlieue, rural) et adapte automatiquement : 750 m en centre-ville dense, jusqu'à 3 km en zone rurale. La zone croise cinq sources de données publiques (INSEE RP, Filosofi, BPE, IGN, OpenStreetMap).
 
