@@ -722,14 +722,14 @@ th {
   padding-bottom: var(--space-16);
 }
 
-.page-content a {
+.page-content a:not(.btn) {
   color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
   transition: opacity var(--transition-fast);
 }
 
-.page-content a:hover {
+.page-content a:not(.btn):hover {
   opacity: 0.7;
 }
 
