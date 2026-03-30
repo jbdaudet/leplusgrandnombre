@@ -30,7 +30,10 @@
           <h3 class="step__title">{{ .title }}</h3>
           <p class="step__question">{{ .question }}</p>
           {{- if .demo_url -}}
-          <a href="{{ .demo_url }}" class="step__link" target="_blank" rel="noopener noreferrer">{{ .demo_label }} &rarr;</a>
+          <div class="step__actions">
+            <a href="{{ .learn_url }}" class="step__btn step__btn--outline">En savoir plus</a>
+            <a href="{{ .demo_url }}" class="step__btn step__btn--solid" target="_blank" rel="noopener noreferrer">Essayer</a>
+          </div>
           {{- else -}}
           <span class="step__badge">Bientôt</span>
           {{- end -}}
