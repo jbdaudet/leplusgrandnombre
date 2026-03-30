@@ -1161,16 +1161,6 @@ th {
     margin-left: var(--space-4);
   }
 
-  /* Varied shapes */
-  .step:nth-child(8n+1) .step__card { border-radius: var(--radius-lg) var(--radius-sm) var(--radius-lg) var(--radius-sm); }
-  .step:nth-child(8n+2) .step__card { border-radius: var(--radius-sm) var(--radius-lg) var(--radius-sm) var(--radius-lg); }
-  .step:nth-child(8n+3) .step__card { border-radius: 24px; }
-  .step:nth-child(8n+4) .step__card { border-radius: var(--radius-sm); }
-  .step:nth-child(8n+5) .step__card { border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-sm); }
-  .step:nth-child(8n+6) .step__card { border-radius: var(--radius-sm) var(--radius-sm) var(--radius-lg) var(--radius-lg); }
-  .step:nth-child(8n+7) .step__card { border-radius: 24px var(--radius-sm) 24px var(--radius-sm); }
-  .step:nth-child(8n+8) .step__card { border-radius: var(--radius-sm) 24px var(--radius-sm) 24px; }
-
   /* Left-border accent flips side for odd (left) cards */
   .step:nth-child(odd) .step__card {
     border-left: 1px solid var(--color-border);
