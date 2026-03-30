@@ -4,33 +4,41 @@
   <div class="container">
 
     {{- with .Params.phrase -}}
-    {{- $phrase := replace . "le plus grand nombre" "<span class=\"hero__brand\">le plus grand nombre</span>" -}}
-    <p class="hero__phrase">{{ $phrase | safeHTML }}</p>
+    <p class="hero__phrase">{{ . }}</p>
+    {{- end -}}
+
+    {{- with .Params.subtitle -}}
+    <p class="hero__subtitle">{{ . }}</p>
     {{- end -}}
 
   </div>
 </section>
 
 {{- with .Site.Data.apps -}}
-<section class="apps">
-  <div class="apps-grid">
-    {{- range . -}}
-    <div class="app-tile">
-      {{- with .image -}}
-      <div class="app-tile__visual">
-        <img src="{{ . }}" alt="{{ $.name }}" class="app-tile__img">
-      </div>
-      {{- end -}}
-      <div class="app-tile__content">
-        <p class="app-tile__name">{{ .name }}</p>
-        {{- with .tagline -}}<p class="app-tile__tagline">{{ . }}</p>{{- end -}}
-        <div class="app-tile__actions">
-          <a href="{{ .href_learn }}" class="app-btn app-btn--outline">En savoir plus</a>
-          <a href="{{ .href_try }}" class="app-btn app-btn--solid" target="_blank" rel="noopener noreferrer">Essayer</a>
+<section class="journey">
+  <div class="container">
+
+    <div class="journey__line" aria-hidden="true"></div>
+
+    <ol class="journey__steps">
+      {{- range . -}}
+      <li class="step{{ if not .demo_url }} step--soon{{ end }}">
+        <div class="step__marker" aria-hidden="true">
+          <span class="step__number">{{ .number }}</span>
         </div>
-      </div>
-    </div>
-    {{- end -}}
+        <div class="step__card">
+          <h3 class="step__title">{{ .title }}</h3>
+          <p class="step__question">{{ .question }}</p>
+          {{- if .demo_url -}}
+          <a href="{{ .demo_url }}" class="step__link" target="_blank" rel="noopener noreferrer">{{ .demo_label }} &rarr;</a>
+          {{- else -}}
+          <span class="step__badge">Bientôt</span>
+          {{- end -}}
+        </div>
+      </li>
+      {{- end -}}
+    </ol>
+
   </div>
 </section>
 {{- end -}}

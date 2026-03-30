@@ -1,4 +1,5 @@
 ---
 title: "Le Plus Grand Nombre"
-phrase: "On a manqué de temps pour le logo, mais on a des idées pour faciliter l'accès à l'information par le plus grand nombre."
+phrase: "Je comprends votre contexte, vos envies et vos défis. J'utilise la data et l'IA pour vous aider à aller là où vous souhaitez aller."
+subtitle: "À chaque étape de votre projet marketing, je m'adapte à votre cadre et à vos challenges."
 ---
