@@ -17,6 +17,21 @@
   </div>
 
   <script>
+    /* Header: transparent at top, blurred on scroll */
+    (function () {
+      var header = document.querySelector('.site-header');
+      if (!header) return;
+      function checkScroll() {
+        if (window.scrollY > 50) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      }
+      window.addEventListener('scroll', checkScroll, { passive: true });
+      checkScroll();
+    })();
+
     /* Burger menu */
     (function () {
       var burger = document.querySelector('.burger');

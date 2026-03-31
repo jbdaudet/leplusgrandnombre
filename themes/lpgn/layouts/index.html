@@ -6,11 +6,11 @@
     <div class="container">
 
       {{- with .Params.phrase -}}
-      <p class="hero__phrase reveal">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
+      <p class="hero__phrase reveal reveal--from-bottom">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
       {{- end -}}
 
       {{- with .Params.subtitle -}}
-      <p class="hero__subtitle reveal reveal--delay-1">{{ . }}</p>
+      <p class="hero__subtitle reveal reveal--from-bottom reveal--delay-1">{{ . }}</p>
       {{- end -}}
 
     </div>
@@ -38,8 +38,8 @@
     <p class="journey__subheading reveal reveal--delay-1">// chaque étape, une preuve de concept</p>
 
     <ol class="journey__steps">
-      {{- range . -}}
-      <li class="step{{ if not .demo_url }} step--soon{{ end }} reveal">
+      {{- range $i, $app := . -}}
+      <li class="step{{ if not $app.demo_url }} step--soon{{ end }} reveal{{ if eq (mod $i 2) 1 }} reveal--from-right{{ end }}">
         <div class="step__marker" aria-hidden="true">
           <span class="step__number">{{ .number }}</span>
         </div>
