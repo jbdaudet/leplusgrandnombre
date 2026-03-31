@@ -62,7 +62,9 @@ tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
 <meta name="twitter:title" content="{{ .Title }}">
 {{ with $desc }}<meta name="twitter:description" content="{{ . }}">{{ end }}
 <meta name="twitter:image" content="{{ .Site.BaseURL }}NN.png">
+<meta name="twitter:domain" content="leplusgrandnombre.fr">
 
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Raleway:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
@@ -83,10 +85,30 @@ tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
   "name": "{{ .Site.Title }}",
   "url": "{{ .Site.BaseURL }}",
   "description": "{{ .Site.Params.description }}",
+  "logo": "{{ .Site.BaseURL }}logo_lpgn.png",
   "areaServed": "FR",
   "knowsLanguage": "fr",
   "serviceType": ["Data Analytics", "Marketing Intelligence", "AI Solutions"],
-  "sameAs": []
+  "founder": {
+    "@type": "Organization",
+    "name": "Le Plus Grand Nombre"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Le Plus Grand Nombre",
+  "url": "{{ .Site.BaseURL }}",
+  "logo": "{{ .Site.BaseURL }}logo_lpgn.png",
+  "description": "{{ .Site.Params.description }}",
+  "knowsLanguage": "fr",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "url": "{{ .Site.BaseURL }}contact/",
+    "contactType": "sales"
+  }
 }
 </script>
 {{- else if and .IsPage (eq .Section "blog") }}
@@ -98,9 +120,18 @@ tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
   "url": "{{ .Permalink }}",
   "datePublished": "{{ .Date.Format "2006-01-02" }}",
   {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02" }}",{{ end }}
+  "author": {
+    "@type": "Organization",
+    "name": "Le Plus Grand Nombre",
+    "url": "{{ .Site.BaseURL }}"
+  },
   "publisher": {
     "@type": "Organization",
-    "name": "{{ .Site.Title }}"
+    "name": "Le Plus Grand Nombre",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ .Site.BaseURL }}logo_lpgn.png"
+    }
   }
 }
 </script>
@@ -112,8 +143,13 @@ tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "{{ .Site.BaseURL }}" },
+    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "{{ .Site.BaseURL }}" }
+    {{- if and .IsPage (eq .Section "blog") }},
+    { "@type": "ListItem", "position": 2, "name": "Points de vue", "item": "{{ .Site.BaseURL }}blog/" },
+    { "@type": "ListItem", "position": 3, "name": "{{ .Title }}", "item": "{{ .Permalink }}" }
+    {{- else }},
     { "@type": "ListItem", "position": 2, "name": "{{ .Title }}", "item": "{{ .Permalink }}" }
+    {{- end }}
   ]
 }
 </script>
