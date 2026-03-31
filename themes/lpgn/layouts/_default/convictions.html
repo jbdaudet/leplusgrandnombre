@@ -1,7 +1,7 @@
 {{ define "main" }}
 <div class="convictions">
 
-  <header class="convictions__hero reveal">
+  <header class="convictions__hero reveal reveal--from-bottom">
     <div class="container">
       <h1 class="convictions__title">{{ .Title }}</h1>
       {{- with .Description -}}
@@ -12,22 +12,26 @@
 
   <div class="convictions__blocks">
     {{- $blocks := split .RawContent "## " -}}
+    {{- $count := 0 -}}
     {{- range $i, $block := $blocks -}}
       {{- if gt (len (trim $block " \n\r")) 0 -}}
         {{- $parts := split $block "\n" -}}
         {{- $heading := index $parts 0 -}}
         {{- $bodyParts := after 1 $parts -}}
         {{- $body := delimit $bodyParts "\n" -}}
+        {{- $side := "left" -}}
+        {{- if eq (mod $count 2) 1 }}{{ $side = "right" }}{{ end -}}
 
-        <section class="conviction reveal {{ if eq (mod $i 2) 0 }}conviction--left{{ else }}conviction--right{{ end }}">
-          <div class="container conviction__inner">
-            <h2 class="conviction__heading">{{ $heading | markdownify }}</h2>
-            <div class="conviction__body page-content">
+        <section class="conviction conviction--{{ $side }}">
+          <div class="container conviction__inner conviction__lockup">
+            <h2 class="conviction__heading reveal{{ if eq $side "left" }} reveal--from-left{{ else }} reveal--from-right{{ end }}">{{ $heading | markdownify }}</h2>
+            <div class="conviction__body page-content reveal{{ if eq $side "left" }} reveal--from-right{{ else }} reveal--from-left{{ end }} reveal--delay-1">
               {{ $body | markdownify }}
             </div>
           </div>
         </section>
 
+        {{- $count = add $count 1 -}}
       {{- end -}}
     {{- end -}}
   </div>
