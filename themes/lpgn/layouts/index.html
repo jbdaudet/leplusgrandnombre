@@ -1,24 +1,25 @@
 {{ define "main" }}
 
 <section class="hero">
-  <div class="container">
+  <div class="hero__content">
+    <div class="container">
 
-    {{- with .Params.phrase -}}
-    <p class="hero__phrase reveal">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
-    {{- end -}}
+      {{- with .Params.phrase -}}
+      <p class="hero__phrase reveal">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
+      {{- end -}}
 
-    {{- with .Params.subtitle -}}
-    <p class="hero__subtitle reveal reveal--delay-1">{{ . }}</p>
-    {{- end -}}
+      {{- with .Params.subtitle -}}
+      <p class="hero__subtitle reveal reveal--delay-1">{{ . }}</p>
+      {{- end -}}
 
-    <div class="hero__pulse" aria-hidden="true">
-      <span class="hero__pulse-line"></span>
     </div>
-
   </div>
 
-  <div class="hero__scroll-track" aria-hidden="true">
-    <div class="hero__scroll-fill"></div>
+  <div class="hero__line-zone" aria-hidden="true">
+    <div class="hero__pulse-line"></div>
+    <div class="hero__scroll-track">
+      <div class="hero__scroll-fill"></div>
+    </div>
   </div>
 </section>
 

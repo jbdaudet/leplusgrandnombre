@@ -485,12 +485,18 @@ th {
 .hero {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   text-align: center;
   background: var(--color-bg);
   position: relative;
   overflow: hidden;
+}
+
+.hero__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Animated gradient orb — light tones */
@@ -555,21 +561,24 @@ th {
   margin-right: auto;
 }
 
-/* Pulsing line hint below subtitle — fades out once user scrolls */
-.hero__pulse {
+/* Line zone — sits below hero content, contains pulse + scroll track */
+.hero__line-zone {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-10);
-  transition: opacity 0.4s ease;
+  align-items: flex-start;
+  height: 160px;
+  position: relative;
+  flex-shrink: 0;
 }
 
+/* Pulsing line — visible on load, fades out on scroll */
 .hero__pulse-line {
-  display: block;
   width: 2px;
   height: 48px;
   background: var(--gradient-warm);
   border-radius: 1px;
   animation: heroPulse 2s ease-in-out infinite;
+  transition: opacity 0.4s ease;
 }
 
 @keyframes heroPulse {
@@ -577,26 +586,23 @@ th {
   50%      { opacity: 1;   transform: scaleY(1);   transform-origin: top; }
 }
 
-.hero__pulse.is-hidden {
+.hero__pulse-line.is-hidden {
   opacity: 0;
-  pointer-events: none;
 }
 
-/* Scroll track — anchored at bottom of hero, grows on scroll to meet journey line */
+/* Scroll track — grows downward on scroll, fades out at bottom */
 .hero__scroll-track {
   position: absolute;
-  bottom: 0;
-  /* Mobile: align with journey__line at left: 19px + container padding */
-  left: calc(var(--space-4) + 19px);
+  top: 0;
+  left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 50vh;
+  height: 100%;
   overflow: hidden;
   pointer-events: none;
-  z-index: 3;
-  /* Fade in from top, blur out at bottom before the heading */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 70%, transparent 100%);
+  /* Solid at top, dissolves at bottom before the journey heading */
+  mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
 }
 
 .hero__scroll-fill {
@@ -1576,11 +1582,6 @@ pre.mermaid {
     padding-right: var(--space-6);
   }
 
-  /* Tablet: container padding changes, keep hero line aligned */
-  .hero__scroll-track {
-    left: calc(var(--space-6) + 19px);
-  }
-
   .step__title {
     font-size: var(--text-xl);
   }
@@ -1756,11 +1757,6 @@ pre.mermaid {
 
   .step:nth-child(odd).step--soon .step__card {
     border-right-color: var(--color-border);
-  }
-
-  /* Hero line aligns with centered journey line on desktop */
-  .hero__scroll-track {
-    left: 50%;
   }
 
   /* Hero desktop sizing */
