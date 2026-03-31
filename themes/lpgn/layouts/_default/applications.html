@@ -190,7 +190,23 @@
 
     function disassemble(unit) {
       clearTimers(unit);
-      unit.classList.remove('is-title-visible', 'is-docked', 'is-connected', 'is-docked-2', 'is-connected-2', 'is-settled');
+      var ids = [];
+      /* Step 1: flash accent — seam + borders + joints */
+      unit.classList.remove('is-settled');
+      unit.classList.add('is-connected', 'is-connected-2');
+      /* Step 2: undock approach */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-docked-2', 'is-connected-2');
+      }, 300));
+      /* Step 3: undock trio */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-docked', 'is-connected');
+      }, 600));
+      /* Step 4: hide title */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-title-visible');
+      }, 900));
+      timers.set(unit, ids);
     }
 
     var observer = new IntersectionObserver(function (entries) {

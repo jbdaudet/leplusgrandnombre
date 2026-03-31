@@ -32,14 +32,6 @@ flowchart LR
     B --> F["Commerces &\néquipements"]
     B --> H["Centres\nd'intérêt"]
     B --> G["Concurrence"]
-
-    style A fill:#FFF0E9,stroke:#FF6B35
-    style C fill:#ffffff,stroke:#d2d2d7
-    style D fill:#ffffff,stroke:#d2d2d7
-    style E fill:#ffffff,stroke:#d2d2d7
-    style F fill:#ffffff,stroke:#d2d2d7
-    style H fill:#ffffff,stroke:#d2d2d7
-    style G fill:#ffffff,stroke:#d2d2d7
 {{< /mermaid >}}
 
 **La granularité la plus fine disponible.** Chaque donnée est exploitée à son niveau de précision maximal : population et démographie à l'**IRIS** (~2 000 habitants), revenus et pauvreté à la commune, équipements géolocalisés au point. Le rapport ne lisse pas tout à la même échelle — il tire le meilleur de chaque source.
@@ -77,11 +69,6 @@ flowchart LR
     A["Article\n(URL)"] --> B["Extraction\n+ résumé"]
     B --> C["Shower\nThought"]
     C --> D["Idée\ncréative"]
-
-    style A fill:#FFF0E9,stroke:#FF6B35
-    style B fill:#ffffff,stroke:#d2d2d7
-    style C fill:#ffffff,stroke:#d2d2d7
-    style D fill:#FFF0E9,stroke:#FF6B35
 {{< /mermaid >}}
 
 **Étape 1 — Extraction.** L'URL est scrapée et l'article est analysé par une IA rapide qui en extrait un résumé structuré en français. Le résumé apparaît immédiatement dans le navigateur (streaming SSE) — l'utilisateur voit le résultat se construire en temps réel pendant que les étapes suivantes travaillent en arrière-plan.
@@ -138,9 +125,6 @@ flowchart TB
     T --> E
     E --> R["Récupération\n4 niveaux"]
     R --> G["Réponse\nstreaming"]
-
-    style Q fill:#FFF0E9,stroke:#FF6B35
-    style G fill:#FFF0E9,stroke:#FF6B35
 {{< /mermaid >}}
 
 **79 convictions extraites automatiquement.** Le corpus (918 documents, 792 000 mots) est analysé par clustering non supervisé (BERTopic). L'algorithme découvre 79 "convictions" — les croyances profondes qui reviennent dans l'écriture du coach, même quand il parle de sujets différents. Ces convictions sont organisées en hiérarchie (79 feuilles, 59 nœuds intermédiaires) et reliées par un graphe de co-occurrence : quand le coach parle de X, il amène naturellement Y.
@@ -162,9 +146,6 @@ flowchart LR
     C --> D["Arc narratif\nsuggéré"]
     D --> E["Réécriture\nsection par section"]
     E --> F["Simulation\nlecteur"]
-
-    style A fill:#FFF0E9,stroke:#FF6B35
-    style F fill:#FFF0E9,stroke:#FF6B35
 {{< /mermaid >}}
 
 **267 TED talks analysés.** Chaque talk est découpé en sections étiquetées (ouverture, histoire, concept, exemple, application, conclusion) avec leur *purpose* (créer de la curiosité, ancrer en mémoire, reframer...). Un **graphe de transitions** pondéré capture les enchaînements : après une "histoire", un talk qui "enseigne" enchaîne sur un "concept" 40% du temps, mais un talk qui "challenge" passe à une "objection" 25% du temps.
@@ -202,9 +183,6 @@ flowchart LR
     C --> D["Devis\nprofessionnel"]
     C --> E["Stock\najusté"]
     F["Feuilles\nde débit"] --> E
-
-    style A fill:#FFF0E9,stroke:#FF6B35
-    style D fill:#FFF0E9,stroke:#FF6B35
 {{< /mermaid >}}
 
 **17 métiers, 17 vocabulaires.** L'IA ne parle pas "en général" — elle connaît les spécificités de chaque profession. Un menuisier et un plombier ne décrivent pas un chantier de la même façon, n'utilisent pas les mêmes matériaux, ne structurent pas leurs devis pareil. Le système s'adapte dès la sélection du métier.
@@ -249,9 +227,6 @@ flowchart TB
     T2S --> VIZ
     VIZ --> AN["Analyse\nstreaming"]
     ST --> AN
-
-    style Q fill:#FFF0E9,stroke:#FF6B35
-    style AN fill:#FFF0E9,stroke:#FF6B35
 {{< /mermaid >}}
 
 **5 sources, 1 base.** Les données proviennent de l'EIA américaine (production/consommation), de l'ONU (flux par secteur), de PIK/PRIMAP (émissions de gaz à effet de serre), de la Banque Mondiale (population, PIB), et d'Eurostat (détail sectoriel européen). Cinq notebooks d'ingestion nettoient, normalisent et unifient tout dans une base PostgreSQL unique — 220 pays, 1960 à 2024.

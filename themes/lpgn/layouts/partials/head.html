@@ -120,5 +120,35 @@ tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true, theme: 'neutral', themeVariables: { primaryColor: '#FFF0E9', primaryBorderColor: '#FF6B35', lineColor: '#6e6e73', textColor: '#1d1d1f' } });
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#ffffff',
+      primaryBorderColor: '#e0e0e4',
+      primaryTextColor: '#1a1a1a',
+      secondaryColor: '#ffffff',
+      secondaryBorderColor: '#e0e0e4',
+      tertiaryColor: '#ffffff',
+      lineColor: '#e0e0e4',
+      textColor: '#1a1a1a',
+      fontSize: '13px',
+      fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+      nodeTextColor: '#1a1a1a',
+      mainBkg: '#ffffff',
+      nodeBorder: '#e0e0e4',
+      clusterBkg: '#fafafa',
+      clusterBorder: '#e0e0e4',
+      edgeLabelBackground: '#fafafa',
+      nodePadding: 12,
+      rankSpacing: 60
+    },
+    flowchart: {
+      curve: 'linear',
+      padding: 16,
+      nodeSpacing: 40,
+      rankSpacing: 60,
+      htmlLabels: true
+    }
+  });
 </script>

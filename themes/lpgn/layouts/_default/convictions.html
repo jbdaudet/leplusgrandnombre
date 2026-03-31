@@ -88,9 +88,21 @@
 
     function disassemble(unit) {
       clearTimers(unit);
-      unit.classList.remove('is-docked', 'is-connected', 'is-settled');
-      var reveals = unit.querySelectorAll('.reveal');
-      reveals.forEach(function (r) { r.classList.remove('is-visible'); });
+      var ids = [];
+      /* Step 1: flash accent again — seam + borders + joints */
+      unit.classList.remove('is-settled');
+      unit.classList.add('is-connected');
+      /* Step 2: undock body */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-docked');
+      }, 400));
+      /* Step 3: remove reveals and connected state */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-connected');
+        var reveals = unit.querySelectorAll('.reveal');
+        reveals.forEach(function (r) { r.classList.remove('is-visible'); });
+      }, 800));
+      timers.set(unit, ids);
     }
 
     var observer = new IntersectionObserver(function (entries) {

@@ -1914,15 +1914,71 @@ th {
 }
 
 /* ============================================================
-   MERMAID DIAGRAMS — Blueprint feel
+   MERMAID DIAGRAMS — Assembly style
    ============================================================ */
 
 pre.mermaid {
   background: none;
   border: none;
-  padding: var(--space-6) 0;
+  padding: var(--space-8) 0;
   text-align: center;
   overflow-x: auto;
+}
+
+/* Node boxes: sharp, no rounded corners, 1px border */
+pre.mermaid svg .node rect,
+pre.mermaid svg .node polygon,
+pre.mermaid svg .node circle {
+  rx: 0 !important;
+  ry: 0 !important;
+  stroke-width: 1px !important;
+  stroke: var(--color-border) !important;
+  fill: var(--color-white) !important;
+}
+
+/* Accent nodes (first and last in flows) */
+pre.mermaid svg .node:first-child rect,
+pre.mermaid svg .node:first-child polygon {
+  stroke: var(--color-accent) !important;
+  fill: var(--color-accent-light) !important;
+}
+
+pre.mermaid svg .node:last-child rect,
+pre.mermaid svg .node:last-child polygon {
+  stroke: var(--color-accent) !important;
+  fill: var(--color-accent-light) !important;
+}
+
+/* Node text: monospace */
+pre.mermaid svg .node .nodeLabel,
+pre.mermaid svg .node foreignObject div {
+  font-family: var(--font-mono) !important;
+  font-size: 12px !important;
+  color: var(--color-text) !important;
+  line-height: 1.4 !important;
+}
+
+/* Edges: straight lines, 1px, grey */
+pre.mermaid svg .edgePath path.path {
+  stroke: var(--color-border) !important;
+  stroke-width: 1px !important;
+}
+
+/* Arrowheads */
+pre.mermaid svg marker path {
+  fill: var(--color-border) !important;
+  stroke: none !important;
+}
+
+/* Edge labels */
+pre.mermaid svg .edgeLabel {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  color: var(--color-text-secondary) !important;
+}
+
+pre.mermaid svg .edgeLabel .edgeLabel {
+  background: var(--color-bg) !important;
 }
 
 /* ============================================================
