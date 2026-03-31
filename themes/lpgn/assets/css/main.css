@@ -1939,6 +1939,22 @@ th {
    TARTEAUCITRON OVERRIDES
    ============================================================ */
 
+/* Force-hide all tarteaucitron floating elements — they block footer clicks */
+#tarteaucitronRoot {
+  pointer-events: none !important;
+}
+
+#tarteaucitronRoot #tarteaucitronIcon,
+#tarteaucitronRoot #tarteaucitronAlertSmall,
+#tarteaucitronRoot #tarteaucitronAlertBig {
+  display: none !important;
+}
+
+/* Re-enable pointer events only when the full panel is open */
+#tarteaucitronRoot #tarteaucitronBack {
+  pointer-events: auto !important;
+}
+
 #tarteaucitronRoot #tarteaucitronAlertBig {
   font-family: var(--font-sans) !important;
   font-size: 13px !important;
