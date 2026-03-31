@@ -35,7 +35,7 @@ On ne croit pas au produit miracle qui marche pour tout le monde. On croit à la
 
 Nos [applications](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
 
-## Pourquoi "Le Plus Grand Nombre" ?
+## Pourquoi "Le Plus Grand Nombre"
 
 Les outils data et IA les plus puissants sont aujourd'hui réservés aux entreprises qui ont les budgets et les équipes techniques. Analyse de marché en temps réel, personnalisation de contenu, automatisation intelligente, pilotage par la donnée — tout ça existe, mais derrière des murs de consulting à six chiffres.
 

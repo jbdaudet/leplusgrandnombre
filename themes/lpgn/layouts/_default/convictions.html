@@ -49,34 +49,64 @@
 </div>
 
 <script>
-  /* Docking animation: body slides up to meet title, seam glows on contact */
+  /* Docking animation: reversible — assembles on scroll down, disassembles on scroll up */
   (function () {
     var units = document.querySelectorAll('.assembly__unit');
     if (!units.length) return;
 
+    var timers = new Map();
+
+    function clearTimers(unit) {
+      var t = timers.get(unit);
+      if (t) {
+        t.forEach(function (id) { clearTimeout(id); });
+        timers.set(unit, []);
+      }
+    }
+
+    function assemble(unit) {
+      clearTimers(unit);
+      var ids = [];
+      /* Reveal the title */
+      var reveals = unit.querySelectorAll('.reveal');
+      reveals.forEach(function (r) { r.classList.add('is-visible'); });
+      /* Dock the body */
+      ids.push(setTimeout(function () {
+        unit.classList.add('is-docked');
+      }, 400));
+      /* Flash the seam and borders */
+      ids.push(setTimeout(function () {
+        unit.classList.remove('is-settled');
+        unit.classList.add('is-connected');
+      }, 900));
+      /* Settle */
+      ids.push(setTimeout(function () {
+        unit.classList.add('is-settled');
+      }, 1700));
+      timers.set(unit, ids);
+    }
+
+    function disassemble(unit) {
+      clearTimers(unit);
+      unit.classList.remove('is-docked', 'is-connected', 'is-settled');
+      var reveals = unit.querySelectorAll('.reveal');
+      reveals.forEach(function (r) { r.classList.remove('is-visible'); });
+    }
+
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          var unit = entry.target;
-          /* Step 1: title slides in (handled by .reveal) */
-          /* Step 2: after title lands, dock the body */
-          setTimeout(function () {
-            unit.classList.add('is-docked');
-          }, 400);
-          /* Step 3: seam glows + borders flash on contact */
-          setTimeout(function () {
-            unit.classList.add('is-connected');
-          }, 900);
-          /* Step 4: settle back — borders and joints return to grey */
-          setTimeout(function () {
-            unit.classList.add('is-settled');
-          }, 1700);
-          observer.unobserve(unit);
+          assemble(entry.target);
+        } else {
+          disassemble(entry.target);
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
 
-    units.forEach(function (u) { observer.observe(u); });
+    units.forEach(function (u) {
+      timers.set(u, []);
+      observer.observe(u);
+    });
   })();
 </script>
 {{ end }}
