@@ -1946,6 +1946,19 @@ th {
   border-color: var(--color-accent);
 }
 
+.form-message {
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-accent);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
+
+.form-message--error {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
 /* ============================================================
    TARTEAUCITRON OVERRIDES
    ============================================================ */

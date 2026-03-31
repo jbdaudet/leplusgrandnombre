@@ -1,5 +1,5 @@
-<!-- Formspree Contact Form -->
-<form action="https://formspree.io/f/xkovvejd" method="POST" class="contact-form">
+<!-- Formspree Contact Form — AJAX submission -->
+<form id="contact-form" action="https://formspree.io/f/xkovvejd" method="POST" class="contact-form">
 
   <div class="form-group">
     <label for="contact-firstname" class="form-label">Prénom *</label>
@@ -65,7 +65,54 @@
   <input type="text" name="_gotcha" style="display:none" aria-hidden="true" />
 
   <div>
-    <button type="submit" class="btn">Envoyer</button>
+    <button type="submit" class="btn" id="contact-submit">Envoyer</button>
+  </div>
+
+  <div id="contact-success" class="form-message" style="display:none;">
+    Merci ! Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.
+  </div>
+
+  <div id="contact-error" class="form-message form-message--error" style="display:none;">
+    Une erreur est survenue. Veuillez réessayer ou nous contacter directement.
   </div>
 
 </form>
+
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('contact-submit');
+    var success = document.getElementById('contact-success');
+    var error = document.getElementById('contact-error');
+
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours...';
+    success.style.display = 'none';
+    error.style.display = 'none';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function (res) {
+      if (res.ok) {
+        form.reset();
+        success.style.display = 'block';
+        btn.textContent = 'Envoyé';
+      } else {
+        error.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Envoyer';
+      }
+    }).catch(function () {
+      error.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Envoyer';
+    });
+  });
+})();
+</script>
