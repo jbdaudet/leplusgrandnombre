@@ -17,18 +17,14 @@
   </div>
 
   <script>
-    /* Cookie panel opener — retries until tarteaucitron is ready */
+    /* Cookie panel opener — reload with hash, tarteaucitron opens panel on load */
     (function () {
       var btn = document.getElementById('open-cookies');
       if (!btn) return;
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        if (typeof tarteaucitron !== 'undefined') {
-          tarteaucitron.userInterface.openPanel();
-        } else {
-          /* Fallback: navigate to the hashtag which tarteaucitron watches */
-          window.location.hash = 'tarteaucitron';
-        }
+        window.location = window.location.pathname + '#tarteaucitron';
+        window.location.reload();
       });
     })();
 
