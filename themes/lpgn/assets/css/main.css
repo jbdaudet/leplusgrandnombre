@@ -18,6 +18,9 @@
   --color-dark:            #111116;
   --color-dark-surface:    #1a1a22;
 
+  /* Gradient */
+  --gradient-warm: linear-gradient(135deg, #FFD800 0%, #FF8205 40%, #FF6B35 60%, #E10500 100%);
+
   /* Typography — technical + human */
   --font-sans:     'Raleway', 'Segoe UI', sans-serif;
   --font-heading:  'Space Grotesk', 'Raleway', sans-serif;
