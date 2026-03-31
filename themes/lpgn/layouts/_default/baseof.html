@@ -98,7 +98,7 @@
           if (lineFill) {
             var jRect = journey.getBoundingClientRect();
             var scrolledInto = viewportH - jRect.top;
-            var jProgress = Math.max(0, Math.min(1, scrolledInto / (jRect.height + viewportH * 0.3)));
+            var jProgress = Math.max(0, Math.min(1, scrolledInto / jRect.height));
             lineFill.style.transform = 'scaleY(' + jProgress + ')';
           }
         }
