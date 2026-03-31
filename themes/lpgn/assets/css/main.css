@@ -7,8 +7,6 @@
   --color-bg:              #fafafa;
   --color-surface:         #f0f0f2;
   --color-border:          #e0e0e4;
-  --color-grid:            rgba(0, 0, 0, 0.04);
-  --color-grid-strong:     rgba(0, 0, 0, 0.08);
   --color-text:            #1a1a1a;
   --color-text-secondary:  #5c5c66;
   --color-text-tertiary:   #9c9ca6;
@@ -53,9 +51,6 @@
   --space-16: 4rem;
   --space-20: 5rem;
   --space-24: 6rem;
-
-  /* Grid */
-  --grid-size: 48px;
 
   /* Layout */
   --container-width: 980px;
@@ -109,17 +104,6 @@ img, video {
   display: block;
 }
 
-/* ============================================================
-   THE GRID — architectural blueprint underlay
-   ============================================================ */
-
-.site-main {
-  background-image:
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
-  background-position: center top;
-}
 
 
 /* ============================================================
@@ -295,15 +279,6 @@ th {
   padding-top: var(--header-height);
 }
 
-/* ============================================================
-   SECTION SEPARATORS — 1px grid lines
-   ============================================================ */
-
-.section-separator {
-  border: none;
-  border-top: 1px solid var(--color-border);
-  margin: 0;
-}
 
 /* ============================================================
    HEADER
@@ -515,17 +490,32 @@ th {
   overflow: hidden;
 }
 
-/* Grid overlay — stronger in hero */
+/* Animated gradient orb — light tones */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(var(--color-grid-strong) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid-strong) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
-  background-position: center center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 107, 53, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 30% 60%, rgba(255, 130, 5, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 70% 40%, rgba(225, 5, 0, 0.04) 0%, transparent 60%);
+  animation: heroGradientShift 8s ease-in-out infinite alternate;
   pointer-events: none;
+}
+
+@keyframes heroGradientShift {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1) translate(2%, -3%);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.05) translate(-2%, 2%);
+    opacity: 0.9;
+  }
 }
 
 .hero .container {
@@ -1646,7 +1636,6 @@ pre.mermaid {
 
   :root {
     --font-size-base: 17px;
-    --grid-size: 64px;
   }
 
   .burger {
