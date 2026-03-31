@@ -3,8 +3,10 @@
 
   <header class="assembly__hero">
     <div class="container">
-      <span class="assembly__label">// convictions</span>
       <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
+      {{- with .Description -}}
+      <p class="assembly__label">// {{ . }}</p>
+      {{- end -}}
     </div>
   </header>
 
