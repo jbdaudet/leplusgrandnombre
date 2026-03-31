@@ -996,39 +996,42 @@ th {
 
 #tarteaucitronRoot #tarteaucitronAlertBig {
   font-family: var(--font-sans) !important;
-  font-size: var(--text-sm) !important;
-  padding: var(--space-3) var(--space-4) !important;
+  font-size: 13px !important;
+  padding: 12px 20px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: var(--space-3) !important;
+  gap: 10px !important;
 }
 
 #tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronDisclaimerAlert {
-  font-size: var(--text-sm) !important;
+  font-size: 13px !important;
   margin: 0 !important;
   padding: 0 !important;
-  flex: 1 1 200px !important;
-  text-align: left !important;
+  text-align: center !important;
+  width: 100% !important;
 }
 
-#tarteaucitronRoot #tarteaucitronAlertBig button {
+#tarteaucitronRoot #tarteaucitronAlertBig button,
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronCloseAlert,
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPersonalize,
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronAllDenied2 {
   font-family: var(--font-sans) !important;
-  font-size: var(--text-xs) !important;
-  padding: 0.4rem 0.9rem !important;
-  border-radius: var(--radius-pill) !important;
-  margin: 0 !important;
+  font-size: 12px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  margin: 0 4px !important;
   white-space: nowrap !important;
 }
 
-#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPersonalize {
-  font-size: var(--text-xs) !important;
-  padding: 0.4rem 0.9rem !important;
-}
-
-#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPrivacyUrl {
-  font-size: var(--text-xs) !important;
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPrivacyUrl,
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPrivacyUrlDialog {
+  font-size: 12px !important;
+  white-space: nowrap !important;
 }
 
 /* ============================================================
