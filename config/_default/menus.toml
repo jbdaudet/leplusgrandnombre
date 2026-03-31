@@ -19,6 +19,8 @@
   weight = 30
 
 [[main]]
-  name = "Contact"
+  name = "Contact commercial"
   pageRef = "contact"
   weight = 40
+  [main.params]
+    cta = true

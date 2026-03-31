@@ -22,11 +22,19 @@
       <ul class="site-nav">
         {{- range .Site.Menus.main -}}
         <li>
+          {{- if .Params.cta -}}
+          <a
+            class="site-nav__cta"
+            href="{{ .URL }}"
+            {{- if $.IsMenuCurrent "main" . }} aria-current="page"{{ end -}}
+          >{{ .Name }}</a>
+          {{- else -}}
           <a
             class="site-nav__link"
             href="{{ .URL }}"
             {{- if $.IsMenuCurrent "main" . }} aria-current="page"{{ end -}}
           >{{ .Name }}</a>
+          {{- end -}}
         </li>
         {{- end -}}
       </ul>

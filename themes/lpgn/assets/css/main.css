@@ -58,7 +58,7 @@
   /* Layout */
   --container-width: 980px;
   --reading-width:   720px;
-  --header-height:   64px;
+  --header-height:   80px;
 
   /* Radii */
   --radius-sm:   4px;
@@ -521,15 +521,65 @@ th {
   font-weight: 600;
 }
 
+/* Nav CTA — accent button with brackets */
+.site-nav__cta {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  background: var(--color-accent-light);
+  position: relative;
+  --bracket-size: 8px;
+  --bracket-weight: 1.5px;
+  --bracket-offset: -3px;
+  --bracket-color: var(--color-accent);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.site-nav__cta::before,
+.site-nav__cta::after {
+  content: '';
+  position: absolute;
+  inset: var(--bracket-offset);
+  pointer-events: none;
+  transition: inset var(--transition-slow);
+}
+
+.site-nav__cta::before {
+  background:
+    linear-gradient(var(--bracket-color), var(--bracket-color)) top left / var(--bracket-size) var(--bracket-weight) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) top left / var(--bracket-weight) var(--bracket-size) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) top right / var(--bracket-size) var(--bracket-weight) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) top right / var(--bracket-weight) var(--bracket-size) no-repeat;
+}
+
+.site-nav__cta::after {
+  background:
+    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / var(--bracket-size) var(--bracket-weight) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / var(--bracket-weight) var(--bracket-size) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / var(--bracket-size) var(--bracket-weight) no-repeat,
+    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / var(--bracket-weight) var(--bracket-size) no-repeat;
+}
+
+.site-nav__cta:hover {
+  background: var(--color-accent);
+  color: var(--color-white);
+  opacity: 1;
+  --bracket-offset: -1px;
+}
+
 /* ============================================================
    FOOTER — dark blueprint footer
    ============================================================ */
 
 .site-footer {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border-top: none;
-  padding: var(--space-8) 0;
-  margin-top: 0;
+  padding: var(--space-10) 0;
+  margin-top: var(--space-16);
 }
 
 .site-footer__inner {
@@ -558,7 +608,8 @@ th {
 
 .site-footer__links {
   display: flex;
-  gap: var(--space-4);
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
 .site-footer__link {
@@ -1809,23 +1860,22 @@ th {
 }
 
 .form-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
   color: var(--color-text);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 0;
   font-family: var(--font-sans);
   font-size: var(--text-base);
   color: var(--color-text);
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
   border-radius: 0;
   transition: border-color var(--transition-fast);
   outline: none;
@@ -1835,7 +1885,7 @@ th {
 
 .form-input:focus,
 .form-textarea:focus {
-  border-color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
 
 .form-input::placeholder,
@@ -1845,26 +1895,13 @@ th {
 
 .form-textarea {
   resize: vertical;
-  min-height: 140px;
+  min-height: 120px;
+  border: 1px solid var(--color-border);
+  padding: 0.75rem;
 }
 
-.form-submit {
-  display: inline-block;
-  align-self: flex-start;
-  padding: 0.75rem 1.75rem;
-  background: var(--color-accent);
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: 500;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  transition: box-shadow var(--transition-base);
-}
-
-.form-submit:hover {
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+.form-textarea:focus {
+  border-color: var(--color-accent);
 }
 
 /* ============================================================
@@ -2134,6 +2171,10 @@ pre.mermaid svg .cluster-label {
 
   .site-nav li:last-child .site-nav__link {
     border-bottom: none;
+  }
+
+  .site-nav__cta {
+    font-size: var(--text-sm);
   }
 
   /* ---- SERPENTINE TIMELINE (desktop) ---- */
