@@ -4,9 +4,6 @@
   {{- partial "head.html" . -}}
 </head>
 <body>
-  {{/* The Focal Point — cursor glow (desktop only) */}}
-  <div class="focal-point" aria-hidden="true"></div>
-
   <div class="site-wrapper">
 
     {{- partial "header.html" . -}}
@@ -81,38 +78,6 @@
       }
     })();
 
-    /* The Focal Point — cursor glow that follows the mouse (desktop only) */
-    (function () {
-      var fp = document.querySelector('.focal-point');
-      if (!fp || window.matchMedia('(pointer: coarse)').matches) return;
-
-      var mouseX = 0, mouseY = 0, fpX = 0, fpY = 0;
-      var active = false;
-
-      document.addEventListener('mousemove', function (e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (!active) {
-          active = true;
-          fp.classList.add('is-active');
-          tick();
-        }
-      });
-
-      document.addEventListener('mouseleave', function () {
-        active = false;
-        fp.classList.remove('is-active');
-      });
-
-      function tick() {
-        if (!active) return;
-        fpX += (mouseX - fpX) * 0.12;
-        fpY += (mouseY - fpY) * 0.12;
-        fp.style.left = fpX + 'px';
-        fp.style.top = fpY + 'px';
-        requestAnimationFrame(tick);
-      }
-    })();
   </script>
 
 </body>

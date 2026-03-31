@@ -2,6 +2,7 @@
 title: "Nos convictions"
 description: "Ce qu'on croit, comment on travaille, et pourquoi ça change quelque chose."
 showTableOfContents: false
+layout: "convictions"
 ---
 
 ## Le problème n'est jamais technique
