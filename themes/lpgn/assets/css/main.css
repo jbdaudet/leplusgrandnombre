@@ -585,17 +585,18 @@ th {
 /* Scroll track — anchored at bottom of hero, grows on scroll to meet journey line */
 .hero__scroll-track {
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   /* Mobile: align with journey__line at left: 19px + container padding */
   left: calc(var(--space-4) + 19px);
   transform: translateX(-50%);
   width: 2px;
-  height: 160px;
+  height: 50vh;
   overflow: hidden;
   pointer-events: none;
-  /* Fade out at the top so the line dissolves under the heading */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+  z-index: 3;
+  /* Fade in from top, solid at bottom to seamlessly join journey line */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
 }
 
 .hero__scroll-fill {
@@ -672,8 +673,6 @@ th {
   width: 2px;
   background: var(--color-border);
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
 }
 
 .journey__line-fill {
