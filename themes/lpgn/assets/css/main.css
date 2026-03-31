@@ -671,6 +671,7 @@ th {
 }
 
 /* Vertical connecting line */
+/* Sharp line — hidden in the heading zone */
 .journey__line {
   position: absolute;
   left: 19px;
@@ -679,9 +680,24 @@ th {
   width: 2px;
   background: var(--color-border);
   overflow: hidden;
-  /* Fade in from top — line unblurs below the subheading */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 12%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%);
+  /* Sharp everywhere EXCEPT the heading zone (top 180px) */
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 180px, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 180px, black 100%);
+}
+
+/* Blurred duplicate — only visible in the heading zone */
+.journey__line-blur {
+  position: absolute;
+  left: 19px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+  filter: blur(3px);
+  pointer-events: none;
+  /* Only show in the heading zone, fade at edges for smooth transition */
+  mask-image: linear-gradient(to bottom, black 0%, black 120px, transparent 180px, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 120px, transparent 180px, transparent 100%);
 }
 
 .journey__line-fill {

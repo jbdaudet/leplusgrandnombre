@@ -27,12 +27,14 @@
 <section class="journey">
   <div class="container">
 
-    <h2 class="journey__heading reveal">La chaîne marketing, de bout en bout.</h2>
-    <p class="journey__subheading reveal reveal--delay-1">// chaque étape, une preuve de concept</p>
-
     <div class="journey__line" aria-hidden="true">
       <div class="journey__line-fill"></div>
+      {{/* Blur overlay in the heading zone */}}
+      <div class="journey__line-blur"></div>
     </div>
+
+    <h2 class="journey__heading reveal">La chaîne marketing, de bout en bout.</h2>
+    <p class="journey__subheading reveal reveal--delay-1">// chaque étape, une preuve de concept</p>
 
     <ol class="journey__steps">
       {{- range . -}}
