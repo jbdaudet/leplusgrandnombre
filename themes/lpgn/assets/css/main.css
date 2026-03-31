@@ -421,7 +421,7 @@ th {
    ============================================================ */
 
 .hero {
-  min-height: 55vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
