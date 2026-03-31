@@ -991,6 +991,47 @@ th {
 }
 
 /* ============================================================
+   TARTEAUCITRON OVERRIDES
+   ============================================================ */
+
+#tarteaucitronRoot #tarteaucitronAlertBig {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-sm) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-3) !important;
+}
+
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronDisclaimerAlert {
+  font-size: var(--text-sm) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 1 1 200px !important;
+  text-align: left !important;
+}
+
+#tarteaucitronRoot #tarteaucitronAlertBig button {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-xs) !important;
+  padding: 0.4rem 0.9rem !important;
+  border-radius: var(--radius-pill) !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPersonalize {
+  font-size: var(--text-xs) !important;
+  padding: 0.4rem 0.9rem !important;
+}
+
+#tarteaucitronRoot #tarteaucitronAlertBig #tarteaucitronPrivacyUrl {
+  font-size: var(--text-xs) !important;
+}
+
+/* ============================================================
    MERMAID DIAGRAMS
    ============================================================ */
 
