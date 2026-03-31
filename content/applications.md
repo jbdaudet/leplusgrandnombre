@@ -1,10 +1,10 @@
 ---
 title: "Quelques idées"
-description: "Cinq preuves de concept qui montrent comment la data et l'IA peuvent s'adapter à n'importe quel contexte métier."
+description: "Cinq cas d'application qui montrent comment la data et l'IA peuvent s'adapter à n'importe quel contexte métier."
 showTableOfContents: true
 ---
 
-Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce sont des démonstrateurs — construits pour des secteurs très différents — qui illustrent une même capacité : comprendre un contexte, identifier le bon levier, et construire la solution adaptée.
+Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce sont des applications construites pour des secteurs très différents, qui illustrent une même capacité : comprendre un contexte, identifier le bon levier, et construire la solution adaptée.
 
 ---
 
