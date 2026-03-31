@@ -997,7 +997,7 @@ th {
 #tarteaucitronRoot #tarteaucitronAlertBig {
   font-family: var(--font-sans) !important;
   font-size: 13px !important;
-  padding: 12px 20px !important;
+  padding: 16px 20px 24px !important;
   box-sizing: border-box !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -1012,8 +1012,9 @@ th {
   font-size: 13px !important;
   margin: 0 !important;
   padding: 0 !important;
-  text-align: center !important;
-  width: 100% !important;
+  text-align: left !important;
+  width: auto !important;
+  flex: 1 1 auto !important;
 }
 
 #tarteaucitronRoot #tarteaucitronAlertBig button,
