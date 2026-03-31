@@ -1,8 +1,9 @@
 {{ define "main" }}
 <div class="assembly">
 
-  <header class="assembly__hero">
-    <div class="container">
+  <header class="assembly__hero assembly__hero--canvas">
+    <canvas class="crosslines" aria-hidden="true"></canvas>
+    <div class="container" style="position:relative;z-index:1;">
       <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
       {{- with .Description -}}
       <p class="assembly__label">// {{ . }}</p>
@@ -19,4 +20,139 @@
   </div>
 
 </div>
+
+<script>
+(function () {
+  var canvas = document.querySelector('.crosslines');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var w, h;
+  var ACCENT = [255, 107, 53];
+  var LINE_COLOR = [200, 200, 204]; /* light grey */
+  var FADE_DURATION = 30000;        /* 30s to fully fade */
+  var FLASH_DURATION = 1000;        /* 1s intersection glow */
+  var SPAWN_INTERVAL = 1800;        /* new line every 1.8s */
+  var LINE_SPEED = 1.5;             /* px per frame */
+
+  var lines = [];     /* { x, y, dir: 'h'|'v', progress, born, opacity } */
+  var flashes = [];   /* { x, y, born } */
+
+  function resize() {
+    var rect = canvas.parentElement.getBoundingClientRect();
+    w = rect.width;
+    h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function spawnLine() {
+    var dir = Math.random() > 0.5 ? 'h' : 'v';
+    var line;
+    if (dir === 'h') {
+      line = { dir: 'h', x: 0, y: Math.random() * h, progress: 0, born: Date.now() };
+    } else {
+      line = { dir: 'v', x: Math.random() * w, y: 0, progress: 0, born: Date.now() };
+    }
+    /* Check for intersections with existing completed lines */
+    lines.forEach(function (other) {
+      if (other.dir === line.dir) return;
+      if (line.dir === 'h' && other.dir === 'v') {
+        flashes.push({ x: other.x, y: line.y, born: Date.now() + (other.x / LINE_SPEED) * 16.67 });
+      } else if (line.dir === 'v' && other.dir === 'h') {
+        flashes.push({ x: line.x, y: other.y, born: Date.now() + (other.y / LINE_SPEED) * 16.67 });
+      }
+    });
+    lines.push(line);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    var now = Date.now();
+
+    /* Draw lines */
+    for (var i = lines.length - 1; i >= 0; i--) {
+      var l = lines[i];
+      var age = now - l.born;
+      var fadeAlpha = Math.max(0, 1 - age / FADE_DURATION);
+
+      if (fadeAlpha <= 0) {
+        lines.splice(i, 1);
+        continue;
+      }
+
+      /* Grow the line */
+      if (l.dir === 'h') {
+        l.progress = Math.min(w, l.progress + LINE_SPEED);
+      } else {
+        l.progress = Math.min(h, l.progress + LINE_SPEED);
+      }
+
+      var alpha = fadeAlpha * 0.25;
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(' + LINE_COLOR[0] + ',' + LINE_COLOR[1] + ',' + LINE_COLOR[2] + ',' + alpha + ')';
+      ctx.lineWidth = 1;
+
+      if (l.dir === 'h') {
+        ctx.moveTo(0, l.y);
+        ctx.lineTo(l.progress, l.y);
+      } else {
+        ctx.moveTo(l.x, 0);
+        ctx.lineTo(l.x, l.progress);
+      }
+      ctx.stroke();
+    }
+
+    /* Draw intersection flashes */
+    for (var j = flashes.length - 1; j >= 0; j--) {
+      var f = flashes[j];
+      var flashAge = now - f.born;
+
+      if (flashAge < 0) continue; /* not born yet */
+      if (flashAge > FLASH_DURATION) {
+        flashes.splice(j, 1);
+        continue;
+      }
+
+      var flashProgress = flashAge / FLASH_DURATION;
+      /* Bloom then fade */
+      var flashAlpha;
+      if (flashProgress < 0.2) {
+        flashAlpha = flashProgress / 0.2; /* ramp up */
+      } else {
+        flashAlpha = 1 - (flashProgress - 0.2) / 0.8; /* fade out */
+      }
+
+      var radius = 2 + flashProgress * 6;
+
+      /* Outer glow */
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',' + (flashAlpha * 0.3) + ')';
+      ctx.fill();
+
+      /* Inner bright dot */
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',' + (flashAlpha * 0.8) + ')';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+
+  /* Spawn lines at intervals */
+  spawnLine();
+  spawnLine();
+  setInterval(spawnLine, SPAWN_INTERVAL);
+
+  draw();
+  window.addEventListener('resize', resize);
+})();
+</script>
 {{ end }}

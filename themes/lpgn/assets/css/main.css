@@ -1369,6 +1369,21 @@ th {
   padding: var(--space-16) 0 var(--space-12);
 }
 
+/* Hero variant with canvas background */
+.assembly__hero--canvas {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+}
+
+.crosslines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .assembly__label {
   display: block;
   font-family: var(--font-mono);
@@ -1939,18 +1954,22 @@ th {
    TARTEAUCITRON OVERRIDES
    ============================================================ */
 
-/* Force-hide all tarteaucitron floating elements — they block footer clicks */
-#tarteaucitronRoot {
-  pointer-events: none !important;
-}
-
+/* Force-hide tarteaucitron floating elements that block footer clicks */
 #tarteaucitronRoot #tarteaucitronIcon,
-#tarteaucitronRoot #tarteaucitronAlertSmall,
-#tarteaucitronRoot #tarteaucitronAlertBig {
+#tarteaucitronRoot #tarteaucitronAlertSmall {
   display: none !important;
 }
 
-/* Re-enable pointer events only when the full panel is open */
+/* The alert banner: hidden by default but can be re-shown by JS */
+#tarteaucitronRoot #tarteaucitronAlertBig {
+  display: none;
+}
+
+#tarteaucitronRoot #tarteaucitronAlertBig.tac-forceshow {
+  display: flex !important;
+}
+
+/* The full panel must be interactive */
 #tarteaucitronRoot #tarteaucitronBack {
   pointer-events: auto !important;
 }

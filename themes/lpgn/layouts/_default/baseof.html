@@ -17,6 +17,20 @@
   </div>
 
   <script>
+    /* Cookie banner reopener */
+    (function () {
+      var btn = document.getElementById('open-cookies');
+      if (!btn) return;
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var banner = document.getElementById('tarteaucitronAlertBig');
+        if (banner) {
+          banner.classList.add('tac-forceshow');
+          banner.style.display = 'flex';
+        }
+      });
+    })();
+
     /* Header: transparent at top, blurred on scroll */
     (function () {
       var header = document.querySelector('.site-header');
