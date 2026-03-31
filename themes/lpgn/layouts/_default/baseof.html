@@ -108,6 +108,102 @@
       }
     })();
 
+    /* Floating network graph — hero background */
+    (function () {
+      var canvas = document.querySelector('.hero__network');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      var w, h, nodes = [];
+      var NODE_COUNT = 40;
+      var CONNECT_DIST = 150;
+      var NODE_RADIUS = 2.5;
+      var ACCENT = [255, 107, 53];
+
+      function resize() {
+        var rect = canvas.parentElement.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function init() {
+        resize();
+        nodes = [];
+        for (var i = 0; i < NODE_COUNT; i++) {
+          nodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: NODE_RADIUS + Math.random() * 1.5
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+
+        /* Draw edges between nearby nodes */
+        for (var i = 0; i < nodes.length; i++) {
+          for (var j = i + 1; j < nodes.length; j++) {
+            var dx = nodes[i].x - nodes[j].x;
+            var dy = nodes[i].y - nodes[j].y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECT_DIST) {
+              var alpha = (1 - dist / CONNECT_DIST) * 0.12;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ',' + alpha + ')';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+
+        /* Draw nodes */
+        for (var k = 0; k < nodes.length; k++) {
+          var n = nodes[k];
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ', 0.15)';
+          ctx.fill();
+          /* Tiny bright center */
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 1, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + ACCENT[0] + ',' + ACCENT[1] + ',' + ACCENT[2] + ', 0.35)';
+          ctx.fill();
+        }
+      }
+
+      function update() {
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          n.x += n.vx;
+          n.y += n.vy;
+          /* Bounce off edges gently */
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+          n.x = Math.max(0, Math.min(w, n.x));
+          n.y = Math.max(0, Math.min(h, n.y));
+        }
+      }
+
+      function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      init();
+      loop();
+      window.addEventListener('resize', function () { resize(); });
+    })();
   </script>
 
 </body>
