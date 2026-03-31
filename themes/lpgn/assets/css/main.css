@@ -503,12 +503,8 @@ th {
   font-weight: 500;
   color: var(--color-text);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-border);
-  transition: color var(--transition-fast);
-}
-
-.site-nav li:last-child .site-nav__link {
   border-bottom: none;
+  transition: color var(--transition-fast);
 }
 
 .site-nav__link:hover {
