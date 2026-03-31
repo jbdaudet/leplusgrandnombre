@@ -1,12 +1,8 @@
 ---
-title: "Contact"
-description: "Contactez Le Plus Grand Nombre"
+title: "Contactez-nous"
+description: "Vous avez un besoin spécifique ? N'hésitez pas à nous écrire."
 showTableOfContents: false
-hideTitle: true
+layout: "contact"
 ---
-
-## Contactez-nous
-
-Vous avez un besoin spécifique ? N'hésitez pas à nous écrire.
 
 {{< contact-form >}}
