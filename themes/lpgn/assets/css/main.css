@@ -681,8 +681,8 @@ th {
   background: var(--color-border);
   overflow: hidden;
   /* Invisible in heading zone, sharp below it */
-  mask-image: linear-gradient(to bottom, transparent 0%, transparent 280px, black 320px, black 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 280px, black 320px, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 160px, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 160px, black 100%);
 }
 
 /* Blurred duplicate — only visible in the heading zone */
@@ -696,8 +696,8 @@ th {
   filter: blur(3px);
   pointer-events: none;
   /* Visible in heading zone, fades out before the sharp line takes over */
-  mask-image: linear-gradient(to bottom, black 0%, black 240px, transparent 320px, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 240px, transparent 320px, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 110px, transparent 160px, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 110px, transparent 160px, transparent 100%);
 }
 
 .journey__line-fill {
@@ -1728,6 +1728,15 @@ pre.mermaid {
   .journey__line {
     left: 50%;
     transform: translateX(-50%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 240px, black 280px, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 240px, black 280px, black 100%);
+  }
+
+  .journey__line-blur {
+    left: 50%;
+    transform: translateX(-50%);
+    mask-image: linear-gradient(to bottom, black 0%, black 200px, transparent 280px, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 200px, transparent 280px, transparent 100%);
   }
 
   .journey__steps {
