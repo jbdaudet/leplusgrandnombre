@@ -4,7 +4,10 @@
     <p class="site-footer__copy">
       &copy; {{ now.Year }} {{ .Site.Title }}
     </p>
-    <a href="/politique-de-confidentialite/" class="site-footer__link">Politique de confidentialité</a>
+    <div class="site-footer__links">
+      <a href="/politique-de-confidentialite/" class="site-footer__link">Politique de confidentialité</a>
+      <a href="#" class="site-footer__link" onclick="tarteaucitron.userInterface.openPanel();return false;">Cookies</a>
+    </div>
 
   </div>
 </footer>

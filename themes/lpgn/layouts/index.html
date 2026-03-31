@@ -1,12 +1,10 @@
 {{ define "main" }}
 
 <section class="hero">
-  <div class="hero__gradient" aria-hidden="true"></div>
-  <div class="hero__grain" aria-hidden="true"></div>
   <div class="container">
 
     {{- with .Params.phrase -}}
-    <p class="hero__phrase reveal">{{ . }}</p>
+    <p class="hero__phrase reveal">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
     {{- end -}}
 
     {{- with .Params.subtitle -}}
@@ -25,7 +23,7 @@
   <div class="container">
 
     <h2 class="journey__heading reveal">La chaîne marketing, de bout en bout.</h2>
-    <p class="journey__subheading reveal reveal--delay-1">Chaque étape, une preuve de concept.</p>
+    <p class="journey__subheading reveal reveal--delay-1">// chaque étape, une preuve de concept</p>
 
     <div class="journey__line" aria-hidden="true">
       <div class="journey__line-fill"></div>

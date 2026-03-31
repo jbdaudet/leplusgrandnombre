@@ -6,7 +6,18 @@
     <a href="/blog/" class="back-link">&#8592; Retour</a>
     {{- end -}}
 
-    <div class="page-content">
+    <header class="page-header reveal">
+      <h1 class="page-header__title">{{ .Title }}</h1>
+      {{- if and .Date (eq .Section "blog") -}}
+      <p class="page-header__meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">
+          {{- partial "date-fr.html" .Date -}}
+        </time>
+      </p>
+      {{- end -}}
+    </header>
+
+    <div class="page-content reveal reveal--delay-1">
       {{ .Content }}
     </div>
 
