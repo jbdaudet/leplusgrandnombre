@@ -5,11 +5,11 @@ A geomarketing analysis tool for France that generates catchment-area reports fo
 ## Table of Contents
 
 - [Key Concepts](#key-concepts)
-- [Sections](#sections) — Zone, Population, Accessibility, Equipments, Concurrence
+- [Sections](#sections) — Zone, Population, Accessibility, Equipments, Interests, Concurrence
 - [Services](#services) — Analysis, Catchment, Comparison, Geocoding
 - [Data Layer](#data-layer) — Database, OSM Fetcher, SQL Queries
 - [Models](#models) — KPI, Section, Analysis
-- [Utilities](#utilities) — Custom LLM, Google Places
+- [Utilities](#utilities) — Custom LLM, Google Places, Meta Interest Client
 - [Getting Started](#getting-started) — Prerequisites, Installation, Data Files, Environment Variables, Running, DevContainer
 - [API Endpoints](#api-endpoints)
 - [Project Structure](#project-structure)
@@ -65,9 +65,13 @@ The Accessibility section evaluates public transport coverage within the catchme
 
 The Equipments section inventories local amenities from the INSEE BPE database across five categories: commerce, education, healthcare, leisure, and services. Counts are normalized per 10,000 inhabitants for fair comparison with the département reference. A composite amenities score (0-100) is computed using a log-ratio against département equipment density. The section includes a categorized marker map of all facilities, a bar chart comparing per-capita counts by category to the département, and a detailed breakdown table of the top equipment types present.
 
+### Centres d'intérêt (`app/sections/interests.py`)
+
+The Interests section profiles the catchment area's population through Meta (Facebook) audience interest data. It estimates the share of Meta users in the catchment who match each of 12 predefined interest categories (grouped into Patrimoine & Statut, Valeurs & Éthique, Capital Culturel, and Mode de vie & Densité), then computes an affinity index against a France reference. The France reference is the average of 7 major French cities (Paris, Lyon, Marseille, Toulouse, Bordeaux, Lille, Strasbourg) queried with the same radius as the catchment, eliminating scale-dependent bias. An affinity index above 100 means the interest is over-represented locally versus the national average. API calls are made in parallel via ThreadPoolExecutor. The France reference is cached per radius in `cache/meta_france_ref_{radius}km.json` with a 30-day TTL.
+
 ### Concurrence (`app/sections/concurrence.py`)
 
-The Concurrence section analyzes the competitive landscape around a location for a user-specified brand. It uses an LLM (via the custom LLM wrapper) to identify the top 3 direct competitors and an appropriate search radius based on business type. Competitor stores are then located via the Google Places API, producing KPIs for store count, competitor density per km², average Google rating, and a competition pressure score (0-100). Reviews are summarized by an LLM into strengths and weaknesses per competitor. Results are displayed on a color-coded map and a bar chart showing store distribution by competitor.
+The Concurrence section analyzes the competitive landscape around a location for a user-specified brand. It uses an LLM (via the custom LLM wrapper) to identify the top 3 direct competitors and an appropriate search radius based on business type. Competitor stores are then located via the Google Places API (New), producing KPIs for store count, competitor density per km², average Google rating, and a competition pressure score (0-100). Reviews are summarized by an LLM into strengths and weaknesses per competitor. Results are displayed on a color-coded map and a bar chart showing store distribution by competitor.
 
 ## Services
 
@@ -123,7 +127,11 @@ A LangChain-compatible wrapper that provides a unified interface to LLM provider
 
 ### Google Places Client (`app/utils/google_places.py`)
 
-Client for the Google Places API, used to search for competitor stores by name within a radius and retrieve their ratings, review counts, and review texts.
+Client for the Google Places API (New) v1. Uses the `places:searchText` endpoint with field masks to fetch competitor store locations, ratings, and reviews in a single API call per competitor (instead of separate search + detail calls). The field mask controls which pricing tier is billed — reviews are only requested when needed (Preferred tier). Response data is normalized to a legacy dict format so downstream code is unaffected.
+
+### Meta Interest Client (`app/data/meta_interest_client.py`)
+
+Client for the Meta (Facebook) Graph API. Queries audience reach estimates for a geographic circle (latitude, longitude, radius) with optional interest targeting. Used by the Interests section to estimate how many Meta users in a catchment area match each interest category. Includes configurable retry logic with exponential backoff for rate-limit handling.
 
 ## Getting Started
 
@@ -162,9 +170,11 @@ Ask a team member for the current data files, or rebuild them from the raw sourc
 |---|---|---|---|
 | `FLASK_ENV` | No | `app/config.py` | `production` or `development` (default) |
 | `KLP_OPENAI_API_KEY` | For Concurrence section | `app/utils/custom_llm.py` | OpenAI API key for competitor identification and review summarization |
-| `GOOGLE_MAPS_API_KEY` | For Concurrence section | `app/utils/google_places.py` | Google Places API key for competitor store lookup |
+| `GOOGLE_MAPS_API_KEY` | For Concurrence section | `app/utils/google_places.py` | Google Maps API key for competitor store lookup (requires "Places API (New)" enabled in Google Cloud Console) |
+| `FACEBOOK_API_KEY` | For Interests section | `app/data/meta_interest_client.py` | Meta (Facebook) Graph API access token for audience interest queries |
+| `FACEBOOK_ACCOUNT_ID` | For Interests section | `app/data/meta_interest_client.py` | Meta Ad Account ID for audience reach estimates |
 
-The core sections (Zone, Population, Accessibility, Equipments) work without any API keys — they rely only on local datasets and the free French government geocoding API. The Concurrence section requires both `KLP_OPENAI_API_KEY` and `GOOGLE_MAPS_API_KEY` to function.
+The core sections (Zone, Population, Accessibility, Equipments) work without any API keys — they rely only on local datasets and the free French government geocoding API. The Interests section requires `FACEBOOK_API_KEY` and `FACEBOOK_ACCOUNT_ID`. The Concurrence section requires both `KLP_OPENAI_API_KEY` and `GOOGLE_MAPS_API_KEY`.
 
 Environment variables can be set in a `local-secrets.env` file at the project root (gitignored). The application loads it automatically on startup via `python-dotenv`.
 
@@ -238,7 +248,8 @@ Get the catchment radius and urban classification for a location. Body: `{"latit
 - **INSEE UU** (Unités Urbaines) — Urban/rural classification per commune, used to determine catchment radius
 - **IGN** (Institut Géographique National) — Administrative boundary geometries for IRIS zones and communes
 - **OpenStreetMap** — Street network (via OSMnx), live transit stop queries (via Overpass API)
-- **Google Places API** — Competitor store locations, ratings, and reviews (Concurrence section only)
+- **Meta (Facebook) Graph API** — Audience reach estimates by interest category for geographic circles (Interests section only)
+- **Google Places API (New)** — Competitor store locations, ratings, and reviews via `places:searchText` v1 endpoint (Concurrence section only)
 - **OpenAI API** — LLM for competitor identification and review summarization (Concurrence section only)
 
 ## References
