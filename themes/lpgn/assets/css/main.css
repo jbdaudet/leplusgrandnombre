@@ -1950,22 +1950,21 @@ th {
    TARTEAUCITRON OVERRIDES
    ============================================================ */
 
-/* Force-hide tarteaucitron floating elements that block footer clicks */
+/* Force-hide ALL tarteaucitron floating elements — they block footer clicks */
 #tarteaucitronRoot #tarteaucitronIcon,
-#tarteaucitronRoot #tarteaucitronAlertSmall {
-  display: none !important;
-}
-
-/* The alert banner: hidden by default but can be re-shown by JS */
+#tarteaucitronRoot #tarteaucitronAlertSmall,
 #tarteaucitronRoot #tarteaucitronAlertBig {
-  display: none;
+  display: none !important;
+  pointer-events: none !important;
 }
 
-#tarteaucitronRoot #tarteaucitronAlertBig.tac-forceshow {
+/* When user clicks "Choix des cookies", JS adds this class to force-show the banner */
+#tarteaucitronRoot #tarteaucitronAlertBig.tac-show {
   display: flex !important;
+  pointer-events: auto !important;
 }
 
-/* The full panel must be interactive */
+/* The full settings panel must be interactive */
 #tarteaucitronRoot #tarteaucitronBack {
   pointer-events: auto !important;
 }
