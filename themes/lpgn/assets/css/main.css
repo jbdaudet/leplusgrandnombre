@@ -637,7 +637,7 @@ th {
    ============================================================ */
 
 .journey {
-  padding: var(--space-16) 0 var(--space-20);
+  padding: var(--space-16) 0 var(--space-24);
   position: relative;
   background: var(--color-white);
 }
