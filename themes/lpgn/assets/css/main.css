@@ -623,6 +623,8 @@ th {
   font-family: var(--font-sans);
   cursor: pointer;
   text-align: left;
+  position: relative;
+  z-index: 10;
 }
 
 .site-footer__link:hover {
