@@ -1,11 +1,11 @@
 {{ define "main" }}
 <div class="applications">
 
-  <header class="applications__hero reveal">
+  <header class="assembly__hero">
     <div class="container">
-      <h1 class="applications__title">{{ .Title }}</h1>
+      <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
       {{- with .Description -}}
-      <p class="applications__intro">{{ . }}</p>
+      <p class="assembly__label">// {{ . }}</p>
       {{- end -}}
     </div>
   </header>
@@ -19,20 +19,203 @@
 </div>
 
 <script>
-  /* Mermaid progressive reveal — nodes, arrows & labels appear one by one on scroll */
+  /* ---- Transform each app section into a 4-tile Assembly unit ---- */
+  (function () {
+    var content = document.querySelector('.applications__content .container');
+    if (!content) return;
+
+    /* Find each app section: starts with an h2, ends before the next h2 or end */
+    var h2s = Array.from(content.querySelectorAll('h2'));
+
+    h2s.forEach(function (h2) {
+      /* Collect all siblings until next h2 or hr */
+      var els = [];
+      var sibling = h2.nextElementSibling;
+      while (sibling && sibling.tagName !== 'H2' && !(sibling.tagName === 'HR')) {
+        els.push(sibling);
+        sibling = sibling.nextElementSibling;
+      }
+
+      /* Split elements into: contexte/défi/résultat paragraphs, h3 "L'approche", and the rest */
+      var introParagraph = null;
+      var contextP = null, defiP = null, resultatP = null;
+      var approachTitle = null;
+      var approachEls = [];
+      var phase = 'intro'; /* intro -> sections -> approach */
+
+      els.forEach(function (el) {
+        var text = el.textContent || '';
+        if (phase === 'intro' && el.tagName === 'P' && !text.match(/^Le contexte\./)) {
+          introParagraph = el;
+          return;
+        }
+        if (el.tagName === 'P' && text.match(/^Le contexte\./)) { contextP = el; phase = 'sections'; return; }
+        if (el.tagName === 'P' && text.match(/^Le défi\./)) { defiP = el; return; }
+        if (el.tagName === 'P' && text.match(/^Le résultat\./)) { resultatP = el; return; }
+        if (el.tagName === 'H3') { approachTitle = el; phase = 'approach'; return; }
+        if (phase === 'approach') { approachEls.push(el); return; }
+      });
+
+      if (!contextP || !defiP || !resultatP) return;
+
+      /* Build the assembly unit */
+      var unit = document.createElement('div');
+      unit.className = 'app-assembly';
+
+      /* ---- Title tile ---- */
+      var titleTile = document.createElement('div');
+      titleTile.className = 'app-assembly__tile app-assembly__tile--title';
+      var titleInner = document.createElement('div');
+      titleInner.className = 'app-assembly__tile-inner';
+      titleInner.appendChild(h2.cloneNode(true));
+      if (introParagraph) {
+        var introClone = introParagraph.cloneNode(true);
+        introClone.className = 'app-assembly__intro';
+        titleInner.appendChild(introClone);
+      }
+      titleTile.appendChild(titleInner);
+      unit.appendChild(titleTile);
+
+      /* Seam between title and trio */
+      var seam1 = document.createElement('div');
+      seam1.className = 'app-assembly__seam';
+      unit.appendChild(seam1);
+
+      /* ---- Trio: contexte + défi + résultat side by side ---- */
+      var trio = document.createElement('div');
+      trio.className = 'app-assembly__trio app-assembly__dock';
+
+      function makeTile(label, pEl) {
+        var tile = document.createElement('div');
+        tile.className = 'app-assembly__tile app-assembly__tile--section';
+        var lbl = document.createElement('span');
+        lbl.className = 'app-assembly__section-label';
+        lbl.textContent = label;
+        tile.appendChild(lbl);
+        /* Remove the bold label from the paragraph text */
+        var p = pEl.cloneNode(true);
+        var strong = p.querySelector('strong');
+        if (strong) strong.remove();
+        tile.appendChild(p);
+        return tile;
+      }
+
+      trio.appendChild(makeTile('contexte', contextP));
+      trio.appendChild(makeTile('défi', defiP));
+      trio.appendChild(makeTile('résultat', resultatP));
+      unit.appendChild(trio);
+
+      /* Seam between trio and approach */
+      if (approachTitle) {
+        var seam2 = document.createElement('div');
+        seam2.className = 'app-assembly__seam';
+        unit.appendChild(seam2);
+
+        /* ---- Approach tile ---- */
+        var approachTile = document.createElement('div');
+        approachTile.className = 'app-assembly__tile app-assembly__tile--approach app-assembly__dock app-assembly__dock--2';
+        var h3Clone = approachTitle.cloneNode(true);
+        approachTile.appendChild(h3Clone);
+        approachEls.forEach(function (el) {
+          approachTile.appendChild(el.cloneNode(true));
+        });
+        unit.appendChild(approachTile);
+      }
+
+      /* Add SVG joints */
+      var corners = [
+        { cls: 'assembly__joint assembly__joint--tl', d: 'M0 20 L0 0 L20 0' },
+        { cls: 'assembly__joint assembly__joint--tr', d: 'M20 20 L20 0 L0 0' },
+        { cls: 'assembly__joint assembly__joint--bl', d: 'M0 0 L0 20 L20 20' },
+        { cls: 'assembly__joint assembly__joint--br', d: 'M20 0 L20 20 L0 20' }
+      ];
+      corners.forEach(function (c) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', c.cls);
+        svg.setAttribute('width', '20');
+        svg.setAttribute('height', '20');
+        svg.setAttribute('aria-hidden', 'true');
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', c.d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'currentColor');
+        path.setAttribute('stroke-width', '1');
+        svg.appendChild(path);
+        unit.appendChild(svg);
+      });
+
+      /* Replace the original elements with the unit */
+      h2.parentNode.insertBefore(unit, h2);
+      h2.remove();
+      if (introParagraph) introParagraph.remove();
+      contextP.remove();
+      defiP.remove();
+      resultatP.remove();
+      if (approachTitle) approachTitle.remove();
+      approachEls.forEach(function (el) { el.remove(); });
+    });
+
+    /* Remove leftover hrs */
+    content.querySelectorAll('hr').forEach(function (hr) { hr.remove(); });
+
+    /* ---- Docking animation: 4-piece assembly ---- */
+    var appUnits = document.querySelectorAll('.app-assembly');
+    if (!appUnits.length) return;
+
+    var timers = new Map();
+
+    function clearTimers(unit) {
+      var t = timers.get(unit);
+      if (t) { t.forEach(function (id) { clearTimeout(id); }); }
+      timers.set(unit, []);
+    }
+
+    function assemble(unit) {
+      clearTimers(unit);
+      var ids = [];
+      /* Step 1: title tile visible immediately */
+      unit.classList.add('is-title-visible');
+      /* Step 2: trio docks up */
+      ids.push(setTimeout(function () { unit.classList.add('is-docked'); }, 400));
+      /* Step 3: first seam flashes */
+      ids.push(setTimeout(function () { unit.classList.add('is-connected'); }, 800));
+      /* Step 4: approach docks up */
+      ids.push(setTimeout(function () { unit.classList.add('is-docked-2'); }, 1100));
+      /* Step 5: second seam flashes */
+      ids.push(setTimeout(function () { unit.classList.add('is-connected-2'); }, 1500));
+      /* Step 6: settle */
+      ids.push(setTimeout(function () { unit.classList.add('is-settled'); }, 2200));
+      timers.set(unit, ids);
+    }
+
+    function disassemble(unit) {
+      clearTimers(unit);
+      unit.classList.remove('is-title-visible', 'is-docked', 'is-connected', 'is-docked-2', 'is-connected-2', 'is-settled');
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          assemble(entry.target);
+        } else {
+          disassemble(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    appUnits.forEach(function (u) { timers.set(u, []); observer.observe(u); });
+  })();
+
+  /* ---- Mermaid progressive reveal ---- */
   (function () {
     function initMermaidReveal() {
       document.querySelectorAll('pre.mermaid svg, div.mermaid svg').forEach(function (svg) {
         if (svg.dataset.revealInit) return;
         svg.dataset.revealInit = '1';
-
         var nodes = Array.from(svg.querySelectorAll('.node'));
         var edges = Array.from(svg.querySelectorAll('.edgePath'));
         var labels = Array.from(svg.querySelectorAll('.edgeLabel'));
-        /* Also catch arrow markers (the arrowhead tips) */
         var markers = Array.from(svg.querySelectorAll('marker'));
-
-        /* Build ordered sequence: node, then its outgoing edge + label, then next node... */
         var items = [];
         var maxLen = Math.max(nodes.length, edges.length, labels.length);
         for (var i = 0; i < maxLen; i++) {
@@ -40,58 +223,30 @@
           if (i < edges.length) items.push(edges[i]);
           if (i < labels.length) items.push(labels[i]);
         }
-
         if (!items.length) return;
-
-        /* Set all items invisible */
-        items.forEach(function (el) {
-          el.style.opacity = '0';
-          el.style.transition = 'opacity 0.4s ease';
-        });
-        /* Hide arrow markers too */
-        markers.forEach(function (m) {
-          m.style.opacity = '0';
-          m.style.transition = 'opacity 0.4s ease';
-        });
-
+        items.forEach(function (el) { el.style.opacity = '0'; el.style.transition = 'opacity 0.4s ease'; });
+        markers.forEach(function (m) { m.style.opacity = '0'; m.style.transition = 'opacity 0.4s ease'; });
         var container = svg.closest('pre.mermaid') || svg.closest('div.mermaid') || svg.parentElement;
-
         function updateReveal() {
           var rect = container.getBoundingClientRect();
           var viewH = window.innerHeight;
-          /*
-           * Start revealing only when the diagram is 40% up from the bottom of the viewport.
-           * Complete when it reaches 30% from the top.
-           * This means items start appearing well before the reader "arrives" at the diagram.
-           */
-          var triggerStart = viewH * 0.6;  /* diagram top must be above this line to start */
-          var triggerEnd = viewH * 0.3;    /* fully revealed when diagram top reaches here */
+          var triggerStart = viewH * 0.6;
+          var triggerEnd = viewH * 0.3;
           var progress = Math.max(0, Math.min(1, (triggerStart - rect.top) / (triggerStart - triggerEnd)));
           var showCount = Math.round(progress * items.length);
-
-          items.forEach(function (el, idx) {
-            el.style.opacity = idx < showCount ? '1' : '0';
-          });
-          /* Show markers as soon as any edge is visible */
-          var markersVisible = showCount > 1 ? '1' : '0';
-          markers.forEach(function (m) { m.style.opacity = markersVisible; });
+          items.forEach(function (el, idx) { el.style.opacity = idx < showCount ? '1' : '0'; });
+          markers.forEach(function (m) { m.style.opacity = showCount > 1 ? '1' : '0'; });
         }
-
         window.addEventListener('scroll', updateReveal, { passive: true });
         updateReveal();
       });
     }
-
-    /* Mermaid renders async — wait for it, then init reveal */
     var checkInterval = setInterval(function () {
-      var svgs = document.querySelectorAll('pre.mermaid svg, div.mermaid svg');
-      if (svgs.length > 0) {
+      if (document.querySelectorAll('pre.mermaid svg, div.mermaid svg').length > 0) {
         clearInterval(checkInterval);
         setTimeout(initMermaidReveal, 100);
       }
     }, 200);
-
-    /* Safety: stop checking after 10s */
     setTimeout(function () { clearInterval(checkInterval); }, 10000);
   })();
 </script>
