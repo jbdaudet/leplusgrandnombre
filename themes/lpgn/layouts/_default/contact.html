@@ -29,7 +29,7 @@
   var dpr = window.devicePixelRatio || 1;
   var w, h;
   var ACCENT = [255, 107, 53];
-  var LINE_COLOR = [200, 200, 204]; /* light grey */
+  var LINE_COLOR = [255, 107, 53];  /* accent corail */
   var FADE_DURATION = 30000;        /* 30s to fully fade */
   var FLASH_DURATION = 1000;        /* 1s intersection glow */
   var SPAWN_INTERVAL = 1800;        /* new line every 1.8s */
@@ -91,7 +91,7 @@
         l.progress = Math.min(h, l.progress + LINE_SPEED);
       }
 
-      var alpha = fadeAlpha * 0.25;
+      var alpha = fadeAlpha * 0.45;
       ctx.beginPath();
       ctx.strokeStyle = 'rgba(' + LINE_COLOR[0] + ',' + LINE_COLOR[1] + ',' + LINE_COLOR[2] + ',' + alpha + ')';
       ctx.lineWidth = 1;
