@@ -49,7 +49,7 @@
 </div>
 
 <script>
-  /* Docking animation: reversible — assembles on scroll down, disassembles on scroll up */
+  /* Docking animation: assembles once, re-highlights on scroll back */
   (function () {
     var units = document.querySelectorAll('.assembly__unit');
     if (!units.length) return;
@@ -65,6 +65,19 @@
     }
 
     function assemble(unit) {
+      if (unit.dataset.assembled) {
+        /* Already assembled — just re-highlight */
+        clearTimers(unit);
+        unit.classList.remove('is-settled');
+        unit.classList.add('is-connected');
+        var ids = [];
+        ids.push(setTimeout(function () {
+          unit.classList.add('is-settled');
+        }, 800));
+        timers.set(unit, ids);
+        return;
+      }
+
       clearTimers(unit);
       var ids = [];
       /* Reveal the title */
@@ -82,27 +95,15 @@
       /* Settle */
       ids.push(setTimeout(function () {
         unit.classList.add('is-settled');
+        unit.dataset.assembled = '1';
       }, 1700));
       timers.set(unit, ids);
     }
 
-    function disassemble(unit) {
-      clearTimers(unit);
-      var ids = [];
-      /* Step 1: flash accent again — seam + borders + joints */
-      unit.classList.remove('is-settled');
-      unit.classList.add('is-connected');
-      /* Step 2: undock body */
-      ids.push(setTimeout(function () {
-        unit.classList.remove('is-docked');
-      }, 400));
-      /* Step 3: remove reveals and connected state */
-      ids.push(setTimeout(function () {
-        unit.classList.remove('is-connected');
-        var reveals = unit.querySelectorAll('.reveal');
-        reveals.forEach(function (r) { r.classList.remove('is-visible'); });
-      }, 800));
-      timers.set(unit, ids);
+    function settle(unit) {
+      if (!unit.dataset.assembled) return;
+      /* Just settle back to grey when scrolling away */
+      unit.classList.add('is-settled');
     }
 
     var observer = new IntersectionObserver(function (entries) {
@@ -110,7 +111,7 @@
         if (entry.isIntersecting) {
           assemble(entry.target);
         } else {
-          disassemble(entry.target);
+          settle(entry.target);
         }
       });
     }, { threshold: 0.15 });

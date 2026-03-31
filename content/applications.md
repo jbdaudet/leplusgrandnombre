@@ -140,12 +140,16 @@ flowchart TB
 L'autre moteur restructure les articles du coach en utilisant les **patterns narratifs des meilleurs TED talks**.
 
 {{< mermaid >}}
-flowchart LR
-    A["Article\ndu coach"] --> B["Analyse\nstructurelle"]
-    B --> C["Comparaison\nvs 267 TED talks"]
-    C --> D["Arc narratif\nsuggéré"]
-    D --> E["Réécriture\nsection par section"]
-    E --> F["Simulation\nlecteur"]
+flowchart TB
+  subgraph row1 [" "]
+    direction LR
+    A["Article\ndu coach"] --> B["Analyse\nstructurelle"] --> C["Comparaison\nvs 267 TED talks"]
+  end
+  subgraph row2 [" "]
+    direction RL
+    F["Simulation\nlecteur"] --> E["Réécriture\nsection par section"] --> D["Arc narratif\nsuggéré"]
+  end
+  C --> D
 {{< /mermaid >}}
 
 **267 TED talks analysés.** Chaque talk est découpé en sections étiquetées (ouverture, histoire, concept, exemple, application, conclusion) avec leur *purpose* (créer de la curiosité, ancrer en mémoire, reframer...). Un **graphe de transitions** pondéré capture les enchaînements : après une "histoire", un talk qui "enseigne" enchaîne sur un "concept" 40% du temps, mais un talk qui "challenge" passe à une "objection" 25% du temps.
@@ -237,15 +241,7 @@ flowchart TB
 
 **Classification multi-agents.** Chaque question est classée : *tactique* (donnée chiffrée), *stratégique* (question complexe nécessitant plusieurs sous-requêtes), *corpus* (question d'opinion — "que pense Jancovici du nucléaire ?"), ou *métadonnée* (question sur les données elles-mêmes). Chaque type suit un chemin différent avec ses propres agents.
 
-**Visualisation automatique.** Le système choisit le bon type de graphique selon la forme des données — pas besoin de le spécifier :
-
-| Forme des données | Visualisation |
-|---|---|
-| 1 valeur numérique | Carte KPI |
-| Série temporelle | Courbe (Vega-Lite) |
-| Comparaison catégorielle | Barres (Vega-Lite) |
-| Multi-dimensions | Tableau |
-| Autre | Graphique généré par IA |
+**Visualisation automatique.** Le système choisit le bon type de graphique selon la forme des données — courbe pour les séries temporelles, barres pour les comparaisons, tableau pour les données multi-dimensions, carte KPI pour les valeurs uniques. Pas besoin de le spécifier.
 
 **La personnalité Jancovici.** Le même pipeline que le projet coaching — 10 interviews transcrites, convictions extraites par clustering, lexique et anti-lexique, style d'analyse. L'analyste ne débite pas des chiffres : il les met en perspective, fait des analogies, et pose les bonnes questions de suivi.
 

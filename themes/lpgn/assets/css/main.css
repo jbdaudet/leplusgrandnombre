@@ -1981,6 +1981,17 @@ pre.mermaid svg .edgeLabel .edgeLabel {
   background: var(--color-bg) !important;
 }
 
+/* Hide subgraph borders used for layout */
+pre.mermaid svg .cluster rect {
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+pre.mermaid svg .cluster .nodeLabel,
+pre.mermaid svg .cluster-label {
+  display: none !important;
+}
+
 /* ============================================================
    UTILITY
    ============================================================ */
