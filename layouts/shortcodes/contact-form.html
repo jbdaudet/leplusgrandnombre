@@ -1,70 +1,63 @@
-<!-- Formspree Contact Form — AJAX submission -->
+<!-- Formspree Contact Form — Assembly blocks -->
 <form id="contact-form" action="https://formspree.io/f/xkovvejd" method="POST" class="contact-form">
 
-  <div class="form-group">
-    <label for="contact-firstname" class="form-label">Prénom *</label>
-    <input
-      type="text"
-      id="contact-firstname"
-      name="firstname"
-      required
-      class="form-input"
-      placeholder="Votre prénom"
-    />
+  <div class="form-assembly">
+
+    <!-- Identity block: prénom + nom side by side -->
+    <div class="form-tile form-tile--dock" data-dock="1">
+      <span class="form-tile__label">// identité</span>
+      <div class="form-tile__row">
+        <div class="form-group">
+          <label for="contact-firstname" class="form-label">Prénom *</label>
+          <input type="text" id="contact-firstname" name="firstname" required class="form-input" placeholder="Votre prénom" />
+        </div>
+        <div class="form-group">
+          <label for="contact-name" class="form-label">Nom *</label>
+          <input type="text" id="contact-name" name="name" required class="form-input" placeholder="Votre nom" />
+        </div>
+      </div>
+      <div class="form-assembly__seam"></div>
+    </div>
+
+    <!-- Coordinates block: email + rôle side by side -->
+    <div class="form-tile form-tile--dock" data-dock="2">
+      <span class="form-tile__label">// coordonnées</span>
+      <div class="form-tile__row">
+        <div class="form-group">
+          <label for="contact-email" class="form-label">Email *</label>
+          <input type="email" id="contact-email" name="email" required class="form-input" placeholder="votre@email.fr" />
+        </div>
+        <div class="form-group">
+          <label for="contact-role" class="form-label">Rôle *</label>
+          <input type="text" id="contact-role" name="role" required class="form-input" placeholder="Votre fonction" />
+        </div>
+      </div>
+      <div class="form-assembly__seam"></div>
+    </div>
+
+    <!-- Project block -->
+    <div class="form-tile form-tile--dock" data-dock="3">
+      <span class="form-tile__label">// projet</span>
+      <div class="form-group">
+        <label for="contact-message" class="form-label">Parlez-nous de votre projet *</label>
+        <textarea id="contact-message" name="message" required rows="5" class="form-textarea" placeholder="Partagez vos objectifs et vos besoins."></textarea>
+      </div>
+    </div>
+
   </div>
 
-  <div class="form-group">
-    <label for="contact-name" class="form-label">Nom *</label>
-    <input
-      type="text"
-      id="contact-name"
-      name="name"
-      required
-      class="form-input"
-      placeholder="Votre nom"
-    />
+  <!-- SVG joints around the whole form -->
+  <div class="form-assembly__joints" aria-hidden="true">
+    <svg class="assembly__joint assembly__joint--tl" width="20" height="20"><path d="M0 20 L0 0 L20 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+    <svg class="assembly__joint assembly__joint--tr" width="20" height="20"><path d="M20 20 L20 0 L0 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+    <svg class="assembly__joint assembly__joint--bl" width="20" height="20"><path d="M0 0 L0 20 L20 20" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+    <svg class="assembly__joint assembly__joint--br" width="20" height="20"><path d="M20 0 L20 20 L0 20" fill="none" stroke="currentColor" stroke-width="1"/></svg>
   </div>
 
-  <div class="form-group">
-    <label for="contact-email" class="form-label">Email *</label>
-    <input
-      type="email"
-      id="contact-email"
-      name="email"
-      required
-      class="form-input"
-      placeholder="votre@email.fr"
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="contact-role" class="form-label">Rôle *</label>
-    <input
-      type="text"
-      id="contact-role"
-      name="role"
-      required
-      class="form-input"
-      placeholder="Votre fonction"
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="contact-message" class="form-label">Parlez-nous de votre projet *</label>
-    <textarea
-      id="contact-message"
-      name="message"
-      required
-      rows="4"
-      class="form-textarea"
-      placeholder="Partagez vos objectifs et vos besoins."
-    ></textarea>
-  </div>
-
-  <!-- Honeypot for spam protection -->
+  <!-- Honeypot -->
   <input type="text" name="_gotcha" style="display:none" aria-hidden="true" />
 
-  <div>
+  <div class="form-assembly__submit">
     <button type="submit" class="btn" id="contact-submit">Envoyer</button>
   </div>
 
@@ -83,6 +76,38 @@
   var form = document.getElementById('contact-form');
   if (!form) return;
 
+  /* Docking animation for form tiles */
+  var tiles = form.querySelectorAll('.form-tile--dock');
+  var joints = form.querySelector('.form-assembly__joints');
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && !entry.target.classList.contains('is-docked')) {
+        var dock = parseInt(entry.target.dataset.dock);
+        setTimeout(function () {
+          entry.target.classList.add('is-docked');
+        }, (dock - 1) * 300);
+        /* Flash seam on dock */
+        setTimeout(function () {
+          entry.target.classList.add('is-connected');
+        }, (dock - 1) * 300 + 500);
+        setTimeout(function () {
+          entry.target.classList.add('is-settled');
+        }, (dock - 1) * 300 + 1200);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  tiles.forEach(function (t) { observer.observe(t); });
+
+  /* Show joints after all tiles dock */
+  if (joints) {
+    setTimeout(function () {
+      joints.classList.add('is-visible');
+    }, 1800);
+  }
+
+  /* AJAX submit */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = document.getElementById('contact-submit');
