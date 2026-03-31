@@ -1,16 +1,14 @@
 {{ define "main" }}
-<div class="convictions">
+<div class="assembly">
 
-  <header class="convictions__hero reveal reveal--from-bottom">
+  <header class="assembly__hero">
     <div class="container">
-      <h1 class="convictions__title">{{ .Title }}</h1>
-      {{- with .Description -}}
-      <p class="convictions__intro">{{ . }}</p>
-      {{- end -}}
+      <span class="assembly__label">// convictions</span>
+      <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
     </div>
   </header>
 
-  <div class="convictions__blocks">
+  <div class="assembly__grid">
     {{- $blocks := split .RawContent "## " -}}
     {{- $count := 0 -}}
     {{- range $i, $block := $blocks -}}
@@ -19,26 +17,27 @@
         {{- $heading := index $parts 0 -}}
         {{- $bodyParts := after 1 $parts -}}
         {{- $body := delimit $bodyParts "\n" -}}
-        {{- $side := "left" -}}
-        {{- if eq (mod $count 2) 1 }}{{ $side = "right" }}{{ end -}}
 
-        <section class="conviction conviction--{{ $side }}">
-          <div class="container conviction__dock">
-            <div class="conviction__tile conviction__tile--heading">
-              <h2 class="conviction__heading reveal{{ if eq $side "left" }} reveal--from-left{{ else }} reveal--from-right{{ end }}">{{ $heading | markdownify }}</h2>
-              <div class="conviction__notch" aria-hidden="true"></div>
-            </div>
-            <div class="conviction__frontier" aria-hidden="true">
-              <div class="conviction__glow"></div>
-            </div>
-            <div class="conviction__tile conviction__tile--body conviction__slide">
-              <div class="conviction__tab" aria-hidden="true"></div>
-              <div class="conviction__body page-content reveal{{ if eq $side "left" }} reveal--from-right{{ else }} reveal--from-left{{ end }} reveal--delay-1">
-                {{ $body | markdownify }}
-              </div>
+        <div class="assembly__unit" data-unit="{{ $count }}">
+          {{/* SVG L-bracket joints at corners */}}
+          <svg class="assembly__joint assembly__joint--tl" width="20" height="20" aria-hidden="true"><path d="M0 20 L0 0 L20 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          <svg class="assembly__joint assembly__joint--tr" width="20" height="20" aria-hidden="true"><path d="M20 20 L20 0 L0 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          <svg class="assembly__joint assembly__joint--bl" width="20" height="20" aria-hidden="true"><path d="M0 0 L0 20 L20 20" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          <svg class="assembly__joint assembly__joint--br" width="20" height="20" aria-hidden="true"><path d="M20 0 L20 20 L0 20" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+
+          <div class="assembly__block assembly__block--title reveal">
+            <span class="assembly__index">{{ printf "%02d" (add $count 1) }}</span>
+            <h2 class="assembly__heading">{{ $heading | markdownify }}</h2>
+          </div>
+
+          <div class="assembly__seam"></div>
+
+          <div class="assembly__block assembly__block--body assembly__dock">
+            <div class="assembly__body page-content">
+              {{ $body | markdownify }}
             </div>
           </div>
-        </section>
+        </div>
 
         {{- $count = add $count 1 -}}
       {{- end -}}
@@ -46,4 +45,36 @@
   </div>
 
 </div>
+
+<script>
+  /* Docking animation: body slides up to meet title, seam glows on contact */
+  (function () {
+    var units = document.querySelectorAll('.assembly__unit');
+    if (!units.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var unit = entry.target;
+          /* Step 1: title slides in (handled by .reveal) */
+          /* Step 2: after title lands, dock the body */
+          setTimeout(function () {
+            unit.classList.add('is-docked');
+          }, 400);
+          /* Step 3: seam glows + borders flash on contact */
+          setTimeout(function () {
+            unit.classList.add('is-connected');
+          }, 900);
+          /* Step 4: settle back — borders and joints return to grey */
+          setTimeout(function () {
+            unit.classList.add('is-settled');
+          }, 1700);
+          observer.unobserve(unit);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    units.forEach(function (u) { observer.observe(u); });
+  })();
+</script>
 {{ end }}
