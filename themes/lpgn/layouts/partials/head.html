@@ -41,6 +41,51 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Site.Title }}">
 {{- end }}
 
+<!-- JSON-LD Structured Data -->
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "{{ .Site.Title }}",
+  "url": "{{ .Site.BaseURL }}",
+  "description": "{{ .Site.Params.description }}",
+  "areaServed": "FR",
+  "knowsLanguage": "fr",
+  "serviceType": ["Data Analytics", "Marketing Intelligence", "AI Solutions"],
+  "sameAs": []
+}
+</script>
+{{- else if and .IsPage (eq .Section "blog") }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ .Title }}",
+  "url": "{{ .Permalink }}",
+  "datePublished": "{{ .Date.Format "2006-01-02" }}",
+  {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02" }}",{{ end }}
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ .Site.Title }}"
+  }
+}
+</script>
+{{- end }}
+
+{{- if not .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "{{ .Site.BaseURL }}" },
+    { "@type": "ListItem", "position": 2, "name": "{{ .Title }}", "item": "{{ .Permalink }}" }
+  ]
+}
+</script>
+{{- end }}
+
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true, theme: 'neutral', themeVariables: { primaryColor: '#FFF0E9', primaryBorderColor: '#FF6B35', lineColor: '#6e6e73', textColor: '#1d1d1f' } });

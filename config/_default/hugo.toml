@@ -9,7 +9,7 @@ buildDrafts     = false
 buildFuture     = false
 
 [params]
-  description = "Solutions numériques pour les artisans et professionnels"
+  description = "Je comprends votre contexte et vos défis. J'utilise la data et l'IA pour vous aider à chaque étape de votre projet marketing."
 
 [pagination]
   pagerSize = 10
