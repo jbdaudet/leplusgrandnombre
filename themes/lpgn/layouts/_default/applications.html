@@ -1,0 +1,82 @@
+{{ define "main" }}
+<div class="applications">
+
+  <header class="applications__hero reveal">
+    <div class="container">
+      <h1 class="applications__title">{{ .Title }}</h1>
+      {{- with .Description -}}
+      <p class="applications__intro">{{ . }}</p>
+      {{- end -}}
+    </div>
+  </header>
+
+  <div class="applications__content">
+    <div class="container">
+      {{ .Content }}
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* Mermaid progressive reveal — nodes & edges appear one by one on scroll */
+  (function () {
+    function initMermaidReveal() {
+      document.querySelectorAll('pre.mermaid svg, div.mermaid svg').forEach(function (svg) {
+        if (svg.dataset.revealInit) return;
+        svg.dataset.revealInit = '1';
+
+        var nodes = Array.from(svg.querySelectorAll('.node'));
+        var edges = Array.from(svg.querySelectorAll('.edgePath'));
+        var labels = Array.from(svg.querySelectorAll('.edgeLabel'));
+
+        /* Build ordered sequence: node, edge, label, node, edge, label... */
+        var items = [];
+        var maxLen = Math.max(nodes.length, edges.length, labels.length);
+        for (var i = 0; i < maxLen; i++) {
+          if (i < nodes.length) items.push(nodes[i]);
+          if (i < edges.length) items.push(edges[i]);
+          if (i < labels.length) items.push(labels[i]);
+        }
+
+        if (!items.length) return;
+
+        /* Set all items invisible */
+        items.forEach(function (el) {
+          el.style.opacity = '0';
+          el.style.transition = 'opacity 0.35s ease';
+        });
+
+        var container = svg.closest('pre.mermaid') || svg.closest('div.mermaid') || svg.parentElement;
+
+        function updateReveal() {
+          var rect = container.getBoundingClientRect();
+          var viewH = window.innerHeight;
+          /* Progress: 0 when top enters viewport, 1 when fully scrolled past center */
+          var progress = Math.max(0, Math.min(1, (viewH - rect.top) / (viewH * 0.7)));
+          var showCount = Math.round(progress * items.length);
+
+          items.forEach(function (el, idx) {
+            el.style.opacity = idx < showCount ? '1' : '0';
+          });
+        }
+
+        window.addEventListener('scroll', updateReveal, { passive: true });
+        updateReveal();
+      });
+    }
+
+    /* Mermaid renders async — wait for it, then init reveal */
+    var checkInterval = setInterval(function () {
+      var svgs = document.querySelectorAll('pre.mermaid svg, div.mermaid svg');
+      if (svgs.length > 0) {
+        clearInterval(checkInterval);
+        setTimeout(initMermaidReveal, 100);
+      }
+    }, 200);
+
+    /* Safety: stop checking after 10s */
+    setTimeout(function () { clearInterval(checkInterval); }, 10000);
+  })();
+</script>
+{{ end }}

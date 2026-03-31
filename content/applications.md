@@ -2,6 +2,7 @@
 title: "Quelques idées"
 description: "Cinq cas d'application qui montrent comment la data et l'IA peuvent s'adapter à n'importe quel contexte métier."
 showTableOfContents: true
+layout: "applications"
 ---
 
 Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce sont des applications construites pour des secteurs très différents, qui illustrent une même capacité : comprendre un contexte, identifier le bon levier, et construire la solution adaptée.
