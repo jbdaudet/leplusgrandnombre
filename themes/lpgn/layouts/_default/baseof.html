@@ -70,17 +70,13 @@
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
 
-            /* Lockup: when a reveal inside a lockup fires, check if all siblings are visible */
-            var lockup = entry.target.closest('.conviction__lockup');
-            if (lockup) {
-              var children = lockup.querySelectorAll('.reveal');
-              var allVisible = true;
-              children.forEach(function (c) {
-                if (!c.classList.contains('is-visible')) allVisible = false;
-              });
-              if (allVisible) {
-                /* Slight delay so the slide finishes before brackets appear */
-                setTimeout(function () { lockup.classList.add('is-locked'); }, 500);
+            /* Docking: when a reveal inside a dock fires, check if heading is visible to trigger body snap */
+            var dock = entry.target.closest('.conviction__dock');
+            if (dock && !dock.classList.contains('is-docked')) {
+              var headingReveal = dock.querySelector('.conviction__tile--heading .reveal');
+              if (headingReveal && headingReveal.classList.contains('is-visible')) {
+                /* Heading is in — trigger the body to dock */
+                setTimeout(function () { dock.classList.add('is-docked'); }, 200);
               }
             }
           }

@@ -23,10 +23,19 @@
         {{- if eq (mod $count 2) 1 }}{{ $side = "right" }}{{ end -}}
 
         <section class="conviction conviction--{{ $side }}">
-          <div class="container conviction__inner conviction__lockup">
-            <h2 class="conviction__heading reveal{{ if eq $side "left" }} reveal--from-left{{ else }} reveal--from-right{{ end }}">{{ $heading | markdownify }}</h2>
-            <div class="conviction__body page-content reveal{{ if eq $side "left" }} reveal--from-right{{ else }} reveal--from-left{{ end }} reveal--delay-1">
-              {{ $body | markdownify }}
+          <div class="container conviction__dock">
+            <div class="conviction__tile conviction__tile--heading">
+              <h2 class="conviction__heading reveal{{ if eq $side "left" }} reveal--from-left{{ else }} reveal--from-right{{ end }}">{{ $heading | markdownify }}</h2>
+              <div class="conviction__notch" aria-hidden="true"></div>
+            </div>
+            <div class="conviction__frontier" aria-hidden="true">
+              <div class="conviction__glow"></div>
+            </div>
+            <div class="conviction__tile conviction__tile--body conviction__slide">
+              <div class="conviction__tab" aria-hidden="true"></div>
+              <div class="conviction__body page-content reveal{{ if eq $side "left" }} reveal--from-right{{ else }} reveal--from-left{{ end }} reveal--delay-1">
+                {{ $body | markdownify }}
+              </div>
             </div>
           </div>
         </section>

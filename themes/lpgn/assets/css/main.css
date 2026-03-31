@@ -1330,69 +1330,112 @@ th {
   padding: var(--space-12) 0;
 }
 
-.conviction__inner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  max-width: var(--container-width);
+/* ---- Docking system ---- */
+.conviction__dock {
+  max-width: var(--reading-width);
 }
 
-/* Lockup brackets — appear around the whole block when pieces lock together */
-.conviction__lockup {
+/* Tiles: bordered blocks with surgical 1px lines */
+.conviction__tile {
+  border: 1px solid var(--color-border);
   position: relative;
-  padding: var(--space-6);
-  --bracket-color: transparent;
-  --bracket-size: 20px;
-  --bracket-weight: 2px;
-  --bracket-offset: -8px;
 }
 
-.conviction__lockup::before,
-.conviction__lockup::after {
-  content: '';
+.conviction__tile--heading {
+  padding: var(--space-6) var(--space-6) var(--space-8);
+}
+
+.conviction__tile--body {
+  padding: var(--space-8) var(--space-6) var(--space-6);
+}
+
+/* Notch: rectangular cutout at bottom center of heading tile */
+.conviction__notch {
   position: absolute;
-  inset: var(--bracket-offset);
-  pointer-events: none;
-  transition: inset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+}
+
+/* Tab: rectangular protrusion at top center of body tile, fits into notch */
+.conviction__tab {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-bg);
+}
+
+/* Frontier: the shared border zone between the two tiles */
+.conviction__frontier {
+  height: 0;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+/* Glow line: hidden by default, pulses on connection */
+.conviction__glow {
+  position: absolute;
+  top: -1px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--color-accent);
   opacity: 0;
+  filter: blur(0px);
+  transition: none;
+  pointer-events: none;
 }
 
-.conviction__lockup::before {
-  background:
-    linear-gradient(var(--bracket-color), var(--bracket-color)) top left / var(--bracket-size) var(--bracket-weight) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) top left / var(--bracket-weight) var(--bracket-size) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) top right / var(--bracket-size) var(--bracket-weight) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) top right / var(--bracket-weight) var(--bracket-size) no-repeat;
+/* Body tile starts offset, slides up to dock */
+.conviction__slide {
+  transform: translateY(24px);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.5s ease;
 }
 
-.conviction__lockup::after {
-  background:
-    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / var(--bracket-size) var(--bracket-weight) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom left / var(--bracket-weight) var(--bracket-size) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / var(--bracket-size) var(--bracket-weight) no-repeat,
-    linear-gradient(var(--bracket-color), var(--bracket-color)) bottom right / var(--bracket-weight) var(--bracket-size) no-repeat;
-}
-
-/* When both children have locked in, brackets appear */
-.conviction__lockup.is-locked {
-  --bracket-color: var(--color-border);
-  --bracket-offset: 0px;
-}
-
-.conviction__lockup.is-locked::before,
-.conviction__lockup.is-locked::after {
+/* When docked, body snaps into place */
+.conviction__dock.is-docked .conviction__slide {
+  transform: translateY(0);
   opacity: 1;
 }
 
-/* Hover: brackets tighten and glow */
-.conviction__lockup.is-locked:hover {
-  --bracket-color: var(--color-accent);
-  --bracket-offset: -4px;
+/* Glow pulse on connection */
+.conviction__dock.is-docked .conviction__glow {
+  animation: frontierGlow 0.8s ease-out 0.6s forwards;
 }
 
-.conviction__lockup.is-locked:hover::before,
-.conviction__lockup.is-locked:hover::after {
-  filter: drop-shadow(0 0 4px var(--color-accent-glow));
+@keyframes frontierGlow {
+  0%   { opacity: 0; filter: blur(0px); }
+  30%  { opacity: 1; filter: blur(4px); }
+  60%  { opacity: 0.8; filter: blur(2px); }
+  100% { opacity: 0; filter: blur(0px); }
+}
+
+/* Notch/tab borders light up briefly too */
+.conviction__dock.is-docked .conviction__notch {
+  animation: jointGlow 0.8s ease-out 0.6s forwards;
+}
+.conviction__dock.is-docked .conviction__tab {
+  animation: jointGlow 0.8s ease-out 0.6s forwards;
+}
+
+@keyframes jointGlow {
+  0%   { border-color: var(--color-border); }
+  30%  { border-color: var(--color-accent); }
+  60%  { border-color: var(--color-accent); }
+  100% { border-color: var(--color-border); }
 }
 
 .conviction__heading {
@@ -1431,7 +1474,7 @@ th {
   max-width: 480px;
 }
 
-/* ---- Desktop: alternating asymmetric layout ---- */
+/* ---- Desktop: wider dock, alternating offset ---- */
 @media (min-width: 768px) {
 
   .convictions__hero {
@@ -1446,50 +1489,34 @@ th {
     padding: var(--space-16) 0;
   }
 
-  .conviction__inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    align-items: start;
+  .conviction__dock {
+    max-width: 640px;
   }
 
   .conviction__heading {
     font-size: var(--text-3xl);
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-8));
   }
 
   .conviction__body {
     max-width: none;
   }
 
-  /* Left-aligned blocks: title left, body right */
-  .conviction--left .conviction__heading {
-    grid-column: 1;
-    text-align: left;
+  /* Alternate horizontal position for visual rhythm */
+  .conviction--left .conviction__dock {
+    margin-left: 0;
+    margin-right: auto;
   }
 
-  .conviction--left .conviction__body {
-    grid-column: 2;
+  .conviction--right .conviction__dock {
+    margin-left: auto;
+    margin-right: 0;
   }
 
-  /* Right-aligned blocks: title right, body left */
-  .conviction--right .conviction__heading {
-    grid-column: 2;
-    grid-row: 1;
-    text-align: right;
-  }
-
-  .conviction--right .conviction__body {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  /* CTA block: override to centered single column */
-  .conviction:last-child .conviction__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  /* CTA block: override to centered */
+  .conviction:last-child .conviction__dock {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
 }
 
