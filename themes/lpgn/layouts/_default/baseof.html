@@ -67,9 +67,21 @@
       var hero = document.querySelector('.hero');
       var journey = document.querySelector('.journey');
 
+      /* Fade out the pulsing hint as soon as user scrolls */
+      var heroPulse = document.querySelector('.hero__pulse');
+
       if (hero && journey) {
         function updateLines() {
           var viewportH = window.innerHeight;
+
+          /* Hide pulse once scrolling starts */
+          if (heroPulse) {
+            if (window.scrollY > 30) {
+              heroPulse.classList.add('is-hidden');
+            } else {
+              heroPulse.classList.remove('is-hidden');
+            }
+          }
 
           /* Phase 1: Hero line fills as you scroll away from hero */
           if (heroFill && heroTrack) {

@@ -555,21 +555,47 @@ th {
   margin-right: auto;
 }
 
-/* Scroll hint — line that fills toward journey and aligns with timeline */
-.hero__scroll-hint {
+/* Pulsing line hint below subtitle — fades out once user scrolls */
+.hero__pulse {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-10);
+  transition: opacity 0.4s ease;
+}
+
+.hero__pulse-line {
+  display: block;
+  width: 2px;
+  height: 48px;
+  background: var(--gradient-warm);
+  border-radius: 1px;
+  animation: heroPulse 2s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.2; transform: scaleY(0.5); transform-origin: top; }
+  50%      { opacity: 1;   transform: scaleY(1);   transform-origin: top; }
+}
+
+.hero__pulse.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Scroll track — anchored at bottom of hero, grows on scroll to meet journey line */
+.hero__scroll-track {
   position: absolute;
   bottom: 0;
   /* Mobile: align with journey__line at left: 19px + container padding */
   left: calc(var(--space-4) + 19px);
   transform: translateX(-50%);
-}
-
-.hero__scroll-track {
   width: 2px;
-  height: 120px;
-  background: var(--color-border);
-  position: relative;
+  height: 160px;
   overflow: hidden;
+  pointer-events: none;
+  /* Fade out at the top so the line dissolves under the heading */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
 }
 
 .hero__scroll-fill {
@@ -646,8 +672,8 @@ th {
   width: 2px;
   background: var(--color-border);
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
 }
 
 .journey__line-fill {
@@ -1549,7 +1575,7 @@ pre.mermaid {
   }
 
   /* Tablet: container padding changes, keep hero line aligned */
-  .hero__scroll-hint {
+  .hero__scroll-track {
     left: calc(var(--space-6) + 19px);
   }
 
@@ -1731,7 +1757,7 @@ pre.mermaid {
   }
 
   /* Hero line aligns with centered journey line on desktop */
-  .hero__scroll-hint {
+  .hero__scroll-track {
     left: 50%;
   }
 

@@ -11,12 +11,14 @@
     <p class="hero__subtitle reveal reveal--delay-1">{{ . }}</p>
     {{- end -}}
 
-    <div class="hero__scroll-hint reveal reveal--delay-2" aria-hidden="true">
-      <div class="hero__scroll-track">
-        <div class="hero__scroll-fill"></div>
-      </div>
+    <div class="hero__pulse" aria-hidden="true">
+      <span class="hero__pulse-line"></span>
     </div>
 
+  </div>
+
+  <div class="hero__scroll-track" aria-hidden="true">
+    <div class="hero__scroll-fill"></div>
   </div>
 </section>
 
