@@ -13,7 +13,7 @@
   <div class="convictions__blocks">
     {{- $blocks := split .RawContent "## " -}}
     {{- range $i, $block := $blocks -}}
-      {{- if gt (len (strings.TrimSpace $block)) 0 -}}
+      {{- if gt (len (trim $block " \n\r")) 0 -}}
         {{- $parts := split $block "\n" -}}
         {{- $heading := index $parts 0 -}}
         {{- $bodyParts := after 1 $parts -}}

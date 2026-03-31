@@ -1088,6 +1088,146 @@ th {
 }
 
 /* ============================================================
+   CONVICTIONS PAGE — asymmetric staggered layout
+   ============================================================ */
+
+.convictions__hero {
+  padding: var(--space-16) 0 var(--space-10);
+  text-align: center;
+}
+
+.convictions__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
+}
+
+.convictions__intro {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.convictions__blocks {
+  padding-bottom: var(--space-16);
+}
+
+.conviction {
+  padding: var(--space-12) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.conviction__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--container-width);
+}
+
+.conviction__heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+
+.conviction__body {
+  max-width: 600px;
+  padding-bottom: 0;
+}
+
+.conviction__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Last block (CTA) centered */
+.conviction:last-child {
+  text-align: center;
+  border-top: none;
+  padding-top: var(--space-16);
+}
+
+.conviction:last-child .conviction__inner {
+  align-items: center;
+}
+
+.conviction:last-child .conviction__heading {
+  font-size: var(--text-2xl);
+}
+
+.conviction:last-child .conviction__body {
+  max-width: 480px;
+}
+
+/* ---- Desktop: alternating asymmetric layout ---- */
+@media (min-width: 768px) {
+
+  .convictions__hero {
+    padding: var(--space-24) 0 var(--space-16);
+  }
+
+  .convictions__title {
+    font-size: var(--text-5xl);
+  }
+
+  .conviction {
+    padding: var(--space-16) 0;
+  }
+
+  .conviction__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .conviction__heading {
+    font-size: var(--text-3xl);
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-8));
+  }
+
+  .conviction__body {
+    max-width: none;
+  }
+
+  /* Left-aligned blocks: title left, body right */
+  .conviction--left .conviction__heading {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .conviction--left .conviction__body {
+    grid-column: 2;
+  }
+
+  /* Right-aligned blocks: title right, body left */
+  .conviction--right .conviction__heading {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+  }
+
+  .conviction--right .conviction__body {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* CTA block: override to centered single column */
+  .conviction:last-child .conviction__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ============================================================
    CONTACT FORM
    ============================================================ */
 
