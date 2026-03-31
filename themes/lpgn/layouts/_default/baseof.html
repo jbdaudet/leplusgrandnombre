@@ -60,21 +60,39 @@
 
       reveals.forEach(function (el) { observer.observe(el); });
 
-      /* Animated timeline line fill on scroll */
+      /* Continuous line: hero scroll track → journey timeline */
+      var heroFill = document.querySelector('.hero__scroll-fill');
+      var heroTrack = document.querySelector('.hero__scroll-track');
       var lineFill = document.querySelector('.journey__line-fill');
+      var hero = document.querySelector('.hero');
       var journey = document.querySelector('.journey');
-      if (lineFill && journey) {
-        function updateLine() {
-          var rect = journey.getBoundingClientRect();
-          var journeyTop = rect.top;
-          var journeyHeight = rect.height;
+
+      if (hero && journey) {
+        function updateLines() {
           var viewportH = window.innerHeight;
-          var scrolledInto = viewportH - journeyTop;
-          var progress = Math.max(0, Math.min(1, scrolledInto / (journeyHeight + viewportH * 0.3)));
-          lineFill.style.transform = 'scaleY(' + progress + ')';
+
+          /* Phase 1: Hero line fills as you scroll away from hero */
+          if (heroFill && heroTrack) {
+            var heroRect = hero.getBoundingClientRect();
+            var trackRect = heroTrack.getBoundingClientRect();
+            /* Start filling once user starts scrolling, complete before hero exits */
+            var heroScrolled = -heroRect.top;
+            var heroRange = heroRect.height - viewportH * 0.5;
+            var heroProgress = Math.max(0, Math.min(1, heroScrolled / Math.max(heroRange, 1)));
+            heroFill.style.transform = 'scaleY(' + heroProgress + ')';
+          }
+
+          /* Phase 2: Journey line fills as journey scrolls into view */
+          if (lineFill) {
+            var jRect = journey.getBoundingClientRect();
+            var scrolledInto = viewportH - jRect.top;
+            var jProgress = Math.max(0, Math.min(1, scrolledInto / (jRect.height + viewportH * 0.3)));
+            lineFill.style.transform = 'scaleY(' + jProgress + ')';
+          }
         }
-        window.addEventListener('scroll', updateLine, { passive: true });
-        updateLine();
+
+        window.addEventListener('scroll', updateLines, { passive: true });
+        updateLines();
       }
     })();
 

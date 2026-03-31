@@ -19,7 +19,7 @@
 </div>
 
 <script>
-  /* Mermaid progressive reveal — nodes & edges appear one by one on scroll */
+  /* Mermaid progressive reveal — nodes, arrows & labels appear one by one on scroll */
   (function () {
     function initMermaidReveal() {
       document.querySelectorAll('pre.mermaid svg, div.mermaid svg').forEach(function (svg) {
@@ -29,8 +29,10 @@
         var nodes = Array.from(svg.querySelectorAll('.node'));
         var edges = Array.from(svg.querySelectorAll('.edgePath'));
         var labels = Array.from(svg.querySelectorAll('.edgeLabel'));
+        /* Also catch arrow markers (the arrowhead tips) */
+        var markers = Array.from(svg.querySelectorAll('marker'));
 
-        /* Build ordered sequence: node, edge, label, node, edge, label... */
+        /* Build ordered sequence: node, then its outgoing edge + label, then next node... */
         var items = [];
         var maxLen = Math.max(nodes.length, edges.length, labels.length);
         for (var i = 0; i < maxLen; i++) {
@@ -44,7 +46,12 @@
         /* Set all items invisible */
         items.forEach(function (el) {
           el.style.opacity = '0';
-          el.style.transition = 'opacity 0.35s ease';
+          el.style.transition = 'opacity 0.4s ease';
+        });
+        /* Hide arrow markers too */
+        markers.forEach(function (m) {
+          m.style.opacity = '0';
+          m.style.transition = 'opacity 0.4s ease';
         });
 
         var container = svg.closest('pre.mermaid') || svg.closest('div.mermaid') || svg.parentElement;
@@ -52,13 +59,22 @@
         function updateReveal() {
           var rect = container.getBoundingClientRect();
           var viewH = window.innerHeight;
-          /* Progress: 0 when top enters viewport, 1 when fully scrolled past center */
-          var progress = Math.max(0, Math.min(1, (viewH - rect.top) / (viewH * 0.7)));
+          /*
+           * Start revealing only when the diagram is 40% up from the bottom of the viewport.
+           * Complete when it reaches 30% from the top.
+           * This means items start appearing well before the reader "arrives" at the diagram.
+           */
+          var triggerStart = viewH * 0.6;  /* diagram top must be above this line to start */
+          var triggerEnd = viewH * 0.3;    /* fully revealed when diagram top reaches here */
+          var progress = Math.max(0, Math.min(1, (triggerStart - rect.top) / (triggerStart - triggerEnd)));
           var showCount = Math.round(progress * items.length);
 
           items.forEach(function (el, idx) {
             el.style.opacity = idx < showCount ? '1' : '0';
           });
+          /* Show markers as soon as any edge is visible */
+          var markersVisible = showCount > 1 ? '1' : '0';
+          markers.forEach(function (m) { m.style.opacity = markersVisible; });
         }
 
         window.addEventListener('scroll', updateReveal, { passive: true });
