@@ -17,6 +17,17 @@
   </div>
 
   <script>
+    /* Cookie panel opener */
+    (function () {
+      var btn = document.getElementById('open-cookies');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        if (typeof tarteaucitron !== 'undefined' && tarteaucitron.userInterface) {
+          tarteaucitron.userInterface.openPanel();
+        }
+      });
+    })();
+
     /* Header: transparent at top, blurred on scroll */
     (function () {
       var header = document.querySelector('.site-header');
