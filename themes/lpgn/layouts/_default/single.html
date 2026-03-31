@@ -1,26 +1,31 @@
 {{ define "main" }}
-<div class="container">
-  <div class="reading-width">
+<div class="assembly">
 
-    {{- if eq .Section "blog" -}}
-    <a href="/blog/" class="back-link">&#8592; Retour</a>
-    {{- end -}}
-
-    <header class="page-header reveal">
-      <h1 class="page-header__title">{{ .Title }}</h1>
-      {{- if and .Date (eq .Section "blog") -}}
-      <p class="page-header__meta">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">
-          {{- partial "date-fr.html" .Date -}}
-        </time>
-      </p>
+  <header class="assembly__hero">
+    <div class="container">
+      {{- if eq .Section "blog" -}}
+      <a href="/blog/" class="back-link">&#8592; Retour</a>
       {{- end -}}
-    </header>
-
-    <div class="page-content">
-      {{ .Content }}
+      <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
+      {{- if and .Date (eq .Section "blog") -}}
+      <p class="assembly__label">
+        // <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+      </p>
+      {{- else -}}
+        {{- with .Description -}}
+        <p class="assembly__label">// {{ . }}</p>
+        {{- end -}}
+      {{- end -}}
     </div>
+  </header>
 
+  <div class="container">
+    <div class="reading-width">
+      <div class="page-content">
+        {{ .Content }}
+      </div>
+    </div>
   </div>
+
 </div>
 {{ end }}

@@ -1375,6 +1375,7 @@ th {
   font-size: var(--text-xs);
   color: var(--color-text-tertiary);
   letter-spacing: 0.08em;
+  margin-top: var(--space-4);
   margin-bottom: var(--space-4);
 }
 
