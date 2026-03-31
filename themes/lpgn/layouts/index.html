@@ -1,15 +1,21 @@
 {{ define "main" }}
 
 <section class="hero">
+  <div class="hero__gradient" aria-hidden="true"></div>
+  <div class="hero__grain" aria-hidden="true"></div>
   <div class="container">
 
     {{- with .Params.phrase -}}
-    <p class="hero__phrase">{{ . }}</p>
+    <p class="hero__phrase reveal">{{ . }}</p>
     {{- end -}}
 
     {{- with .Params.subtitle -}}
-    <p class="hero__subtitle">{{ . }}</p>
+    <p class="hero__subtitle reveal reveal--delay-1">{{ . }}</p>
     {{- end -}}
+
+    <div class="hero__scroll-hint reveal reveal--delay-2" aria-hidden="true">
+      <span class="hero__scroll-line"></span>
+    </div>
 
   </div>
 </section>
@@ -18,11 +24,16 @@
 <section class="journey">
   <div class="container">
 
-    <div class="journey__line" aria-hidden="true"></div>
+    <h2 class="journey__heading reveal">La chaîne marketing, de bout en bout.</h2>
+    <p class="journey__subheading reveal reveal--delay-1">Chaque étape, une preuve de concept.</p>
+
+    <div class="journey__line" aria-hidden="true">
+      <div class="journey__line-fill"></div>
+    </div>
 
     <ol class="journey__steps">
       {{- range . -}}
-      <li class="step{{ if not .demo_url }} step--soon{{ end }}">
+      <li class="step{{ if not .demo_url }} step--soon{{ end }} reveal">
         <div class="step__marker" aria-hidden="true">
           <span class="step__number">{{ .number }}</span>
         </div>
