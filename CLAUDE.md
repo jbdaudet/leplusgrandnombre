@@ -10,7 +10,7 @@
 4. **Créer du contenu qui me ressemble** → Coaching
 5. **Activer & distribuer** → *(pas de démo encore)*
 6. **Gagner du temps au quotidien** → Artisans
-7. **Piloter par les résultats** → The Shift Project
+7. **Le KPI utile, votre vision en plus** → The Shift Project
 8. **Fidéliser & engager** → *(pas de démo encore)*
 
 Posture : pas un expert data qui vend de la technique — quelqu'un qui comprend le contexte, les envies et les challenges du client, et qui utilise la data/IA comme moyen pour l'aider à aller là où il veut aller. Toujours partir du problème client, jamais de la techno.

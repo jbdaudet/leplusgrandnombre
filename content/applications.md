@@ -205,46 +205,55 @@ flowchart LR
 
 ---
 
-<h2 id="theshiftproject">Piloter par les résultats <a href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">theshiftproject</a></h2>
+<h2 id="theshiftproject">Le KPI utile, votre vision en plus <a href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">theshiftproject</a></h2>
 
-Quand les données sont là, encore faut-il pouvoir les interroger, les comprendre et en tirer des décisions — sans être data analyst.
+Personne ne lit les dashboards. Trop de chiffres, trop de graphiques, trop peu d'insights. Et quand on a enfin une question précise, il faut un data analyst pour obtenir la réponse.
 
-**Le contexte.** N'importe qui s'intéressant aux questions d'énergie et de climat : un analyste, un journaliste, un étudiant, un décideur. Les données mondiales existent, mais elles sont techniques, éparpillées et muettes.
+**Le contexte.** Un analyste, un journaliste, un décideur qui s'intéresse à l'énergie et au climat. Les données mondiales existent — 220 pays, 60 ans d'historique — mais elles sont enfermées dans des bases techniques que personne n'interroge directement.
 
-**Le défi.** Pour obtenir un graphique de l'évolution de la consommation d'énergie par secteur en France, il faut savoir écrire du SQL, connaître les sources (EIA, Eurostat, Banque Mondiale, PRIMAP), et interpréter les résultats dans leur contexte. La barrière d'entrée est trop haute.
+**Le défi.** Le vrai problème n'est pas l'accès aux données. C'est que les chiffres bruts ne disent rien. "La France consomme 150 Mtep" — c'est beaucoup ? C'est en hausse ? Qu'est-ce que ça signifie ? Un dashboard classique affiche la réponse. Un bon analyste l'**interprète**.
 
-**Le résultat.** Posez une question en français. Vous obtenez un graphique, des chiffres, et une analyse qui met les données en perspective — comme si vous aviez un expert énergie en face de vous pour décrypter les chiffres.
+**Le résultat.** Posez une question en français. Vous obtenez un graphique, des chiffres, et une analyse signée par une persona qui a un point de vue — pas un résumé neutre, mais une lecture incarnée qui met les données en perspective, fait des analogies, et pose les bonnes questions de suivi.
 
 ### L'approche
 
-Le défi technique central : **comment laisser une IA interroger une base de données sans qu'elle invente des tables, des colonnes ou des chiffres ?** La réponse : une couche sémantique qui sépare l'intention de l'exécution.
+L'architecture repose sur trois couches qui se renforcent mutuellement : une base de données pré-structurée pour que les agents ne puissent pas inventer de chiffres, des agents spécialisés qui collaborent selon le type de question, et un corpus de convictions qui donne aux réponses une voix et un point de vue.
 
 {{< mermaid >}}
 flowchart TB
-    Q["Question en\nlangage naturel"] --> CL["Classification"]
-    CL -->|tactique| SL["Couche sémantique\n(catalogue de métriques)"]
-    CL -->|stratégique| ST["Clarification\nmulti-étapes"]
-    CL -->|corpus| RAG["Persona + RAG\n(convictions)"]
-    SL --> SQL["SQL\ndéterministe"]
-    SL -->|"métrique\ninconnue"| T2S["Text-to-SQL\n+ EXPLAIN"]
-    SQL --> VIZ["Visualisation\nautomatique"]
-    T2S --> VIZ
-    VIZ --> AN["Analyse\nstreaming"]
-    ST --> AN
+    subgraph PERSONA ["Corpus & Persona"]
+        direction LR
+        INT["10 interviews\ntranscrites"] --> CONV["34 convictions\nextraites\n(BERTopic)"]
+        CONV --> CTX["Contexte dynamique\n(convictions + style\n+ anti-lexique)"]
+    end
+
+    subgraph AGENTS ["Agents"]
+        direction TB
+        Q["Question"] --> CL["Classifieur"]
+        CL -->|"chiffre"| TAC["Agent tactique"]
+        CL -->|"question\ncomplexe"| STR["Agent stratégique\n(sous-questions)"]
+        CL -->|"opinion"| COR["Agent corpus"]
+    end
+
+    subgraph DATA ["Base de données"]
+        direction LR
+        SRC["5 sources\n(EIA, ONU, PRIMAP,\nBanque Mondiale,\nEurostat)"] --> KPI["KPIs précalculées\n(couche sémantique\nYAML)"]
+        KPI --> SQL["SQL\ndéterministe"]
+    end
+
+    TAC --> SQL
+    STR --> SQL
+    SQL --> VIZ["Graphique\nautomatique"]
+    VIZ --> AN["Analyse"]
+    COR --> AN
+    CTX --> AN
+    CTX --> COR
 {{< /mermaid >}}
 
-**5 sources, 1 base.** Les données proviennent de l'EIA américaine (production/consommation), de l'ONU (flux par secteur), de PIK/PRIMAP (émissions de gaz à effet de serre), de la Banque Mondiale (population, PIB), et d'Eurostat (détail sectoriel européen). Cinq notebooks d'ingestion nettoient, normalisent et unifient tout dans une base PostgreSQL unique — 220 pays, 1960 à 2024.
+**En bas : les données, pré-structurées.** Cinq sources publiques (EIA, ONU, PRIMAP, Banque Mondiale, Eurostat) sont nettoyées et unifiées dans une base PostgreSQL unique. Mais le vrai verrou, c'est la **couche sémantique** : un catalogue YAML qui décrit chaque métrique — nom, formule, dimensions, filtres valides. Quand un agent a besoin d'un chiffre, il choisit une métrique ; le **SQL est assemblé mécaniquement** à partir du catalogue. Pas de génération libre, pas d'invention de colonnes. Les KPIs virtuelles (intensité énergétique, émissions par habitant…) sont définies déclarativement — l'IA choisit, le code calcule. Pour les questions hors-catalogue, un Text-to-SQL prend le relais, mais la requête est **validée par EXPLAIN** avant exécution : si le plan échoue, la requête est rejetée.
 
-**La couche sémantique : zéro hallucination SQL.** Un catalogue YAML décrit chaque métrique disponible : nom, table source, formule, dimensions possibles, filtres valides. Quand l'utilisateur pose une question, une IA rapide identifie la métrique et les filtres — puis le **SQL est assemblé de manière déterministe** à partir du catalogue. Pas de génération libre, pas d'invention de colonnes. Les métriques virtuelles (intensité énergétique, émissions par habitant...) sont définies déclarativement — l'IA choisit, le code calcule.
+**Au milieu : les agents, spécialisés.** Chaque question est d'abord classée. Une question factuelle ("quelle est la consommation d'énergie de la France ?") suit le chemin **tactique** : identification de la métrique, SQL déterministe, visualisation automatique (courbe, barres, KPI ou tableau selon la forme des données). Une question complexe ("comment expliquer la baisse des émissions en Europe ?") suit le chemin **stratégique** : l'agent décompose en sous-questions, récupère les données de chacune, puis synthétise. Une question d'opinion ("que pense Jancovici du nucléaire ?") va directement au **corpus**.
 
-**Fallback contrôlé.** Pour les questions hors-catalogue, un Text-to-SQL génère la requête PostgreSQL, mais elle est **validée par EXPLAIN avant exécution**. Si le plan d'exécution échoue, la requête est rejetée — jamais de résultat faux silencieux.
-
-**Classification multi-agents.** Chaque question est classée : *tactique* (donnée chiffrée), *stratégique* (question complexe nécessitant plusieurs sous-requêtes), *corpus* (question d'opinion — "que pense Jancovici du nucléaire ?"), ou *métadonnée* (question sur les données elles-mêmes). Chaque type suit un chemin différent avec ses propres agents.
-
-**Visualisation automatique.** Le système choisit le bon type de graphique selon la forme des données — courbe pour les séries temporelles, barres pour les comparaisons, tableau pour les données multi-dimensions, carte KPI pour les valeurs uniques. Pas besoin de le spécifier.
-
-**La personnalité Jancovici.** Le même pipeline que le projet coaching — 10 interviews transcrites, convictions extraites par clustering, lexique et anti-lexique, style d'analyse. L'analyste ne débite pas des chiffres : il les met en perspective, fait des analogies, et pose les bonnes questions de suivi.
-
-**Feedback utilisateur.** Chaque réponse peut être notée (pouce haut/bas). Les votes sont stockés avec les métadonnées du pipeline (quel chemin, quelle métrique, quels filtres), ce qui permet d'identifier précisément les points faibles : est-ce la couche sémantique qui a choisi la mauvaise métrique ? Le Text-to-SQL qui a généré une requête bancale ? L'analyse qui n'a pas contextualisé ?
+**En haut : la persona, incarnée.** Les chiffres ne sont pas commentés par une IA générique. Dix interviews sont transcrites, découpées en segments, puis analysées par clustering (BERTopic) pour en extraire **34 convictions** — les croyances profondes qui structurent la pensée de l'analyste. À chaque réponse, le système sélectionne les convictions pertinentes par similarité sémantique et les injecte dans le contexte de l'agent, aux côtés d'un profil de style (lexique, anti-lexique, tics verbaux). Résultat : l'analyse ne récite pas des chiffres — elle les **lit** avec un point de vue.
 
 {{< button href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
