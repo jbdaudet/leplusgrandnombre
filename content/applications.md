@@ -209,51 +209,181 @@ flowchart LR
 
 Personne ne lit les dashboards. Trop de chiffres, trop de graphiques, trop peu de sens. Ici, vous n'attendez plus qu'un expert soit libre pour traduire vos données : posez votre question, obtenez la décision.
 
-**Le contexte.** Un analyste, un journaliste, un décideur qui s'intéresse à l'énergie et au climat. Les données mondiales existent — 220 pays, 60 ans d'historique — mais elles sont enfermées dans des bases techniques que personne n'interroge directement.
+**Le contexte.** La donnée est là, mais elle est muette. Analyste, décideur ou expert métier : vous saturez d'informations. Qu'elles soient publiques (Open Data) ou internes (CRM, ERP), vos données dorment par millions de lignes dans des bases techniques inaccessibles. Faute de pouvoir interroger la réalité du terrain en un clic, vous finissez par décider à l'instinct.
 
-**Le défi.** Le vrai problème n'est pas l'accès aux données. C'est que les chiffres bruts ne disent rien. "La France consomme 150 Mtep" — c'est beaucoup ? C'est en hausse ? Qu'est-ce que ça signifie ? Un dashboard classique affiche la réponse. Un bon analyste l'**interprète**.
+**Le défi.** Les chiffres ne parlent pas seuls. Le problème n'est pas l'accès à la donnée, mais son interprétation. Un dashboard classique se contente d'afficher le chiffre. Un expert, lui, lui donne du sens.
 
-**Le résultat.** Posez une question en français. Vous obtenez un graphique, des chiffres, et une analyse signée par une persona qui a un point de vue — pas un résumé neutre, mais une lecture incarnée qui met les données en perspective, fait des analogies, et pose les bonnes questions de suivi.
+**Le résultat.** Interrogez, décidez. Posez une question, vous obtiendrez, en plus des chiffres, une analyse incarnée. Ce n'est pas un résumé neutre : c'est une lecture signée par une persona qui a un point de vue, fait des analogies et vous propose les prochaines étapes.
 
 ### L'approche
 
-L'architecture repose sur trois couches qui se renforcent mutuellement : une base de données pré-structurée pour que les agents ne puissent pas inventer de chiffres, des agents spécialisés qui collaborent selon le type de question, et un corpus de convictions qui donne aux réponses une voix et un point de vue.
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;margin:2rem auto;display:block;font-family:'Raleway','Segoe UI',sans-serif">
+  <style>
+    .tip .tip-box { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+    .tip:hover .tip-box { opacity: 1; }
+    .tip:hover .tip-target { stroke-width: 2; }
+    .tip { cursor: default; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 3.5 L0 7z" fill="#9c9ca6"/></marker>
+    <marker id="arrow-accent" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 3.5 L0 7z" fill="#FF6B35"/></marker>
+    <symbol id="agent" viewBox="0 0 20 20">
+      <circle cx="10" cy="10" r="4" fill="none" stroke="#FF6B35" stroke-width="1.5"/>
+      <circle cx="10" cy="10" r="1.5" fill="#FF6B35"/>
+      <line x1="10" y1="2" x2="10" y2="6" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="3.2" y1="14" x2="6.6" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="16.8" y1="14" x2="13.4" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="10" cy="1.5" r="1.5" fill="#FF6B35"/>
+      <circle cx="2.5" cy="15" r="1.5" fill="#FF6B35"/>
+      <circle cx="17.5" cy="15" r="1.5" fill="#FF6B35"/>
+    </symbol>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.12"/>
+    </filter>
+  </defs>
 
-{{< mermaid >}}
-flowchart TB
-    subgraph PERSONA ["Corpus & Persona"]
-        direction LR
-        INT["10 interviews\ntranscrites"] --> CONV["34 convictions\nextraites\n(BERTopic)"]
-        CONV --> CTX["Contexte dynamique\n(convictions + style\n+ anti-lexique)"]
-    end
+  <!-- ── Question ── -->
+  <rect x="350" y="8" width="200" height="44" rx="22" fill="#fff" stroke="#e0e0e4"/>
+  <text x="450" y="35" text-anchor="middle" font-size="13" fill="#1a1a1a" font-weight="600">Question utilisateur</text>
 
-    subgraph AGENTS ["Agents"]
-        direction TB
-        Q["Question"] --> CL["Classifieur"]
-        CL -->|"chiffre"| TAC["Agent tactique"]
-        CL -->|"question\ncomplexe"| STR["Agent stratégique\n(sous-questions)"]
-        CL -->|"opinion"| COR["Agent corpus"]
-    end
+  <line x1="450" y1="52" x2="450" y2="82" stroke="#9c9ca6" marker-end="url(#arrow)"/>
 
-    subgraph DATA ["Base de données"]
-        direction LR
-        SRC["5 sources\n(EIA, ONU, PRIMAP,\nBanque Mondiale,\nEurostat)"] --> KPI["KPIs précalculées\n(couche sémantique\nYAML)"]
-        KPI --> SQL["SQL\ndéterministe"]
-    end
+  <!-- ── Classifieur ── -->
+  <g class="tip">
+    <rect class="tip-target" x="355" y="82" width="190" height="50" rx="10" fill="#FFF0E9" stroke="#FF6B35"/>
+    <use href="#agent" x="370" y="95" width="22" height="22"/>
+    <text x="400" y="103" font-size="12" fill="#1a1a1a" font-weight="600">Classifieur</text>
+    <text x="400" y="119" font-size="10" fill="#5c5c66">Quel type de question ?</text>
+    <g class="tip-box">
+      <rect x="560" y="62" width="280" height="72" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
+      <text x="576" y="82" font-size="11" fill="#1a1a1a" font-weight="600">Classifieur</text>
+      <text x="576" y="98" font-size="10" fill="#5c5c66">Lit la question et la classe : chiffre factuel,</text>
+      <text x="576" y="112" font-size="10" fill="#5c5c66">question complexe, opinion, ou métadonnée.</text>
+      <text x="576" y="126" font-size="10" fill="#5c5c66">Chaque type active un agent spécialisé.</text>
+    </g>
+  </g>
 
-    TAC --> SQL
-    STR --> SQL
-    SQL --> VIZ["Graphique\nautomatique"]
-    VIZ --> AN["Analyse"]
-    COR --> AN
-    CTX --> AN
-    CTX --> COR
-{{< /mermaid >}}
+  <!-- 3 arrows from classifieur to agents -->
+  <line x1="395" y1="132" x2="155" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="132" x2="450" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <line x1="505" y1="132" x2="745" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
 
-**En bas : les données, pré-structurées.** Cinq sources publiques (EIA, ONU, PRIMAP, Banque Mondiale, Eurostat) sont nettoyées et unifiées dans une base PostgreSQL unique. Mais le vrai verrou, c'est la **couche sémantique** : un catalogue YAML qui décrit chaque métrique — nom, formule, dimensions, filtres valides. Quand un agent a besoin d'un chiffre, il choisit une métrique ; le **SQL est assemblé mécaniquement** à partir du catalogue. Pas de génération libre, pas d'invention de colonnes. Les KPIs virtuelles (intensité énergétique, émissions par habitant…) sont définies déclarativement — l'IA choisit, le code calcule. Pour les questions hors-catalogue, un Text-to-SQL prend le relais, mais la requête est **validée par EXPLAIN** avant exécution : si le plan échoue, la requête est rejetée.
+  <text x="255" y="155" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">un chiffre</text>
+  <text x="450" y="168" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">question complexe</text>
+  <text x="650" y="155" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">une opinion</text>
 
-**Au milieu : les agents, spécialisés.** Chaque question est d'abord classée. Une question factuelle ("quelle est la consommation d'énergie de la France ?") suit le chemin **tactique** : identification de la métrique, SQL déterministe, visualisation automatique (courbe, barres, KPI ou tableau selon la forme des données). Une question complexe ("comment expliquer la baisse des émissions en Europe ?") suit le chemin **stratégique** : l'agent décompose en sous-questions, récupère les données de chacune, puis synthétise. Une question d'opinion ("que pense Jancovici du nucléaire ?") va directement au **corpus**.
+  <!-- ── Agent Tactique ── -->
+  <g class="tip">
+    <rect class="tip-target" x="50" y="182" width="210" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
+    <use href="#agent" x="62" y="196" width="22" height="22"/>
+    <text x="92" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent tactique</text>
+    <text x="92" y="223" font-size="10" fill="#5c5c66">Identifie la métrique</text>
+    <text x="92" y="237" font-size="10" fill="#5c5c66">→ SQL déterministe → graphique</text>
+    <g class="tip-box">
+      <rect x="50" y="258" width="280" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
+      <text x="66" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent tactique</text>
+      <text x="66" y="294" font-size="10" fill="#5c5c66">« Consommation d'énergie de la France ? »</text>
+      <text x="66" y="308" font-size="10" fill="#5c5c66">Identifie la bonne métrique dans le catalogue,</text>
+      <text x="66" y="322" font-size="10" fill="#5c5c66">assemble le SQL, choisit le graphique adapté.</text>
+      <text x="66" y="336" font-size="10" fill="#FF6B35">Aucun SQL n'est généré par l'IA.</text>
+    </g>
+  </g>
 
-**En haut : la persona, incarnée.** Les chiffres ne sont pas commentés par une IA générique. Dix interviews sont transcrites, découpées en segments, puis analysées par clustering (BERTopic) pour en extraire **34 convictions** — les croyances profondes qui structurent la pensée de l'analyste. À chaque réponse, le système sélectionne les convictions pertinentes par similarité sémantique et les injecte dans le contexte de l'agent, aux côtés d'un profil de style (lexique, anti-lexique, tics verbaux). Résultat : l'analyse ne récite pas des chiffres — elle les **lit** avec un point de vue.
+  <!-- ── Agent Stratégique ── -->
+  <g class="tip">
+    <rect class="tip-target" x="310" y="182" width="280" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
+    <use href="#agent" x="322" y="196" width="22" height="22"/>
+    <text x="352" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent stratégique</text>
+    <text x="352" y="223" font-size="10" fill="#5c5c66">Décompose en sous-questions</text>
+    <text x="352" y="237" font-size="10" fill="#5c5c66">→ données de chacune → synthèse</text>
+    <g class="tip-box">
+      <rect x="310" y="258" width="290" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
+      <text x="326" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent stratégique</text>
+      <text x="326" y="294" font-size="10" fill="#5c5c66">« Pourquoi les émissions baissent en Europe ? »</text>
+      <text x="326" y="308" font-size="10" fill="#5c5c66">Décompose en sous-questions, récupère les</text>
+      <text x="326" y="322" font-size="10" fill="#5c5c66">données de chacune, puis synthétise une</text>
+      <text x="326" y="336" font-size="10" fill="#5c5c66">réponse structurée multi-étapes.</text>
+    </g>
+  </g>
+
+  <!-- ── Agent Corpus ── -->
+  <g class="tip">
+    <rect class="tip-target" x="640" y="182" width="210" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
+    <use href="#agent" x="652" y="196" width="22" height="22"/>
+    <text x="682" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent expert</text>
+    <text x="682" y="223" font-size="10" fill="#5c5c66">Cherche dans les convictions</text>
+    <text x="682" y="237" font-size="10" fill="#5c5c66">et le corpus de l'expert</text>
+    <g class="tip-box">
+      <rect x="580" y="258" width="280" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
+      <text x="596" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent expert</text>
+      <text x="596" y="294" font-size="10" fill="#5c5c66">« Que pense Jancovici du nucléaire ? »</text>
+      <text x="596" y="308" font-size="10" fill="#5c5c66">Pas de données chiffrées : cherche par</text>
+      <text x="596" y="322" font-size="10" fill="#5c5c66">similarité sémantique dans les convictions</text>
+      <text x="596" y="336" font-size="10" fill="#5c5c66">et le corpus, puis répond dans sa voix.</text>
+    </g>
+  </g>
+
+  <!-- ── Couche sémantique ── -->
+  <rect x="50" y="296" width="500" height="80" rx="12" fill="#fafafa" stroke="#e0e0e4" stroke-dasharray="6 3"/>
+  <text x="70" y="318" font-size="11" fill="#9c9ca6" font-weight="600" letter-spacing="1">COUCHE SÉMANTIQUE</text>
+  <text x="70" y="336" font-size="11" fill="#5c5c66">Catalogue YAML · métriques, formules, filtres valides</text>
+  <text x="70" y="352" font-size="11" fill="#5c5c66">→ SQL assemblé mécaniquement (pas généré par l'IA)</text>
+  <text x="70" y="366" font-size="10" fill="#FF6B35" font-weight="600">Zéro hallucination</text>
+
+  <line x1="155" y1="252" x2="155" y2="296" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="252" x2="450" y2="296" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+
+  <!-- ── Persona ── -->
+  <rect x="600" y="296" width="260" height="80" rx="12" fill="#FFF0E9" stroke="#FF6B35" stroke-dasharray="6 3"/>
+  <text x="620" y="318" font-size="11" fill="#FF6B35" font-weight="600" letter-spacing="1">PERSONA</text>
+  <text x="620" y="336" font-size="11" fill="#5c5c66">34 convictions extraites</text>
+  <text x="620" y="352" font-size="11" fill="#5c5c66">de 10 interviews (clustering)</text>
+  <text x="620" y="366" font-size="11" fill="#5c5c66">Lexique · anti-lexique · style</text>
+
+  <line x1="745" y1="252" x2="730" y2="296" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+
+  <!-- ── Visualisation ── -->
+  <rect x="170" y="416" width="200" height="44" rx="10" fill="#fff" stroke="#e0e0e4"/>
+  <text x="270" y="443" text-anchor="middle" font-size="12" fill="#1a1a1a" font-weight="600">Visualisation auto</text>
+
+  <line x1="300" y1="376" x2="270" y2="416" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+
+  <!-- ── Analyse incarnée ── -->
+  <g class="tip">
+    <rect class="tip-target" x="440" y="416" width="260" height="50" rx="10" fill="#FFF0E9" stroke="#FF6B35"/>
+    <use href="#agent" x="452" y="425" width="22" height="22"/>
+    <text x="482" y="439" font-size="12" fill="#1a1a1a" font-weight="600">Analyse incarnée</text>
+    <text x="482" y="455" font-size="10" fill="#5c5c66">Chiffres lus avec un point de vue</text>
+    <g class="tip-box">
+      <rect x="440" y="360" width="280" height="52" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
+      <text x="456" y="380" font-size="11" fill="#1a1a1a" font-weight="600">Analyse incarnée</text>
+      <text x="456" y="396" font-size="10" fill="#5c5c66">Commente les chiffres avec le style, les convictions</text>
+      <text x="456" y="408" font-size="10" fill="#5c5c66">et les analogies de la persona. Propose les prochaines étapes.</text>
+    </g>
+  </g>
+
+  <line x1="370" y1="438" x2="440" y2="438" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <line x1="730" y1="376" x2="630" y2="416" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+  <path d="M 850 217 Q 880 440, 700 440" fill="none" stroke="#FF6B35" stroke-dasharray="4 3" marker-end="url(#arrow-accent)"/>
+
+  <!-- ── Réponse ── -->
+  <rect x="440" y="500" width="260" height="44" rx="22" fill="#FF6B35" stroke="none"/>
+  <text x="570" y="527" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Réponse + graphique + analyse</text>
+
+  <line x1="570" y1="460" x2="570" y2="500" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+
+  <!-- ── Légende ── -->
+  <use href="#agent" x="55" y="571" width="16" height="16"/>
+  <text x="78" y="584" font-size="10" fill="#5c5c66">Agent IA</text>
+  <text x="78" y="596" font-size="9" fill="#9c9ca6" font-style="italic">survolez pour détails</text>
+  <line x1="200" y1="580" x2="230" y2="580" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <text x="240" y="584" font-size="10" fill="#9c9ca6">Flux de données</text>
+  <line x1="380" y1="580" x2="410" y2="580" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+  <text x="420" y="584" font-size="10" fill="#FF6B35">Persona injectée</text>
+  <rect x="560" y="573" width="14" height="14" rx="3" fill="#FFF0E9" stroke="#FF6B35"/>
+  <text x="582" y="584" font-size="10" fill="#5c5c66">Couche persona</text>
+  <rect x="710" y="573" width="14" height="14" rx="3" fill="#fafafa" stroke="#e0e0e4" stroke-dasharray="4 2"/>
+  <text x="732" y="584" font-size="10" fill="#5c5c66">Anti-hallucination</text>
+</svg>
 
 {{< button href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
