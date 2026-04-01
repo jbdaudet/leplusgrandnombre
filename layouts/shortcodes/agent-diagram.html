@@ -4,52 +4,63 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 const container = document.getElementById('agent-graph');
-const isMobile = window.innerWidth < 640;
+const W = container.clientWidth;
+const mob = W < 640;
+const nodeW = mob ? 120 : 155;
+const nodeH = mob ? 40 : 46;
+const tierGap = mob ? 80 : 95;
 
-/* ── Data ── */
+/* ── Positions: each node gets a target (tx, ty) ── */
+/* tx is fraction of width (0=left, 0.5=center, 1=right), ty is tier index */
+/*
+   Main flow (center):  Question → Classifieur → 3 agents → Réponse
+   Data service (left):  Agent data ← tactique & stratégique
+                         Agent data → dico, SQL, KPIs → renvoie dataviz
+   Persona (right):      nourrit expert + colore réponse
+*/
 const nodes = [
-  { id:'question',    label:'Question utilisateur',   type:'pill',   detail:'En langage naturel, en français.\nEx : « Évolution du mix énergétique en France ? »', tier:0 },
-  { id:'classifieur', label:'Classifieur',             type:'agent-accent', detail:'Lit la question et la classe : chiffre factuel, question complexe, opinion ou métadonnée. Chaque type active un agent spécialisé.', tier:1 },
-  { id:'tactique',    label:'Agent tactique',           type:'agent',  detail:'« Consommation d\'énergie de la France ? »\nIdentifie la métrique, demande les données à l\'agent data, choisit le graphique adapté.', tier:2 },
-  { id:'strategique', label:'Agent stratégique',        type:'agent',  detail:'« Pourquoi les émissions baissent en Europe ? »\nDécompose en sous-questions, appelle l\'agent data pour chacune, puis synthétise.', tier:2 },
-  { id:'expert',      label:'Agent expert',             type:'agent',  detail:'« Que pense Jancovici du nucléaire ? »\nPas de données chiffrées. Cherche dans les convictions et le corpus, répond dans la voix de l\'expert.', tier:2 },
-  { id:'data',        label:'Agent data',               type:'agent-accent', detail:'Consulte le dictionnaire des données. Cherche d\'abord dans la couche sémantique (SQL déterministe). Si métrique inconnue → fallback Text-to-SQL validé par EXPLAIN.', tier:3 },
-  { id:'semantique',  label:'Couche sémantique',        type:'source', detail:'Catalogue YAML : chaque métrique décrite avec sa table, formule, dimensions, filtres. L\'IA choisit, le code assemble le SQL.\nZéro hallucination.', tier:4 },
-  { id:'fallback',    label:'Fallback Text-to-SQL',     type:'source', detail:'Si la métrique n\'est pas au catalogue, l\'IA génère du SQL PostgreSQL, validé par EXPLAIN avant exécution.', tier:4 },
-  { id:'dictionnaire',label:'Dictionnaire',             type:'source', detail:'Description de chaque table, colonne et valeur possible. Permet à l\'agent data de comprendre la base sans inventer de colonnes.', tier:4 },
-  { id:'corpus',      label:'Corpus',                   type:'source-accent', detail:'10 interviews transcrites, ~270 segments, embeddings pgvector. Récupération en 4 niveaux par similarité sémantique.', tier:3 },
-  { id:'persona',     label:'Persona',                  type:'source-accent', detail:'34 convictions extraites par clustering (BERTopic). Lexique, anti-lexique, tics verbaux injectés dans chaque réponse.', tier:4 },
-  { id:'viz',         label:'Visualisation auto',        type:'agent',  detail:'Choisit le graphique selon les données : courbe, barres, carte KPI ou tableau.', tier:5 },
-  { id:'analyse',     label:'Analyse incarnée',          type:'agent-accent', detail:'Commente les chiffres avec le style, les convictions et les analogies de la persona. Propose les prochaines étapes.', tier:5 },
-  { id:'reponse',     label:'Réponse + graphique + analyse', type:'cta', detail:'', tier:6 }
+  { id:'question',     label:'Question utilisateur',         type:'pill',          tx:0.50, ty:0, detail:'En langage naturel, en français.\nEx : « Évolution du mix énergétique en France ? »' },
+  { id:'classifieur',  label:'Classifieur',                   type:'agent-accent',  tx:0.50, ty:1, detail:'Lit la question et la classe : chiffre factuel, question complexe, ou opinion.\nChaque type active un agent spécialisé.' },
+  { id:'tactique',     label:'Agent tactique',                type:'agent',         tx:0.30, ty:2, detail:'« Consommation d\'énergie de la France ? »\nInterroge l\'agent data, reçoit la dataviz, formule la réponse.' },
+  { id:'strategique',  label:'Agent stratégique',             type:'agent',         tx:0.55, ty:2, detail:'« Pourquoi les émissions baissent en Europe ? »\nDécompose en sous-questions, interroge l\'agent data pour chacune, synthétise.' },
+  { id:'expert',       label:'Agent expert',                  type:'agent',         tx:0.80, ty:2, detail:'« Que pense Jancovici du nucléaire ? »\nPas de données chiffrées. Répond depuis le corpus, avec la voix de la persona.' },
+  { id:'reponse',      label:'Réponse + graphique + analyse', type:'cta',           tx:0.50, ty:3, detail:'Graphique, chiffres et analyse incarnée — commentés avec le style et les convictions de la persona.' },
+  { id:'data',         label:'Agent data',                    type:'agent-accent',  tx:0.12, ty:3, detail:'Appelé par tactique & stratégique.\nConsulte le dictionnaire, génère le SQL via la couche sémantique, renvoie les données + la dataviz.' },
+  { id:'dictionnaire', label:'Dictionnaire',                  type:'source',        tx:0.05, ty:4, detail:'Description de chaque table, colonne et valeur possible.\nPermet à l\'agent data de comprendre la base sans inventer de colonnes.' },
+  { id:'sql',          label:'Générateur SQL',                type:'source',        tx:0.22, ty:4, detail:'Couche sémantique (SQL déterministe depuis un catalogue YAML).\nSi métrique inconnue → fallback Text-to-SQL validé par EXPLAIN.' },
+  { id:'kpis',         label:'Librairie de KPIs',             type:'source',        tx:0.40, ty:4, detail:'Métriques virtuelles (intensité énergétique, émissions par habitant…) définies déclarativement.\nL\'IA choisit, le code calcule.' },
+  { id:'persona',      label:'Persona',                       type:'source-accent', tx:0.88, ty:3, detail:'34 convictions extraites par clustering (BERTopic) de 10 interviews.\nLexique, anti-lexique, tics verbaux injectés dans chaque réponse.' }
 ];
 
 const links = [
-  { source:'question',    target:'classifieur', label:'' },
-  { source:'classifieur', target:'tactique',    label:'un chiffre' },
-  { source:'classifieur', target:'strategique', label:'complexe' },
-  { source:'classifieur', target:'expert',      label:'opinion' },
-  { source:'tactique',    target:'data',        label:'' },
-  { source:'strategique', target:'data',        label:'' },
-  { source:'data',        target:'semantique',  label:'' },
-  { source:'data',        target:'fallback',    label:'si inconnu', dashed:true },
-  { source:'data',        target:'dictionnaire',label:'' },
-  { source:'expert',      target:'corpus',      label:'', accent:true },
-  { source:'corpus',      target:'persona',     label:'', accent:true },
-  { source:'semantique',  target:'viz',         label:'' },
-  { source:'fallback',    target:'viz',         label:'', dashed:true },
-  { source:'viz',         target:'analyse',     label:'' },
-  { source:'persona',     target:'analyse',     label:'', accent:true },
-  { source:'persona',     target:'expert',      label:'', accent:true, dashed:true },
-  { source:'analyse',     target:'reponse',     label:'', accent:true }
+  /* Main flow: Question → Classifieur → 3 agents → Réponse */
+  { source:'question',     target:'classifieur',  label:'' },
+  { source:'classifieur',  target:'tactique',     label:'chiffre' },
+  { source:'classifieur',  target:'strategique',  label:'complexe' },
+  { source:'classifieur',  target:'expert',       label:'opinion' },
+  { source:'tactique',     target:'reponse',      label:'' },
+  { source:'strategique',  target:'reponse',      label:'' },
+  { source:'expert',       target:'reponse',      label:'' },
+  /* Data service: tactique & stratégique interrogent agent data */
+  { source:'tactique',     target:'data',         label:'dataviz' },
+  { source:'strategique',  target:'data',         label:'dataviz' },
+  /* Agent data s'appuie sur ses 3 outils */
+  { source:'data',         target:'dictionnaire', label:'' },
+  { source:'data',         target:'sql',          label:'' },
+  { source:'data',         target:'kpis',         label:'' },
+  /* Persona nourrit l'expert et colore la réponse */
+  { source:'persona',      target:'expert',       label:'', accent:true },
+  { source:'persona',      target:'reponse',      label:'', accent:true }
 ];
 
-/* ── Dimensions ── */
-const W = container.clientWidth;
-const nodeW = isMobile ? 130 : 160;
-const nodeH = isMobile ? 44 : 48;
-const tierSpacing = isMobile ? 90 : 100;
-const H = (7 * tierSpacing) + 40;
+/* ── Compute initial positions from targets ── */
+const pad = nodeW * 0.6;
+nodes.forEach(d => {
+  d.x = pad + d.tx * (W - 2 * pad);
+  d.y = 25 + d.ty * tierGap;
+});
+
+const H = 25 + 5 * tierGap;
 container.style.height = H + 'px';
 
 /* ── Colors ── */
@@ -58,58 +69,59 @@ const C = {
   text:'#1a1a1a', muted:'#5c5c66', faint:'#9c9ca6', bg:'#fafafa', white:'#fff'
 };
 
-/* ── SVG setup ── */
+/* ── SVG for links ── */
 const svg = d3.select(container).append('svg')
   .attr('width', W).attr('height', H)
   .style('position','absolute').style('top',0).style('left',0)
   .style('pointer-events','none');
 
 const defs = svg.append('defs');
-['gray','accent'].forEach(t => {
-  defs.append('marker').attr('id','arrow-'+t)
+[['gray',C.faint],['accent',C.accent]].forEach(([k,c]) => {
+  defs.append('marker').attr('id','a-'+k)
     .attr('viewBox','0 0 10 7').attr('refX',10).attr('refY',3.5)
     .attr('markerWidth',7).attr('markerHeight',5).attr('orient','auto-start-reverse')
-    .append('path').attr('d','M0 0 L10 3.5 L0 7z')
-    .attr('fill', t==='accent' ? C.accent : C.faint);
+    .append('path').attr('d','M0 0 L10 3.5 L0 7z').attr('fill',c);
 });
 
-/* ── Force simulation ── */
+/* ── Simulation ── */
 const sim = d3.forceSimulation(nodes)
-  .force('link', d3.forceLink(links).id(d=>d.id).distance(tierSpacing * 0.8).strength(0.4))
-  .force('charge', d3.forceManyBody().strength(-300))
-  .force('x', d3.forceX(W/2).strength(0.12))
-  .force('y', d3.forceY(d => 20 + d.tier * tierSpacing).strength(0.8))
-  .force('collide', d3.forceCollide(nodeW * 0.6))
-  .alphaDecay(0.03);
+  .force('link', d3.forceLink(links).id(d=>d.id).distance(tierGap * 0.7).strength(0.3))
+  .force('charge', d3.forceManyBody().strength(-120))
+  .force('x', d3.forceX(d => pad + d.tx * (W - 2*pad)).strength(0.6))
+  .force('y', d3.forceY(d => 25 + d.ty * tierGap).strength(0.9))
+  .force('collide', d3.forceCollide(nodeW * 0.55))
+  .alphaDecay(0.05)
+  .velocityDecay(0.5);
 
-/* ── Link elements ── */
-const linkEls = svg.selectAll('.link').data(links).join('line')
-  .attr('class','link')
+/* ── Link lines ── */
+const linkEls = svg.selectAll('.lk').data(links).join('path')
+  .attr('class','lk')
+  .attr('fill','none')
   .attr('stroke', d => d.accent ? C.accent : C.faint)
   .attr('stroke-width', 1.2)
   .attr('stroke-dasharray', d => d.dashed ? '5 3' : null)
-  .attr('marker-end', d => d.accent ? 'url(#arrow-accent)' : 'url(#arrow-gray)')
-  .style('pointer-events','none');
+  .attr('marker-end', d => d.accent ? 'url(#a-accent)' : 'url(#a-gray)');
 
 /* ── Link labels ── */
-const linkLabels = svg.selectAll('.link-label').data(links.filter(d=>d.label)).join('text')
-  .attr('class','link-label')
+const linkLabels = svg.selectAll('.ll').data(links.filter(d=>d.label)).join('text')
+  .attr('class','ll')
   .text(d=>d.label)
-  .attr('font-size', isMobile ? 8 : 9)
+  .attr('font-size', mob ? 8 : 9)
   .attr('fill', C.faint)
   .attr('font-style','italic')
   .attr('text-anchor','middle')
-  .attr('font-family','Raleway, sans-serif')
-  .style('pointer-events','none');
+  .attr('font-family','Raleway,sans-serif');
 
-/* ── Node DOM elements ── */
-const nodeEls = d3.select(container).selectAll('.node').data(nodes).join('div')
-  .attr('class','node')
+/* ── Node HTML elements ── */
+const agentSvg = '<svg viewBox="0 0 20 20" style="width:14px;height:14px;vertical-align:-2px;margin-right:3px"><circle cx="10" cy="10" r="4" fill="none" stroke="#FF6B35" stroke-width="1.5"/><circle cx="10" cy="10" r="1.5" fill="#FF6B35"/><line x1="10" y1="2" x2="10" y2="6" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><line x1="3.2" y1="14" x2="6.6" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><line x1="16.8" y1="14" x2="13.4" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="1.5" r="1.5" fill="#FF6B35"/><circle cx="2.5" cy="15" r="1.5" fill="#FF6B35"/><circle cx="17.5" cy="15" r="1.5" fill="#FF6B35"/></svg>';
+
+const nodeEls = d3.select(container).selectAll('.nd').data(nodes).join('div')
+  .attr('class','nd')
   .style('position','absolute')
   .style('width', nodeW+'px')
-  .style('padding', '8px 10px')
+  .style('padding', mob ? '6px 8px' : '8px 10px')
   .style('box-sizing','border-box')
-  .style('border-radius', d => d.type==='pill'||d.type==='cta' ? '22px' : '10px')
+  .style('border-radius', d => d.type==='pill'||d.type==='cta' ? '22px' : '8px')
   .style('text-align', d => d.type==='pill'||d.type==='cta' ? 'center' : 'left')
   .style('background', d => {
     if(d.type==='cta') return C.accent;
@@ -119,74 +131,80 @@ const nodeEls = d3.select(container).selectAll('.node').data(nodes).join('div')
   })
   .style('border', d => {
     if(d.type==='cta') return 'none';
-    if(d.type.includes('accent')) return '1px solid '+C.accent;
-    if(d.type.includes('source')) return '1px dashed '+C.border;
-    return '1px solid '+C.border;
+    const c = d.type.includes('accent') ? C.accent : C.border;
+    const s = d.type.includes('source') ? 'dashed' : 'solid';
+    return '1px '+s+' '+c;
   })
-  .style('cursor','pointer')
-  .style('font-family','Raleway, sans-serif')
-  .style('transition','box-shadow 0.2s ease')
+  .style('cursor', d => d.detail ? 'pointer' : 'default')
+  .style('font-family','Raleway,sans-serif')
   .style('z-index', 2)
+  .style('box-shadow','0 1px 4px rgba(0,0,0,0.06)')
+  .html(d => {
+    const isAI = d.type.includes('agent');
+    const isCta = d.type === 'cta';
+    const col = isCta ? '#fff' : C.text;
+    const fs = mob ? 10 : 12;
+    const icon = isAI ? agentSvg : '';
+    return icon + '<span style="font-size:'+fs+'px;font-weight:600;color:'+col+'">'+d.label+'</span>';
+  })
   .on('click', function(ev, d) {
     if(!d.detail) return;
-    /* Toggle tooltip */
-    const existing = container.querySelector('.tooltip-active');
-    if(existing) existing.remove();
-    const tip = document.createElement('div');
-    tip.className = 'tooltip-active';
-    tip.style.cssText = 'position:absolute;z-index:100;background:#fff;border:1px solid '+C.border+';border-radius:10px;padding:12px 14px;max-width:280px;font-family:Raleway,sans-serif;box-shadow:0 4px 20px rgba(0,0,0,0.12);pointer-events:auto';
-    tip.style.left = Math.min(d.x + nodeW/2 + 10, W - 290) + 'px';
-    tip.style.top = (d.y - 10) + 'px';
-    tip.innerHTML = '<div style="font-size:12px;font-weight:600;color:'+C.text+';margin-bottom:6px">'+d.label+'</div>'
-      + '<div style="font-size:11px;color:'+C.muted+';line-height:1.6;white-space:pre-line">'+d.detail+'</div>'
-      + '<div style="font-size:9px;color:'+C.faint+';margin-top:8px;cursor:pointer" onclick="this.parentElement.remove()">✕ fermer</div>';
-    container.appendChild(tip);
     ev.stopPropagation();
+    const old = container.querySelector('.tip-pop');
+    if(old) old.remove();
+    const tip = document.createElement('div');
+    tip.className = 'tip-pop';
+    const tipX = Math.min(Math.max(10, d.x - 130), W - 280);
+    const tipY = d.y + nodeH/2 + 8;
+    tip.style.cssText = 'position:absolute;z-index:100;background:#fff;border:1px solid '+C.border+';border-radius:10px;padding:12px 14px;width:260px;font-family:Raleway,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,0.14);left:'+tipX+'px;top:'+tipY+'px';
+    tip.innerHTML = '<div style="font-size:12px;font-weight:600;color:'+C.text+';margin-bottom:6px">'+d.label+'</div>'
+      +'<div style="font-size:11px;color:'+C.muted+';line-height:1.6;white-space:pre-line">'+d.detail+'</div>'
+      +'<div style="margin-top:8px;font-size:9px;color:'+C.faint+';cursor:pointer" onclick="this.parentElement.remove()">✕ fermer</div>';
+    container.appendChild(tip);
   });
 
-/* Node inner HTML */
-nodeEls.html(d => {
-  const isAI = d.type.includes('agent');
-  const isCta = d.type === 'cta';
-  const titleColor = isCta ? '#fff' : C.text;
-  const fontSize = isMobile ? 11 : 12;
-  const icon = isAI ? '<svg viewBox="0 0 20 20" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"><circle cx="10" cy="10" r="4" fill="none" stroke="'+C.accent+'" stroke-width="1.5"/><circle cx="10" cy="10" r="1.5" fill="'+C.accent+'"/><line x1="10" y1="2" x2="10" y2="6" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><line x1="3.2" y1="14" x2="6.6" y2="12" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><line x1="16.8" y1="14" x2="13.4" y2="12" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="1.5" r="1.5" fill="'+C.accent+'"/><circle cx="2.5" cy="15" r="1.5" fill="'+C.accent+'"/><circle cx="17.5" cy="15" r="1.5" fill="'+C.accent+'"/></svg>' : '';
-  const detailHint = d.detail ? '<div style="font-size:8px;color:'+C.faint+';margin-top:2px">cliquez pour détails</div>' : '';
-  return icon + '<span style="font-size:'+fontSize+'px;font-weight:600;color:'+titleColor+'">'+d.label+'</span>' + detailHint;
-});
-
-/* ── Close tooltip on outside click ── */
 document.addEventListener('click', () => {
-  const t = container.querySelector('.tooltip-active');
+  const t = container.querySelector('.tip-pop');
   if(t) t.remove();
 });
 
+/* ── Curved link path ── */
+function linkPath(d) {
+  const goingDown = d.source.y < d.target.y;
+  const sx = d.source.x, sy = goingDown ? d.source.y + nodeH/2 : d.source.y - nodeH/2;
+  const tx = d.target.x, ty = goingDown ? d.target.y - nodeH/2 : d.target.y + nodeH/2;
+  const my = (sy + ty) / 2;
+  return 'M'+sx+','+sy+' C'+sx+','+my+' '+tx+','+my+' '+tx+','+ty;
+}
+
 /* ── Tick ── */
 sim.on('tick', () => {
-  /* Clamp positions */
   nodes.forEach(d => {
     d.x = Math.max(nodeW/2, Math.min(W - nodeW/2, d.x));
     d.y = Math.max(nodeH/2, Math.min(H - nodeH/2, d.y));
   });
 
   nodeEls
-    .style('left', d => (d.x - nodeW/2) + 'px')
-    .style('top', d => (d.y - nodeH/2) + 'px');
+    .style('left', d => (d.x - nodeW/2)+'px')
+    .style('top', d => (d.y - nodeH/2)+'px');
 
-  linkEls
-    .attr('x1', d => d.source.x).attr('y1', d => d.source.y + nodeH/2)
-    .attr('x2', d => d.target.x).attr('y2', d => d.target.y - nodeH/2);
+  linkEls.attr('d', linkPath);
 
   linkLabels
-    .attr('x', d => (d.source.x + d.target.x) / 2)
-    .attr('y', d => (d.source.y + nodeH/2 + d.target.y - nodeH/2) / 2);
+    .attr('x', d => (d.source.x + d.target.x)/2)
+    .attr('y', d => (d.source.y + nodeH/2 + d.target.y - nodeH/2)/2 + 3);
 });
 
 /* ── Resize ── */
+let resizeTimer;
 window.addEventListener('resize', () => {
-  const newW = container.clientWidth;
-  svg.attr('width', newW);
-  sim.force('x', d3.forceX(newW/2).strength(0.12));
-  sim.alpha(0.5).restart();
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const nw = container.clientWidth;
+    const p = nodeW * 0.6;
+    svg.attr('width', nw);
+    sim.force('x', d3.forceX(d => p + d.tx * (nw - 2*p)).strength(0.6));
+    sim.alpha(0.6).restart();
+  }, 150);
 });
 </script>

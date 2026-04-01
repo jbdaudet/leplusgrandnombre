@@ -215,8 +215,20 @@ Personne ne lit les dashboards. Trop de chiffres, trop de graphiques, trop peu d
 
 **Le résultat.** Interrogez, décidez. Posez une question, vous obtiendrez, en plus des chiffres, une analyse incarnée. Ce n'est pas un résumé neutre : c'est une lecture signée par une persona qui a un point de vue, fait des analogies et vous propose les prochaines étapes.
 
-### L'approche
+### L'approche : quatre cerveaux pour une seule décision
 
-{{< agent-diagram >}}
+Le système ne se contente pas de répondre. Il utilise un **aiguilleur** qui analyse votre intention pour activer le moteur le plus fiable.
+
+**1. Le moteur tactique — Précision chiffrée.**
+Ce qu'il fait : il extrait le chiffre exact via une couche sémantique déterministe (YAML). La garantie : pas d'hallucination SQL. Si la question est inédite, il génère du code mais le fait valider par un audit système (EXPLAIN) avant de l'exécuter.
+
+**2. Le moteur stratégique — Réflexion profonde.**
+Ce qu'il fait : il ne donne pas de réponse immédiate. Il engage un dialogue de clarification pour cerner votre besoin. La garantie : une approche en 4 étapes (diagnostic → vision → compromis → feuille de route) pour transformer une intuition en plan d'action.
+
+**3. Le moteur corpus — Mémoire de l'expert.**
+Ce qu'il fait : il fouille dans 10+ interviews et documents via une recherche vectorielle (pgvector) en 4 étapes. La garantie : la réponse est nourrie par des convictions réelles et un lexique spécifique, pas par une IA générique.
+
+**4. Le moteur métadonnées — Transparence.**
+Ce qu'il fait : il interroge directement le dictionnaire de données pour expliquer ce qu'il y a "sous le capot". La garantie : vous savez toujours d'où vient la donnée et comment elle est calculée.
 
 {{< button href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
