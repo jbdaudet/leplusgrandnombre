@@ -17,15 +17,14 @@
   </div>
 
   <script>
-    /* Cookie banner reopener */
+    /* Cookie banner reopener — use tarteaucitron's native API */
     (function () {
       var btn = document.getElementById('open-cookies');
       if (!btn) return;
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        var banner = document.getElementById('tarteaucitronAlertBig');
-        if (banner) {
-          banner.classList.add('tac-show');
+        if (typeof tarteaucitron !== 'undefined' && tarteaucitron.userInterface) {
+          tarteaucitron.userInterface.openAlert();
         }
       });
     })();

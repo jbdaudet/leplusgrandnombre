@@ -2074,24 +2074,17 @@ th {
    TARTEAUCITRON OVERRIDES
    ============================================================ */
 
-/* Force-hide ALL tarteaucitron floating elements — they block footer clicks */
+/* Force-hide tarteaucitron floating elements we never want visible */
 #tarteaucitronRoot #tarteaucitronIcon,
-#tarteaucitronRoot #tarteaucitronAlertSmall,
-#tarteaucitronRoot #tarteaucitronAlertBig {
+#tarteaucitronRoot #tarteaucitronAlertSmall {
   display: none !important;
   pointer-events: none !important;
 }
 
-/* When user clicks "Choix des cookies", JS adds this class to force-show the banner */
-#tarteaucitronRoot #tarteaucitronAlertBig.tac-show {
-  display: flex !important;
-  pointer-events: auto !important;
-}
-
-/* The full settings panel must be interactive */
-#tarteaucitronRoot #tarteaucitronBack {
-  pointer-events: auto !important;
-}
+/* Let tarteaucitron manage #tarteaucitronAlertBig visibility natively:
+   - First visit: tarteaucitron shows it → user clicks accept/deny → tarteaucitron hides it
+   - Subsequent visits: hidden (consent stored in cookie)
+   - Footer "Choix des cookies": JS reopens it via tarteaucitron API */
 
 #tarteaucitronRoot #tarteaucitronAlertBig {
   font-family: var(--font-sans) !important;
@@ -2100,7 +2093,6 @@ th {
   box-sizing: border-box !important;
   width: 100% !important;
   max-width: 100% !important;
-  display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: center !important;
