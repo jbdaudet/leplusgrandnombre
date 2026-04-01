@@ -38,7 +38,7 @@ Vous ne combattez plus une croyance, vous comblez un vide.
 
 ## Le piège du « Diapason »
 
-Mark Sargent, un des leaders du mouvement platiste, résume parfaitement le gain émotionnel : *« La science dit que vous êtes insignifiants. Nous, nous disons que vous vivez dans un système clos et que vous êtes incroyablement importants. »* Les réseaux sociaux fonctionnent comme des diapasons : ils synchronisent nos émotions, pas nos logiques. La radicalisation vient du fait que « ma vérité » est devenue une extension de moi-même. On ne débat plus, on survit.
+Mark Sargent, un des leaders du mouvement platiste, résume parfaitement le gain émotionnel : *« La science dit que vous êtes insignifiants. Nous, nous disons que vous vivez dans un système clos et que vous êtes incroyablement importants. »* Les réseaux sociaux fonctionnent comme des diapasons : ils synchronisent nos émotions, pas nos logiques. La radicalisation vient du fait que « ma vérité » est devenue une extension de moi-même. On ne débat plus pour chercher la vérité, on se bat pour protéger son appartenance au groupe.
 
 {{< conclusion >}}
 Les démocraties ne gagneront pas la guerre de l'information avec des tableurs Excel, mais en répondant aux angoisses que les fake news exploitent. Mark Twain avait raison sur les statistiques, mais il oubliait le plus dangereux des mensonges : celui que l'on se raconte à soi-même pour ne pas se remettre en question.
