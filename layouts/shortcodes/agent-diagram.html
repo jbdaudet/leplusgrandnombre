@@ -1,246 +1,192 @@
-<style>
-.ad{--c-accent:#FF6B35;--c-accent-bg:#FFF0E9;--c-border:#e0e0e4;--c-text:#1a1a1a;--c-muted:#5c5c66;--c-faint:#9c9ca6;--c-bg:#fafafa;font-family:'Raleway','Segoe UI',sans-serif;max-width:900px;margin:2rem auto}
+<div id="agent-graph" style="width:100%;max-width:940px;margin:2rem auto;position:relative;overflow:hidden"></div>
 
-/* Agent icon (inline SVG in CSS) */
-.ad-icon{display:inline-flex;width:20px;height:20px;flex-shrink:0}
-.ad-icon svg{width:100%;height:100%}
-.ad-db{display:inline-flex;width:16px;height:18px;flex-shrink:0}
-.ad-db svg{width:100%;height:100%}
+<script type="module">
+import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
-/* Cards */
-.ad-card{border-radius:10px;padding:14px 16px;position:relative}
-.ad-card--agent{background:#fff;border:1px solid var(--c-border)}
-.ad-card--agent-accent{background:var(--c-accent-bg);border:1px solid var(--c-accent)}
-.ad-card--source{background:var(--c-bg);border:1px dashed var(--c-border)}
-.ad-card--source-accent{background:var(--c-accent-bg);border:1px dashed var(--c-accent)}
-.ad-card--pill{border-radius:22px;text-align:center;padding:12px 20px}
-.ad-card--cta{background:var(--c-accent);border:none;color:#fff}
+const container = document.getElementById('agent-graph');
+const isMobile = window.innerWidth < 640;
 
-.ad-card__head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.ad-card__title{font-size:13px;font-weight:600;color:var(--c-text)}
-.ad-card__title--accent{color:var(--c-accent)}
-.ad-card__sub{font-size:11px;color:var(--c-muted);margin:0}
-.ad-card__sub--accent{color:var(--c-accent);font-weight:600}
-.ad-card__tag{font-size:9px;color:var(--c-faint);font-style:italic;margin-top:2px}
+/* ── Data ── */
+const nodes = [
+  { id:'question',    label:'Question utilisateur',   type:'pill',   detail:'En langage naturel, en français.\nEx : « Évolution du mix énergétique en France ? »', tier:0 },
+  { id:'classifieur', label:'Classifieur',             type:'agent-accent', detail:'Lit la question et la classe : chiffre factuel, question complexe, opinion ou métadonnée. Chaque type active un agent spécialisé.', tier:1 },
+  { id:'tactique',    label:'Agent tactique',           type:'agent',  detail:'« Consommation d\'énergie de la France ? »\nIdentifie la métrique, demande les données à l\'agent data, choisit le graphique adapté.', tier:2 },
+  { id:'strategique', label:'Agent stratégique',        type:'agent',  detail:'« Pourquoi les émissions baissent en Europe ? »\nDécompose en sous-questions, appelle l\'agent data pour chacune, puis synthétise.', tier:2 },
+  { id:'expert',      label:'Agent expert',             type:'agent',  detail:'« Que pense Jancovici du nucléaire ? »\nPas de données chiffrées. Cherche dans les convictions et le corpus, répond dans la voix de l\'expert.', tier:2 },
+  { id:'data',        label:'Agent data',               type:'agent-accent', detail:'Consulte le dictionnaire des données. Cherche d\'abord dans la couche sémantique (SQL déterministe). Si métrique inconnue → fallback Text-to-SQL validé par EXPLAIN.', tier:3 },
+  { id:'semantique',  label:'Couche sémantique',        type:'source', detail:'Catalogue YAML : chaque métrique décrite avec sa table, formule, dimensions, filtres. L\'IA choisit, le code assemble le SQL.\nZéro hallucination.', tier:4 },
+  { id:'fallback',    label:'Fallback Text-to-SQL',     type:'source', detail:'Si la métrique n\'est pas au catalogue, l\'IA génère du SQL PostgreSQL, validé par EXPLAIN avant exécution.', tier:4 },
+  { id:'dictionnaire',label:'Dictionnaire',             type:'source', detail:'Description de chaque table, colonne et valeur possible. Permet à l\'agent data de comprendre la base sans inventer de colonnes.', tier:4 },
+  { id:'corpus',      label:'Corpus',                   type:'source-accent', detail:'10 interviews transcrites, ~270 segments, embeddings pgvector. Récupération en 4 niveaux par similarité sémantique.', tier:3 },
+  { id:'persona',     label:'Persona',                  type:'source-accent', detail:'34 convictions extraites par clustering (BERTopic). Lexique, anti-lexique, tics verbaux injectés dans chaque réponse.', tier:4 },
+  { id:'viz',         label:'Visualisation auto',        type:'agent',  detail:'Choisit le graphique selon les données : courbe, barres, carte KPI ou tableau.', tier:5 },
+  { id:'analyse',     label:'Analyse incarnée',          type:'agent-accent', detail:'Commente les chiffres avec le style, les convictions et les analogies de la persona. Propose les prochaines étapes.', tier:5 },
+  { id:'reponse',     label:'Réponse + graphique + analyse', type:'cta', detail:'', tier:6 }
+];
 
-/* Details (tooltip replacement) */
-.ad-card details{margin-top:8px}
-.ad-card summary{font-size:10px;color:var(--c-accent);cursor:pointer;list-style:none;user-select:none}
-.ad-card summary::-webkit-details-marker{display:none}
-.ad-card summary::before{content:'+ détails';transition:opacity .2s}
-.ad-card details[open] summary::before{content:'− fermer'}
-.ad-card details p{font-size:10px;color:var(--c-muted);margin:6px 0 0;line-height:1.5}
+const links = [
+  { source:'question',    target:'classifieur', label:'' },
+  { source:'classifieur', target:'tactique',    label:'un chiffre' },
+  { source:'classifieur', target:'strategique', label:'complexe' },
+  { source:'classifieur', target:'expert',      label:'opinion' },
+  { source:'tactique',    target:'data',        label:'' },
+  { source:'strategique', target:'data',        label:'' },
+  { source:'data',        target:'semantique',  label:'' },
+  { source:'data',        target:'fallback',    label:'si inconnu', dashed:true },
+  { source:'data',        target:'dictionnaire',label:'' },
+  { source:'expert',      target:'corpus',      label:'', accent:true },
+  { source:'corpus',      target:'persona',     label:'', accent:true },
+  { source:'semantique',  target:'viz',         label:'' },
+  { source:'fallback',    target:'viz',         label:'', dashed:true },
+  { source:'viz',         target:'analyse',     label:'' },
+  { source:'persona',     target:'analyse',     label:'', accent:true },
+  { source:'persona',     target:'expert',      label:'', accent:true, dashed:true },
+  { source:'analyse',     target:'reponse',     label:'', accent:true }
+];
 
-/* Arrows (vertical connector) */
-.ad-arrow{display:flex;justify-content:center;padding:4px 0}
-.ad-arrow::after{content:'';display:block;width:1px;height:20px;background:var(--c-faint)}
+/* ── Dimensions ── */
+const W = container.clientWidth;
+const nodeW = isMobile ? 130 : 160;
+const nodeH = isMobile ? 44 : 48;
+const tierSpacing = isMobile ? 90 : 100;
+const H = (7 * tierSpacing) + 40;
+container.style.height = H + 'px';
 
-/* Section layout */
-.ad-section{margin-bottom:8px}
-.ad-section__label{font-size:10px;color:var(--c-faint);text-align:center;margin-bottom:6px;font-style:italic}
+/* ── Colors ── */
+const C = {
+  accent:'#FF6B35', accentBg:'#FFF0E9', border:'#e0e0e4',
+  text:'#1a1a1a', muted:'#5c5c66', faint:'#9c9ca6', bg:'#fafafa', white:'#fff'
+};
 
-/* 3-col row for agents */
-.ad-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* ── SVG setup ── */
+const svg = d3.select(container).append('svg')
+  .attr('width', W).attr('height', H)
+  .style('position','absolute').style('top',0).style('left',0)
+  .style('pointer-events','none');
 
-/* 2-col row */
-.ad-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+const defs = svg.append('defs');
+['gray','accent'].forEach(t => {
+  defs.append('marker').attr('id','arrow-'+t)
+    .attr('viewBox','0 0 10 7').attr('refX',10).attr('refY',3.5)
+    .attr('markerWidth',7).attr('markerHeight',5).attr('orient','auto-start-reverse')
+    .append('path').attr('d','M0 0 L10 3.5 L0 7z')
+    .attr('fill', t==='accent' ? C.accent : C.faint);
+});
 
-/* 3-col row: semantic + fallback + dict */
-.ad-row3-data{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* ── Force simulation ── */
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links).id(d=>d.id).distance(tierSpacing * 0.8).strength(0.4))
+  .force('charge', d3.forceManyBody().strength(-300))
+  .force('x', d3.forceX(W/2).strength(0.12))
+  .force('y', d3.forceY(d => 20 + d.tier * tierSpacing).strength(0.8))
+  .force('collide', d3.forceCollide(nodeW * 0.6))
+  .alphaDecay(0.03);
 
-/* 2-col row: corpus + persona */
-.ad-row2-right{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* ── Link elements ── */
+const linkEls = svg.selectAll('.link').data(links).join('line')
+  .attr('class','link')
+  .attr('stroke', d => d.accent ? C.accent : C.faint)
+  .attr('stroke-width', 1.2)
+  .attr('stroke-dasharray', d => d.dashed ? '5 3' : null)
+  .attr('marker-end', d => d.accent ? 'url(#arrow-accent)' : 'url(#arrow-gray)')
+  .style('pointer-events','none');
 
-/* Bottom row: viz + analyse */
-.ad-row2-bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* ── Link labels ── */
+const linkLabels = svg.selectAll('.link-label').data(links.filter(d=>d.label)).join('text')
+  .attr('class','link-label')
+  .text(d=>d.label)
+  .attr('font-size', isMobile ? 8 : 9)
+  .attr('fill', C.faint)
+  .attr('font-style','italic')
+  .attr('text-anchor','middle')
+  .attr('font-family','Raleway, sans-serif')
+  .style('pointer-events','none');
 
-/* Feeds-from label */
-.ad-feeds{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
-.ad-feeds__tag{font-size:9px;padding:2px 8px;border-radius:10px;background:var(--c-accent-bg);color:var(--c-accent);white-space:nowrap}
-.ad-feeds__tag--gray{background:var(--c-bg);color:var(--c-faint)}
+/* ── Node DOM elements ── */
+const nodeEls = d3.select(container).selectAll('.node').data(nodes).join('div')
+  .attr('class','node')
+  .style('position','absolute')
+  .style('width', nodeW+'px')
+  .style('padding', '8px 10px')
+  .style('box-sizing','border-box')
+  .style('border-radius', d => d.type==='pill'||d.type==='cta' ? '22px' : '10px')
+  .style('text-align', d => d.type==='pill'||d.type==='cta' ? 'center' : 'left')
+  .style('background', d => {
+    if(d.type==='cta') return C.accent;
+    if(d.type.includes('accent')) return C.accentBg;
+    if(d.type.includes('source')) return C.bg;
+    return C.white;
+  })
+  .style('border', d => {
+    if(d.type==='cta') return 'none';
+    if(d.type.includes('accent')) return '1px solid '+C.accent;
+    if(d.type.includes('source')) return '1px dashed '+C.border;
+    return '1px solid '+C.border;
+  })
+  .style('cursor','pointer')
+  .style('font-family','Raleway, sans-serif')
+  .style('transition','box-shadow 0.2s ease')
+  .style('z-index', 2)
+  .on('click', function(ev, d) {
+    if(!d.detail) return;
+    /* Toggle tooltip */
+    const existing = container.querySelector('.tooltip-active');
+    if(existing) existing.remove();
+    const tip = document.createElement('div');
+    tip.className = 'tooltip-active';
+    tip.style.cssText = 'position:absolute;z-index:100;background:#fff;border:1px solid '+C.border+';border-radius:10px;padding:12px 14px;max-width:280px;font-family:Raleway,sans-serif;box-shadow:0 4px 20px rgba(0,0,0,0.12);pointer-events:auto';
+    tip.style.left = Math.min(d.x + nodeW/2 + 10, W - 290) + 'px';
+    tip.style.top = (d.y - 10) + 'px';
+    tip.innerHTML = '<div style="font-size:12px;font-weight:600;color:'+C.text+';margin-bottom:6px">'+d.label+'</div>'
+      + '<div style="font-size:11px;color:'+C.muted+';line-height:1.6;white-space:pre-line">'+d.detail+'</div>'
+      + '<div style="font-size:9px;color:'+C.faint+';margin-top:8px;cursor:pointer" onclick="this.parentElement.remove()">✕ fermer</div>';
+    container.appendChild(tip);
+    ev.stopPropagation();
+  });
 
-/* Legend */
-.ad-legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--c-border)}
-.ad-legend__item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--c-muted)}
-.ad-legend__dot{width:10px;height:10px;border-radius:3px}
-.ad-legend__dot--accent{background:var(--c-accent-bg);border:1px solid var(--c-accent)}
-.ad-legend__dot--source{background:var(--c-bg);border:1px dashed var(--c-border)}
+/* Node inner HTML */
+nodeEls.html(d => {
+  const isAI = d.type.includes('agent');
+  const isCta = d.type === 'cta';
+  const titleColor = isCta ? '#fff' : C.text;
+  const fontSize = isMobile ? 11 : 12;
+  const icon = isAI ? '<svg viewBox="0 0 20 20" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"><circle cx="10" cy="10" r="4" fill="none" stroke="'+C.accent+'" stroke-width="1.5"/><circle cx="10" cy="10" r="1.5" fill="'+C.accent+'"/><line x1="10" y1="2" x2="10" y2="6" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><line x1="3.2" y1="14" x2="6.6" y2="12" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><line x1="16.8" y1="14" x2="13.4" y2="12" stroke="'+C.accent+'" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="1.5" r="1.5" fill="'+C.accent+'"/><circle cx="2.5" cy="15" r="1.5" fill="'+C.accent+'"/><circle cx="17.5" cy="15" r="1.5" fill="'+C.accent+'"/></svg>' : '';
+  const detailHint = d.detail ? '<div style="font-size:8px;color:'+C.faint+';margin-top:2px">cliquez pour détails</div>' : '';
+  return icon + '<span style="font-size:'+fontSize+'px;font-weight:600;color:'+titleColor+'">'+d.label+'</span>' + detailHint;
+});
 
-/* Mobile: stack everything */
-@media(max-width:640px){
-  .ad-row3,.ad-row2,.ad-row3-data,.ad-row2-right,.ad-row2-bottom{grid-template-columns:1fr}
-}
-</style>
+/* ── Close tooltip on outside click ── */
+document.addEventListener('click', () => {
+  const t = container.querySelector('.tooltip-active');
+  if(t) t.remove();
+});
 
-<div class="ad">
+/* ── Tick ── */
+sim.on('tick', () => {
+  /* Clamp positions */
+  nodes.forEach(d => {
+    d.x = Math.max(nodeW/2, Math.min(W - nodeW/2, d.x));
+    d.y = Math.max(nodeH/2, Math.min(H - nodeH/2, d.y));
+  });
 
-  <!-- Question -->
-  <div class="ad-card ad-card--agent ad-card--pill">
-    <span class="ad-card__title">Question utilisateur</span>
-    <details><summary></summary><p>En langage naturel, en français. Ex : « Évolution du mix énergétique en France ? »</p></details>
-  </div>
+  nodeEls
+    .style('left', d => (d.x - nodeW/2) + 'px')
+    .style('top', d => (d.y - nodeH/2) + 'px');
 
-  <div class="ad-arrow"></div>
+  linkEls
+    .attr('x1', d => d.source.x).attr('y1', d => d.source.y + nodeH/2)
+    .attr('x2', d => d.target.x).attr('y2', d => d.target.y - nodeH/2);
 
-  <!-- Classifieur -->
-  <div class="ad-card ad-card--agent-accent">
-    <div class="ad-card__head">
-      <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-      <span class="ad-card__title">Classifieur</span>
-    </div>
-    <p class="ad-card__sub">Route la question vers l'agent spécialisé</p>
-    <details><summary></summary><p>Lit la question et la classe : chiffre factuel, question complexe, opinion ou métadonnée. Chaque type active un chemin différent.</p></details>
-  </div>
+  linkLabels
+    .attr('x', d => (d.source.x + d.target.x) / 2)
+    .attr('y', d => (d.source.y + nodeH/2 + d.target.y - nodeH/2) / 2);
+});
 
-  <div class="ad-arrow"></div>
-
-  <!-- 3 routing labels -->
-  <div class="ad-row3 ad-section">
-    <div class="ad-section__label">un chiffre</div>
-    <div class="ad-section__label">question complexe</div>
-    <div class="ad-section__label">une opinion</div>
-  </div>
-
-  <!-- 3 agents -->
-  <div class="ad-row3">
-    <div class="ad-card ad-card--agent">
-      <div class="ad-card__head">
-        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-        <span class="ad-card__title">Agent tactique</span>
-      </div>
-      <p class="ad-card__sub">Métrique → graphique</p>
-      <details><summary></summary><p>« Consommation d'énergie de la France ? » — Identifie la métrique, demande les données à l'agent data, choisit le graphique adapté.</p></details>
-    </div>
-
-    <div class="ad-card ad-card--agent">
-      <div class="ad-card__head">
-        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-        <span class="ad-card__title">Agent stratégique</span>
-      </div>
-      <p class="ad-card__sub">Sous-questions → synthèse</p>
-      <details><summary></summary><p>« Pourquoi les émissions baissent en Europe ? » — Décompose en sous-questions, appelle l'agent data pour chacune, puis synthétise.</p></details>
-    </div>
-
-    <div class="ad-card ad-card--agent">
-      <div class="ad-card__head">
-        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-        <span class="ad-card__title">Agent expert</span>
-      </div>
-      <p class="ad-card__sub">Répond depuis le corpus</p>
-      <details><summary></summary><p>« Que pense Jancovici du nucléaire ? » — Pas de données chiffrées. Cherche dans les convictions et le corpus, répond dans la voix de l'expert.</p></details>
-      <div class="ad-feeds">
-        <span class="ad-feeds__tag">↓ Corpus</span>
-        <span class="ad-feeds__tag">↓ Persona</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="ad-arrow"></div>
-
-  <!-- Agent data -->
-  <div class="ad-card ad-card--agent-accent">
-    <div class="ad-card__head">
-      <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-      <span class="ad-card__title">Agent data</span>
-      <span class="ad-card__tag">appelé par tactique & stratégique</span>
-    </div>
-    <p class="ad-card__sub">Récupère les chiffres</p>
-    <details><summary></summary><p>Consulte le dictionnaire des données pour comprendre la structure. Cherche d'abord dans la couche sémantique (SQL déterministe). Si la métrique n'existe pas → fallback Text-to-SQL validé par EXPLAIN.</p></details>
-  </div>
-
-  <div class="ad-arrow"></div>
-
-  <!-- Couche sémantique + fallback + dictionnaire -->
-  <div class="ad-row3-data">
-    <div class="ad-card ad-card--source">
-      <span class="ad-card__title" style="font-size:10px;letter-spacing:1px;color:var(--c-faint)">COUCHE SÉMANTIQUE</span>
-      <p class="ad-card__sub">Métriques → SQL déterministe</p>
-      <p class="ad-card__sub ad-card__sub--accent">Zéro hallucination</p>
-      <details><summary></summary><p>Catalogue YAML : chaque métrique décrite avec sa table, formule, dimensions et filtres. L'IA choisit la métrique, le code assemble le SQL. KPIs virtuelles déclaratives.</p></details>
-    </div>
-
-    <div class="ad-card ad-card--source">
-      <span class="ad-card__title" style="font-size:10px;letter-spacing:1px;color:var(--c-faint)">FALLBACK</span>
-      <p class="ad-card__sub">Text-to-SQL → EXPLAIN</p>
-      <p class="ad-card__tag">si métrique inconnue</p>
-      <details><summary></summary><p>Si la métrique n'est pas au catalogue, l'IA génère du SQL PostgreSQL. La requête est validée par EXPLAIN avant exécution : si le plan échoue, la requête est rejetée.</p></details>
-    </div>
-
-    <div class="ad-card ad-card--source">
-      <div class="ad-card__head">
-        <span class="ad-card__title" style="font-size:11px">Dictionnaire</span>
-      </div>
-      <p class="ad-card__sub">Tables, colonnes, valeurs</p>
-      <details><summary></summary><p>Description de chaque table, colonne et valeur possible. Permet à l'agent data de comprendre la structure de la base sans inventer de colonnes.</p></details>
-    </div>
-  </div>
-
-  <!-- Corpus + Persona (right side conceptually) -->
-  <div style="margin-top:10px">
-    <div class="ad-row2-right">
-      <div class="ad-card ad-card--source-accent">
-        <div class="ad-card__head">
-          <span class="ad-card__title ad-card__title--accent">Corpus</span>
-        </div>
-        <p class="ad-card__sub">10 interviews transcrites, ~270 segments, embeddings pgvector</p>
-        <details><summary></summary><p>Récupération en 4 niveaux par similarité sémantique : conviction+thème → conviction → thème → tout le corpus.</p></details>
-      </div>
-
-      <div class="ad-card ad-card--source-accent">
-        <span class="ad-card__title ad-card__title--accent" style="font-size:10px;letter-spacing:1px">PERSONA</span>
-        <p class="ad-card__sub">34 convictions · lexique · anti-lexique · style</p>
-        <details><summary></summary><p>34 convictions extraites par clustering (BERTopic) des transcriptions. Lexique, anti-lexique, tics verbaux injectés dans chaque réponse par similarité sémantique.</p></details>
-      </div>
-    </div>
-  </div>
-
-  <div class="ad-arrow"></div>
-
-  <!-- Viz + Analyse -->
-  <div class="ad-row2-bottom">
-    <div class="ad-card ad-card--agent">
-      <span class="ad-card__title">Visualisation auto</span>
-      <details><summary></summary><p>Choisit le bon graphique selon les données : courbe (séries temporelles), barres (comparaisons), carte KPI (valeur unique), tableau (multi-dimensions).</p></details>
-    </div>
-
-    <div class="ad-card ad-card--agent-accent">
-      <div class="ad-card__head">
-        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
-        <span class="ad-card__title">Analyse incarnée</span>
-      </div>
-      <p class="ad-card__sub">Chiffres lus avec un point de vue</p>
-      <div class="ad-feeds">
-        <span class="ad-feeds__tag">← Persona</span>
-        <span class="ad-feeds__tag--gray ad-feeds__tag">← Visualisation</span>
-      </div>
-      <details><summary></summary><p>Commente les chiffres avec le style, les convictions et les analogies de la persona. Propose les prochaines étapes.</p></details>
-    </div>
-  </div>
-
-  <div class="ad-arrow"></div>
-
-  <!-- Réponse -->
-  <div class="ad-card ad-card--cta ad-card--pill">
-    <span style="font-size:13px;font-weight:600">Réponse + graphique + analyse</span>
-  </div>
-
-  <!-- Legend -->
-  <div class="ad-legend">
-    <div class="ad-legend__item">
-      <span class="ad-icon" style="width:14px;height:14px">{{ partial "inline-agent-icon.html" . }}</span>
-      Agent IA
-    </div>
-    <div class="ad-legend__item">
-      <span class="ad-legend__dot ad-legend__dot--accent"></span>
-      Persona
-    </div>
-    <div class="ad-legend__item">
-      <span class="ad-legend__dot ad-legend__dot--source"></span>
-      Anti-hallucination
-    </div>
-    <div class="ad-legend__item" style="font-size:10px;color:var(--c-accent)">
-      Cliquez « + détails » pour en savoir plus
-    </div>
-  </div>
-
-</div>
+/* ── Resize ── */
+window.addEventListener('resize', () => {
+  const newW = container.clientWidth;
+  svg.attr('width', newW);
+  sim.force('x', d3.forceX(newW/2).strength(0.12));
+  sim.alpha(0.5).restart();
+});
+</script>
