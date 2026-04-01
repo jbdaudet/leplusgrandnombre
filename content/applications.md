@@ -11,40 +11,23 @@ Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce so
 
 <h2 id="geomarketing">Comprendre son marché <a href="https://geomarketing.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">geomarketing</a></h2>
 
-Avant de lancer quoi que ce soit, il faut savoir à qui on s'adresse, où ils sont, et ce qui compte pour eux.
+**Le contexte.** L'emplacement est un pari à haut risque. Porteurs de projets ou enseignes : choisir une adresse pour un commerce est une décision lourde de conséquences financières. Pourtant, elle repose souvent sur l'intuition. Faute d'une vision consolidée du quartier, vous risquez d'investir là où vos clients ne passent pas ou dans une zone en déclin.
 
-**Le contexte.** Un professionnel qui cherche le bon emplacement pour ouvrir un commerce en France. Ou un réseau qui veut comprendre le potentiel d'une zone avant d'investir.
+**Le défi.** La donnée locale est fragmentée et figée. Les informations (Insee, flux piétons, concurrence, avis clients) existent mais ne se parlent pas. Calculer manuellement une zone de chalandise et analyser sa dynamique réelle sur plusieurs années demande une expertise rare et chronophage. Le défi est d'obtenir un diagnostic fiable qui ne soit pas juste une photo à l'instant T, mais une analyse de trajectoire.
 
-**Le défi.** Les données existent — démographie, revenus, transports, centres d'intérêt, concurrence — mais elles sont éparpillées dans des dizaines de sources publiques et privées, chacune avec son format et sa granularité. En pratique, personne ne les croise. On se fie à l'intuition.
+**Le résultat.** Le rapport d'expertise instantané. Tapez une adresse et obtenez un dossier complet benchmarké par rapport au département. Le système livre immédiatement le potentiel piéton, le profil de consommation, et surtout, la dynamique d'évolution du quartier. Ce n'est plus seulement un état des lieux, c'est une recommandation stratégique qui valide si l'emplacement correspond à l'avenir de votre marque.
 
-**Le résultat.** Entrez une adresse. En quelques secondes, vous obtenez un rapport complet : qui habite autour, quel pouvoir d'achat, quels transports, quels commerces, ce qui les intéresse, quelle concurrence — le tout comparé à la moyenne du département. La décision d'implantation devient factuelle.
+### L'approche : le scoring multi-couches
 
-### L'approche
+L'application croise les données géographiques, temporelles et l'IA pour sécuriser la décision.
 
-Six sections d'analyse, chacune avec sa propre logique de données, assemblées automatiquement en un rapport cohérent.
+**Analyse de trajectoire.** Le système compare les données historiques (2016 vs 2021) pour mesurer l'évolution réelle de la population, des revenus et de la pauvreté. Il identifie ainsi les zones en pleine mutation ou gentrification — pas juste une photo, mais un film.
 
-{{< mermaid >}}
-flowchart LR
-    A["Adresse"] --> B["Géocodage\n+ zone de\nchalandise"]
-    B --> C["Zone &\nflux piétons"]
-    B --> D["Population &\nrevenus"]
-    B --> E["Transports"]
-    B --> F["Commerces &\néquipements"]
-    B --> H["Centres\nd'intérêt"]
-    B --> G["Concurrence"]
-{{< /mermaid >}}
+**Flux piéton modélisé.** Au lieu d'un simple comptage, l'algorithme prédit les flux logiques entre les zones résidentielles et les pôles d'attractivité (commerces, transports). Résultat : une carte de chaleur montrant les vrais couloirs de passage.
 
-**La granularité la plus fine disponible.** Chaque donnée est exploitée à son niveau de précision maximal : population et démographie à l'**IRIS** (~2 000 habitants), revenus et pauvreté à la commune, équipements géolocalisés au point. Le rapport ne lisse pas tout à la même échelle — il tire le meilleur de chaque source.
+**Affinité psychographique.** L'outil mesure l'intérêt réel des habitants (bio, luxe, sport…) pour vérifier l'adéquation culturelle avec votre enseigne. On ne sait pas seulement *combien* de gens habitent là, mais *ce qui les intéresse*.
 
-**Zone de chalandise intelligente.** Le rayon ne se fixe pas au doigt mouillé. Le système identifie la **classification urbaine INSEE** de la commune (ville-centre, banlieue, rural) et adapte automatiquement : 750 m en centre-ville dense, jusqu'à 3 km en zone rurale. La zone croise cinq sources de données publiques (INSEE RP, Filosofi, BPE, IGN, OpenStreetMap).
-
-**Estimation de flux piétons.** Plutôt qu'un simple comptage de population, le système modélise les **déplacements réels** domicile → commerces/transports via la méthode de centralité de Sevtsuk (2021). Le score combine le volume de flux piétons passant par le point (50%), la proximité aux destinations commerciales et de transport (30%), et la connectivité du réseau de rues (20%). Résultat : une carte avec gradient de chaleur montrant les vrais couloirs de passage.
-
-**Benchmarking systématique.** Chaque indicateur (densité, revenus, équipements, transports) est comparé à la **moyenne du département** et, quand c'est disponible, aux **données historiques 2016** pour détecter les tendances. Un quartier qui se gentrifie ou qui perd ses commerces, ça se voit immédiatement.
-
-**Profilage par centres d'intérêt.** La section la plus originale : le système interroge l'**API Meta (Facebook)** pour estimer la part d'utilisateurs dans la zone de chalandise qui s'intéressent à 12 catégories prédéfinies — réparties en 4 axes : Patrimoine & Statut, Valeurs & Éthique, Capital Culturel, Mode de vie & Densité. Chaque catégorie est convertie en **indice d'affinité** comparé à une référence nationale (moyenne de 7 grandes villes françaises, interrogées avec le même rayon pour éliminer les biais d'échelle). Un indice supérieur à 100 signifie que l'intérêt est sur-représenté localement. Résultat : on ne sait pas seulement *combien* de gens habitent là, mais *ce qui les intéresse*.
-
-**Analyse concurrentielle automatique.** L'utilisateur entre un nom de marque. L'IA identifie les 3 principaux concurrents directs et le rayon de recherche adapté au type de commerce. Google Places (API v1) localise les points de vente concurrents, récupère les notes et les avis en un seul appel par concurrent, et l'IA synthétise les forces et faiblesses de chacun. Score de pression concurrentielle de 0 à 100.
+**Synthèse décisionnelle par l'IA.** Les chiffres ne sont pas restitués bruts — ils sont interprétés par une persona experte qui transforme les données en conseils actionnables, résume les forces et faiblesses de la concurrence via leurs avis clients, et structure sa réponse en diagnostic → vision → compromis → feuille de route.
 
 {{< button href="https://geomarketing.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
 
