@@ -1,168 +1,246 @@
-<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;margin:2rem auto;display:block;font-family:'Raleway','Segoe UI',sans-serif">
-  <style>
-    .tip .tip-box { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-    .tip:hover .tip-box { opacity: 1; }
-    .tip:hover .tip-target { stroke-width: 2; }
-    .tip { cursor: default; }
-  </style>
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 3.5 L0 7z" fill="#9c9ca6"/></marker>
-    <marker id="arrow-accent" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 3.5 L0 7z" fill="#FF6B35"/></marker>
-    <symbol id="agent" viewBox="0 0 20 20">
-      <circle cx="10" cy="10" r="4" fill="none" stroke="#FF6B35" stroke-width="1.5"/>
-      <circle cx="10" cy="10" r="1.5" fill="#FF6B35"/>
-      <line x1="10" y1="2" x2="10" y2="6" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="3.2" y1="14" x2="6.6" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="16.8" y1="14" x2="13.4" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="10" cy="1.5" r="1.5" fill="#FF6B35"/>
-      <circle cx="2.5" cy="15" r="1.5" fill="#FF6B35"/>
-      <circle cx="17.5" cy="15" r="1.5" fill="#FF6B35"/>
-    </symbol>
-    <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
-      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.12"/>
-    </filter>
-  </defs>
+<style>
+.ad{--c-accent:#FF6B35;--c-accent-bg:#FFF0E9;--c-border:#e0e0e4;--c-text:#1a1a1a;--c-muted:#5c5c66;--c-faint:#9c9ca6;--c-bg:#fafafa;font-family:'Raleway','Segoe UI',sans-serif;max-width:900px;margin:2rem auto}
+
+/* Agent icon (inline SVG in CSS) */
+.ad-icon{display:inline-flex;width:20px;height:20px;flex-shrink:0}
+.ad-icon svg{width:100%;height:100%}
+.ad-db{display:inline-flex;width:16px;height:18px;flex-shrink:0}
+.ad-db svg{width:100%;height:100%}
+
+/* Cards */
+.ad-card{border-radius:10px;padding:14px 16px;position:relative}
+.ad-card--agent{background:#fff;border:1px solid var(--c-border)}
+.ad-card--agent-accent{background:var(--c-accent-bg);border:1px solid var(--c-accent)}
+.ad-card--source{background:var(--c-bg);border:1px dashed var(--c-border)}
+.ad-card--source-accent{background:var(--c-accent-bg);border:1px dashed var(--c-accent)}
+.ad-card--pill{border-radius:22px;text-align:center;padding:12px 20px}
+.ad-card--cta{background:var(--c-accent);border:none;color:#fff}
+
+.ad-card__head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ad-card__title{font-size:13px;font-weight:600;color:var(--c-text)}
+.ad-card__title--accent{color:var(--c-accent)}
+.ad-card__sub{font-size:11px;color:var(--c-muted);margin:0}
+.ad-card__sub--accent{color:var(--c-accent);font-weight:600}
+.ad-card__tag{font-size:9px;color:var(--c-faint);font-style:italic;margin-top:2px}
+
+/* Details (tooltip replacement) */
+.ad-card details{margin-top:8px}
+.ad-card summary{font-size:10px;color:var(--c-accent);cursor:pointer;list-style:none;user-select:none}
+.ad-card summary::-webkit-details-marker{display:none}
+.ad-card summary::before{content:'+ détails';transition:opacity .2s}
+.ad-card details[open] summary::before{content:'− fermer'}
+.ad-card details p{font-size:10px;color:var(--c-muted);margin:6px 0 0;line-height:1.5}
+
+/* Arrows (vertical connector) */
+.ad-arrow{display:flex;justify-content:center;padding:4px 0}
+.ad-arrow::after{content:'';display:block;width:1px;height:20px;background:var(--c-faint)}
+
+/* Section layout */
+.ad-section{margin-bottom:8px}
+.ad-section__label{font-size:10px;color:var(--c-faint);text-align:center;margin-bottom:6px;font-style:italic}
+
+/* 3-col row for agents */
+.ad-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* 2-col row */
+.ad-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* 3-col row: semantic + fallback + dict */
+.ad-row3-data{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* 2-col row: corpus + persona */
+.ad-row2-right{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Bottom row: viz + analyse */
+.ad-row2-bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Feeds-from label */
+.ad-feeds{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.ad-feeds__tag{font-size:9px;padding:2px 8px;border-radius:10px;background:var(--c-accent-bg);color:var(--c-accent);white-space:nowrap}
+.ad-feeds__tag--gray{background:var(--c-bg);color:var(--c-faint)}
+
+/* Legend */
+.ad-legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--c-border)}
+.ad-legend__item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--c-muted)}
+.ad-legend__dot{width:10px;height:10px;border-radius:3px}
+.ad-legend__dot--accent{background:var(--c-accent-bg);border:1px solid var(--c-accent)}
+.ad-legend__dot--source{background:var(--c-bg);border:1px dashed var(--c-border)}
+
+/* Mobile: stack everything */
+@media(max-width:640px){
+  .ad-row3,.ad-row2,.ad-row3-data,.ad-row2-right,.ad-row2-bottom{grid-template-columns:1fr}
+}
+</style>
+
+<div class="ad">
 
   <!-- Question -->
-  <rect x="350" y="8" width="200" height="44" rx="22" fill="#fff" stroke="#e0e0e4"/>
-  <text x="450" y="35" text-anchor="middle" font-size="13" fill="#1a1a1a" font-weight="600">Question utilisateur</text>
+  <div class="ad-card ad-card--agent ad-card--pill">
+    <span class="ad-card__title">Question utilisateur</span>
+    <details><summary></summary><p>En langage naturel, en français. Ex : « Évolution du mix énergétique en France ? »</p></details>
+  </div>
 
-  <line x1="450" y1="52" x2="450" y2="82" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <div class="ad-arrow"></div>
 
   <!-- Classifieur -->
-  <g class="tip">
-    <rect class="tip-target" x="355" y="82" width="190" height="50" rx="10" fill="#FFF0E9" stroke="#FF6B35"/>
-    <use href="#agent" x="370" y="95" width="22" height="22"/>
-    <text x="400" y="103" font-size="12" fill="#1a1a1a" font-weight="600">Classifieur</text>
-    <text x="400" y="119" font-size="10" fill="#5c5c66">Quel type de question ?</text>
-    <g class="tip-box">
-      <rect x="560" y="62" width="280" height="72" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
-      <text x="576" y="82" font-size="11" fill="#1a1a1a" font-weight="600">Classifieur</text>
-      <text x="576" y="98" font-size="10" fill="#5c5c66">Lit la question et la classe : chiffre factuel,</text>
-      <text x="576" y="112" font-size="10" fill="#5c5c66">question complexe, opinion, ou métadonnée.</text>
-      <text x="576" y="126" font-size="10" fill="#5c5c66">Chaque type active un agent spécialisé.</text>
-    </g>
-  </g>
+  <div class="ad-card ad-card--agent-accent">
+    <div class="ad-card__head">
+      <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+      <span class="ad-card__title">Classifieur</span>
+    </div>
+    <p class="ad-card__sub">Route la question vers l'agent spécialisé</p>
+    <details><summary></summary><p>Lit la question et la classe : chiffre factuel, question complexe, opinion ou métadonnée. Chaque type active un chemin différent.</p></details>
+  </div>
 
-  <!-- Arrows from classifieur to agents -->
-  <line x1="395" y1="132" x2="155" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
-  <line x1="450" y1="132" x2="450" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
-  <line x1="505" y1="132" x2="745" y2="182" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <div class="ad-arrow"></div>
 
-  <text x="255" y="155" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">un chiffre</text>
-  <text x="450" y="168" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">question complexe</text>
-  <text x="650" y="155" text-anchor="middle" font-size="10" fill="#5c5c66" font-style="italic">une opinion</text>
+  <!-- 3 routing labels -->
+  <div class="ad-row3 ad-section">
+    <div class="ad-section__label">un chiffre</div>
+    <div class="ad-section__label">question complexe</div>
+    <div class="ad-section__label">une opinion</div>
+  </div>
 
-  <!-- Agent Tactique -->
-  <g class="tip">
-    <rect class="tip-target" x="50" y="182" width="210" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
-    <use href="#agent" x="62" y="196" width="22" height="22"/>
-    <text x="92" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent tactique</text>
-    <text x="92" y="223" font-size="10" fill="#5c5c66">Identifie la métrique</text>
-    <text x="92" y="237" font-size="10" fill="#5c5c66">→ SQL déterministe → graphique</text>
-    <g class="tip-box">
-      <rect x="50" y="258" width="280" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
-      <text x="66" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent tactique</text>
-      <text x="66" y="294" font-size="10" fill="#5c5c66">« Consommation d'énergie de la France ? »</text>
-      <text x="66" y="308" font-size="10" fill="#5c5c66">Identifie la bonne métrique dans le catalogue,</text>
-      <text x="66" y="322" font-size="10" fill="#5c5c66">assemble le SQL, choisit le graphique adapté.</text>
-      <text x="66" y="336" font-size="10" fill="#FF6B35">Aucun SQL n'est généré par l'IA.</text>
-    </g>
-  </g>
+  <!-- 3 agents -->
+  <div class="ad-row3">
+    <div class="ad-card ad-card--agent">
+      <div class="ad-card__head">
+        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+        <span class="ad-card__title">Agent tactique</span>
+      </div>
+      <p class="ad-card__sub">Métrique → graphique</p>
+      <details><summary></summary><p>« Consommation d'énergie de la France ? » — Identifie la métrique, demande les données à l'agent data, choisit le graphique adapté.</p></details>
+    </div>
 
-  <!-- Agent Stratégique -->
-  <g class="tip">
-    <rect class="tip-target" x="310" y="182" width="280" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
-    <use href="#agent" x="322" y="196" width="22" height="22"/>
-    <text x="352" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent stratégique</text>
-    <text x="352" y="223" font-size="10" fill="#5c5c66">Décompose en sous-questions</text>
-    <text x="352" y="237" font-size="10" fill="#5c5c66">→ données de chacune → synthèse</text>
-    <g class="tip-box">
-      <rect x="310" y="258" width="290" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
-      <text x="326" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent stratégique</text>
-      <text x="326" y="294" font-size="10" fill="#5c5c66">« Pourquoi les émissions baissent en Europe ? »</text>
-      <text x="326" y="308" font-size="10" fill="#5c5c66">Décompose en sous-questions, récupère les</text>
-      <text x="326" y="322" font-size="10" fill="#5c5c66">données de chacune, puis synthétise une</text>
-      <text x="326" y="336" font-size="10" fill="#5c5c66">réponse structurée multi-étapes.</text>
-    </g>
-  </g>
+    <div class="ad-card ad-card--agent">
+      <div class="ad-card__head">
+        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+        <span class="ad-card__title">Agent stratégique</span>
+      </div>
+      <p class="ad-card__sub">Sous-questions → synthèse</p>
+      <details><summary></summary><p>« Pourquoi les émissions baissent en Europe ? » — Décompose en sous-questions, appelle l'agent data pour chacune, puis synthétise.</p></details>
+    </div>
 
-  <!-- Agent Expert -->
-  <g class="tip">
-    <rect class="tip-target" x="640" y="182" width="210" height="70" rx="10" fill="#fff" stroke="#e0e0e4"/>
-    <use href="#agent" x="652" y="196" width="22" height="22"/>
-    <text x="682" y="207" font-size="12" fill="#1a1a1a" font-weight="600">Agent expert</text>
-    <text x="682" y="223" font-size="10" fill="#5c5c66">Cherche dans les convictions</text>
-    <text x="682" y="237" font-size="10" fill="#5c5c66">et le corpus de l'expert</text>
-    <g class="tip-box">
-      <rect x="580" y="258" width="280" height="86" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
-      <text x="596" y="278" font-size="11" fill="#1a1a1a" font-weight="600">Agent expert</text>
-      <text x="596" y="294" font-size="10" fill="#5c5c66">« Que pense Jancovici du nucléaire ? »</text>
-      <text x="596" y="308" font-size="10" fill="#5c5c66">Pas de données chiffrées : cherche par</text>
-      <text x="596" y="322" font-size="10" fill="#5c5c66">similarité sémantique dans les convictions</text>
-      <text x="596" y="336" font-size="10" fill="#5c5c66">et le corpus, puis répond dans sa voix.</text>
-    </g>
-  </g>
+    <div class="ad-card ad-card--agent">
+      <div class="ad-card__head">
+        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+        <span class="ad-card__title">Agent expert</span>
+      </div>
+      <p class="ad-card__sub">Répond depuis le corpus</p>
+      <details><summary></summary><p>« Que pense Jancovici du nucléaire ? » — Pas de données chiffrées. Cherche dans les convictions et le corpus, répond dans la voix de l'expert.</p></details>
+      <div class="ad-feeds">
+        <span class="ad-feeds__tag">↓ Corpus</span>
+        <span class="ad-feeds__tag">↓ Persona</span>
+      </div>
+    </div>
+  </div>
 
-  <!-- Couche sémantique -->
-  <rect x="50" y="296" width="500" height="80" rx="12" fill="#fafafa" stroke="#e0e0e4" stroke-dasharray="6 3"/>
-  <text x="70" y="318" font-size="11" fill="#9c9ca6" font-weight="600" letter-spacing="1">COUCHE SÉMANTIQUE</text>
-  <text x="70" y="336" font-size="11" fill="#5c5c66">Catalogue YAML · métriques, formules, filtres valides</text>
-  <text x="70" y="352" font-size="11" fill="#5c5c66">→ SQL assemblé mécaniquement (pas généré par l'IA)</text>
-  <text x="70" y="366" font-size="10" fill="#FF6B35" font-weight="600">Zéro hallucination</text>
+  <div class="ad-arrow"></div>
 
-  <line x1="155" y1="252" x2="155" y2="296" stroke="#9c9ca6" marker-end="url(#arrow)"/>
-  <line x1="450" y1="252" x2="450" y2="296" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+  <!-- Agent data -->
+  <div class="ad-card ad-card--agent-accent">
+    <div class="ad-card__head">
+      <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+      <span class="ad-card__title">Agent data</span>
+      <span class="ad-card__tag">appelé par tactique & stratégique</span>
+    </div>
+    <p class="ad-card__sub">Récupère les chiffres</p>
+    <details><summary></summary><p>Consulte le dictionnaire des données pour comprendre la structure. Cherche d'abord dans la couche sémantique (SQL déterministe). Si la métrique n'existe pas → fallback Text-to-SQL validé par EXPLAIN.</p></details>
+  </div>
 
-  <!-- Persona -->
-  <rect x="600" y="296" width="260" height="80" rx="12" fill="#FFF0E9" stroke="#FF6B35" stroke-dasharray="6 3"/>
-  <text x="620" y="318" font-size="11" fill="#FF6B35" font-weight="600" letter-spacing="1">PERSONA</text>
-  <text x="620" y="336" font-size="11" fill="#5c5c66">34 convictions extraites</text>
-  <text x="620" y="352" font-size="11" fill="#5c5c66">de 10 interviews (clustering)</text>
-  <text x="620" y="366" font-size="11" fill="#5c5c66">Lexique · anti-lexique · style</text>
+  <div class="ad-arrow"></div>
 
-  <line x1="745" y1="252" x2="730" y2="296" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+  <!-- Couche sémantique + fallback + dictionnaire -->
+  <div class="ad-row3-data">
+    <div class="ad-card ad-card--source">
+      <span class="ad-card__title" style="font-size:10px;letter-spacing:1px;color:var(--c-faint)">COUCHE SÉMANTIQUE</span>
+      <p class="ad-card__sub">Métriques → SQL déterministe</p>
+      <p class="ad-card__sub ad-card__sub--accent">Zéro hallucination</p>
+      <details><summary></summary><p>Catalogue YAML : chaque métrique décrite avec sa table, formule, dimensions et filtres. L'IA choisit la métrique, le code assemble le SQL. KPIs virtuelles déclaratives.</p></details>
+    </div>
 
-  <!-- Visualisation -->
-  <rect x="170" y="416" width="200" height="44" rx="10" fill="#fff" stroke="#e0e0e4"/>
-  <text x="270" y="443" text-anchor="middle" font-size="12" fill="#1a1a1a" font-weight="600">Visualisation auto</text>
+    <div class="ad-card ad-card--source">
+      <span class="ad-card__title" style="font-size:10px;letter-spacing:1px;color:var(--c-faint)">FALLBACK</span>
+      <p class="ad-card__sub">Text-to-SQL → EXPLAIN</p>
+      <p class="ad-card__tag">si métrique inconnue</p>
+      <details><summary></summary><p>Si la métrique n'est pas au catalogue, l'IA génère du SQL PostgreSQL. La requête est validée par EXPLAIN avant exécution : si le plan échoue, la requête est rejetée.</p></details>
+    </div>
 
-  <line x1="300" y1="376" x2="270" y2="416" stroke="#9c9ca6" marker-end="url(#arrow)"/>
+    <div class="ad-card ad-card--source">
+      <div class="ad-card__head">
+        <span class="ad-card__title" style="font-size:11px">Dictionnaire</span>
+      </div>
+      <p class="ad-card__sub">Tables, colonnes, valeurs</p>
+      <details><summary></summary><p>Description de chaque table, colonne et valeur possible. Permet à l'agent data de comprendre la structure de la base sans inventer de colonnes.</p></details>
+    </div>
+  </div>
 
-  <!-- Analyse incarnée -->
-  <g class="tip">
-    <rect class="tip-target" x="440" y="416" width="260" height="50" rx="10" fill="#FFF0E9" stroke="#FF6B35"/>
-    <use href="#agent" x="452" y="425" width="22" height="22"/>
-    <text x="482" y="439" font-size="12" fill="#1a1a1a" font-weight="600">Analyse incarnée</text>
-    <text x="482" y="455" font-size="10" fill="#5c5c66">Chiffres lus avec un point de vue</text>
-    <g class="tip-box">
-      <rect x="440" y="360" width="280" height="52" rx="8" fill="#fff" stroke="#e0e0e4" filter="url(#shadow)"/>
-      <text x="456" y="380" font-size="11" fill="#1a1a1a" font-weight="600">Analyse incarnée</text>
-      <text x="456" y="396" font-size="10" fill="#5c5c66">Commente les chiffres avec le style, les convictions</text>
-      <text x="456" y="408" font-size="10" fill="#5c5c66">et les analogies de la persona. Propose les prochaines étapes.</text>
-    </g>
-  </g>
+  <!-- Corpus + Persona (right side conceptually) -->
+  <div style="margin-top:10px">
+    <div class="ad-row2-right">
+      <div class="ad-card ad-card--source-accent">
+        <div class="ad-card__head">
+          <span class="ad-card__title ad-card__title--accent">Corpus</span>
+        </div>
+        <p class="ad-card__sub">10 interviews transcrites, ~270 segments, embeddings pgvector</p>
+        <details><summary></summary><p>Récupération en 4 niveaux par similarité sémantique : conviction+thème → conviction → thème → tout le corpus.</p></details>
+      </div>
 
-  <line x1="370" y1="438" x2="440" y2="438" stroke="#9c9ca6" marker-end="url(#arrow)"/>
-  <line x1="730" y1="376" x2="630" y2="416" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
-  <path d="M 850 217 Q 880 440, 700 440" fill="none" stroke="#FF6B35" stroke-dasharray="4 3" marker-end="url(#arrow-accent)"/>
+      <div class="ad-card ad-card--source-accent">
+        <span class="ad-card__title ad-card__title--accent" style="font-size:10px;letter-spacing:1px">PERSONA</span>
+        <p class="ad-card__sub">34 convictions · lexique · anti-lexique · style</p>
+        <details><summary></summary><p>34 convictions extraites par clustering (BERTopic) des transcriptions. Lexique, anti-lexique, tics verbaux injectés dans chaque réponse par similarité sémantique.</p></details>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-arrow"></div>
+
+  <!-- Viz + Analyse -->
+  <div class="ad-row2-bottom">
+    <div class="ad-card ad-card--agent">
+      <span class="ad-card__title">Visualisation auto</span>
+      <details><summary></summary><p>Choisit le bon graphique selon les données : courbe (séries temporelles), barres (comparaisons), carte KPI (valeur unique), tableau (multi-dimensions).</p></details>
+    </div>
+
+    <div class="ad-card ad-card--agent-accent">
+      <div class="ad-card__head">
+        <span class="ad-icon">{{ partial "inline-agent-icon.html" . }}</span>
+        <span class="ad-card__title">Analyse incarnée</span>
+      </div>
+      <p class="ad-card__sub">Chiffres lus avec un point de vue</p>
+      <div class="ad-feeds">
+        <span class="ad-feeds__tag">← Persona</span>
+        <span class="ad-feeds__tag--gray ad-feeds__tag">← Visualisation</span>
+      </div>
+      <details><summary></summary><p>Commente les chiffres avec le style, les convictions et les analogies de la persona. Propose les prochaines étapes.</p></details>
+    </div>
+  </div>
+
+  <div class="ad-arrow"></div>
 
   <!-- Réponse -->
-  <rect x="440" y="500" width="260" height="44" rx="22" fill="#FF6B35" stroke="none"/>
-  <text x="570" y="527" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Réponse + graphique + analyse</text>
+  <div class="ad-card ad-card--cta ad-card--pill">
+    <span style="font-size:13px;font-weight:600">Réponse + graphique + analyse</span>
+  </div>
 
-  <line x1="570" y1="460" x2="570" y2="500" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
+  <!-- Legend -->
+  <div class="ad-legend">
+    <div class="ad-legend__item">
+      <span class="ad-icon" style="width:14px;height:14px">{{ partial "inline-agent-icon.html" . }}</span>
+      Agent IA
+    </div>
+    <div class="ad-legend__item">
+      <span class="ad-legend__dot ad-legend__dot--accent"></span>
+      Persona
+    </div>
+    <div class="ad-legend__item">
+      <span class="ad-legend__dot ad-legend__dot--source"></span>
+      Anti-hallucination
+    </div>
+    <div class="ad-legend__item" style="font-size:10px;color:var(--c-accent)">
+      Cliquez « + détails » pour en savoir plus
+    </div>
+  </div>
 
-  <!-- Légende -->
-  <use href="#agent" x="55" y="571" width="16" height="16"/>
-  <text x="78" y="584" font-size="10" fill="#5c5c66">Agent IA</text>
-  <text x="78" y="596" font-size="9" fill="#9c9ca6" font-style="italic">survolez pour détails</text>
-  <line x1="200" y1="580" x2="230" y2="580" stroke="#9c9ca6" marker-end="url(#arrow)"/>
-  <text x="240" y="584" font-size="10" fill="#9c9ca6">Flux de données</text>
-  <line x1="380" y1="580" x2="410" y2="580" stroke="#FF6B35" marker-end="url(#arrow-accent)"/>
-  <text x="420" y="584" font-size="10" fill="#FF6B35">Persona injectée</text>
-  <rect x="560" y="573" width="14" height="14" rx="3" fill="#FFF0E9" stroke="#FF6B35"/>
-  <text x="582" y="584" font-size="10" fill="#5c5c66">Couche persona</text>
-  <rect x="710" y="573" width="14" height="14" rx="3" fill="#fafafa" stroke="#e0e0e4" stroke-dasharray="4 2"/>
-  <text x="732" y="584" font-size="10" fill="#5c5c66">Anti-hallucination</text>
-</svg>
+</div>

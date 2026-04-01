@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(hugo server:*)",
+      "Bash(where hugo:*)",
+      "Read(//c/Users/jbdau/scoop/**)",
+      "Read(//c/Users/jbdau/AppData/**)",
+      "Read(//c/Program Files/**)"
+    ]
+  }
+}
