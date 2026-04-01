@@ -1,5 +1,5 @@
 ---
-title: "Quelques idées"
+title: "Quelques applications"
 description: "Cinq cas d'application qui montrent comment la data et l'IA peuvent s'adapter à n'importe quel contexte métier."
 showTableOfContents: true
 layout: "applications"
