@@ -144,6 +144,11 @@
         unit.appendChild(svg);
       });
 
+      /* Transfer anchor id from h2 to the assembly wrapper so #hash links work */
+      if (h2.id) {
+        unit.id = h2.id;
+      }
+
       /* Replace the original elements with the unit */
       h2.parentNode.insertBefore(unit, h2);
       h2.remove();

@@ -207,7 +207,7 @@ flowchart LR
 
 <h2 id="theshiftproject">Le KPI utile, votre vision en plus <a href="https://theshiftproject.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">theshiftproject</a></h2>
 
-Personne ne lit les dashboards. Trop de chiffres, trop de graphiques, trop peu d'insights. Et quand on a enfin une question précise, il faut un data analyst pour obtenir la réponse.
+Personne ne lit les dashboards. Trop de chiffres, trop de graphiques, trop peu de sens. Ici, vous n'attendez plus qu'un expert soit libre pour traduire vos données : posez votre question, obtenez la décision.
 
 **Le contexte.** Un analyste, un journaliste, un décideur qui s'intéresse à l'énergie et au climat. Les données mondiales existent — 220 pays, 60 ans d'historique — mais elles sont enfermées dans des bases techniques que personne n'interroge directement.
 

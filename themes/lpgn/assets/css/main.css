@@ -1655,6 +1655,7 @@ th {
   position: relative;
   margin-bottom: var(--space-20);
   padding: 0 var(--space-4);
+  scroll-margin-top: calc(var(--header-height) + var(--space-6));
 }
 
 /* SVG joints at corners — reuse from convictions */
