@@ -52,45 +52,25 @@ flowchart LR
 
 <h2 id="signal">Trouver le bon angle <a href="https://signal.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">signal</a></h2>
 
-Une fois qu'on connaît son marché, il faut trouver le message qui va résonner. Pas un message générique — un angle culturel, ancré dans l'actualité, qui crée une connexion authentique.
+**Le contexte.** Le bruit étouffe l'idée. Stratèges et créatifs : vous lisez des dizaines d'articles pour nourrir vos reco. Mais entre la masse d'infos et l'urgence des délais, la "vérité universelle" — celle qui fait une grande campagne — reste souvent invisible. Faute de temps pour creuser, on finit par proposer des idées attendues, sans relief culturel.
 
-**Le contexte.** Un stratège de marque ou un créatif qui lit des dizaines d'articles par semaine en cherchant l'insight qui deviendra une campagne.
+**Le défi.** L'insight ne se décrète pas. Un article n'est qu'un tas de mots. En extraire une "Shower Thought" (une vérité humaine frappante) demande un recul que l'on n'a plus. Le défi n'est pas de résumer l'actualité, mais de percer la surface pour trouver l'opportunité créative unique qui fera vibrer une marque.
 
-**Le défi.** Repérer la vérité universelle cachée dans un article, puis la transformer en opportunité créative pour une marque, c'est un travail d'expert qui prend des heures. Et c'est difficilement reproductible.
+**Le résultat.** De l'article à l'idée, en un clic. Collez une URL. En quelques secondes, vous recevez une analyse culturelle, une vérité universelle et une idée créative concrète : "Et si [votre marque] faisait ceci…". Ce n'est pas une réponse générique, mais une proposition stratégique scorée sur sa capacité à provoquer et à générer du business.
 
-**Le résultat.** Collez le lien d'un article. En 30 secondes, vous obtenez une analyse culturelle, la vérité universelle cachée dans le texte, et une idée créative prête à explorer pour votre marque. Ce que fait un planneur stratégique en une demi-journée, automatisé et reproductible.
+### L'approche : la chaîne de valeur créative
 
-### L'approche
+Signal n'est pas un simple résumé. C'est un pipeline qui simule le cerveau d'un planneur stratégique senior via quatre étapes clés.
 
-Le principe fondateur : **ne jamais faire confiance au premier jet de l'IA.** Chaque sortie passe par un cycle de génération multiple + évaluation automatique. Ce n'est pas du ChatGPT copié-collé — c'est un pipeline de 3 étapes où chacune a sa propre logique.
+{{< signal-diagram >}}
 
-{{< mermaid >}}
-flowchart LR
-    A["Article\n(URL)"] --> B["Extraction\n+ résumé"]
-    B --> C["Shower\nThought"]
-    C --> D["Idée\ncréative"]
-{{< /mermaid >}}
+**1. Le Curateur** — Scrape l'article et en extrait la substantifique moelle. Résumé structuré en français, streaming en temps réel.
 
-**Étape 1 — Extraction.** L'URL est scrapée et l'article est analysé par une IA rapide qui en extrait un résumé structuré en français. Le résumé apparaît immédiatement dans le navigateur (streaming SSE) — l'utilisateur voit le résultat se construire en temps réel pendant que les étapes suivantes travaillent en arrière-plan.
+**2. Le Chercheur** — Confronte l'article à une base de 3 000 vérités culturelles par similarité sémantique. Génère 5 candidats "Shower Thoughts", ne garde que le meilleur.
 
-**Étape 2 — Le shower thought.** C'est ici que le système se distingue d'un simple "résume-moi cet article". L'objectif est de trouver la **vérité universelle** cachée dans le texte — le genre d'insight qu'on a sous la douche, qui fait dire "mais oui, évidemment".
+**3. Le Stratège** — Applique 3 prismes créatifs parmi 20 frameworks (détournement, analogie, provocation…) pour transformer le "Signal" en opportunité de marque.
 
-Le système ne part pas de zéro. Il s'appuie sur un **index de 3 000 vérités culturelles pré-construites**, encodées en vecteurs. L'article est comparé par similarité sémantique à cet index pour trouver les shower thoughts les plus proches — ceux qui résonnent avec les thèmes de l'article. Ensuite :
-
-1. L'IA génère **5 candidats** inspirés de l'article et des correspondances trouvées
-2. Une **IA évaluatrice** note chaque candidat sur trois critères : **Simplicité** (est-ce limpide ?), **Surprise** (est-ce inattendu ?), **Profondeur** (est-ce que ça touche à quelque chose de fondamental ?)
-3. Seul le **meilleur** est retenu
-
-Ce pattern **"générer puis juger"** est ce qui fait la différence entre un premier jet médiocre et un insight qui claque.
-
-**Étape 3 — L'idée créative.** Le shower thought est transformé en opportunité pour la marque. Là encore, pas de tirage au sort :
-
-1. L'IA sélectionne **3 prismes créatifs** parmi une bibliothèque de **20 frameworks** (détournement, analogie, provocation, confession, inversion, rituel...) — les mêmes outils qu'utilise un planneur stratégique en agence
-2. Elle génère **une idée "Et si [marque]..."** par prisme
-3. Chaque idée est évaluée sur **4 critères** : justesse par rapport à la vérité culturelle, pertinence stratégique pour la marque, potentiel génératif (est-ce que ça ouvre des pistes ?), et force de provocation
-4. Seule la **meilleure** est présentée
-
-**Le contexte de marque est injectable.** L'utilisateur peut uploader des documents (PDF, Word, texte) qui décrivent sa marque. Ces documents sont découpés, encodés en vecteurs **en mémoire** (rien n'est stocké), et consultés par similarité sémantique à chaque étape de génération. Le shower thought et l'idée créative sont ainsi ancrés dans le positionnement réel de la marque — pas dans une hallucination. Si aucun document n'est fourni, l'IA génère automatiquement un territoire de marque à partir du nom seul.
+**4. Le Juge** — Note les idées sur la surprise, la profondeur et la pertinence. Seule la meilleure est présentée.
 
 {{< button href="https://signal.leplusgrandnombre.fr/" target="_blank" >}}Essayer{{< /button >}}
 

@@ -1,0 +1,157 @@
+<div id="signal-graph" style="width:100%;max-width:700px;margin:2rem auto;position:relative;overflow:hidden"></div>
+
+<script type="module">
+import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
+
+const container = document.getElementById('signal-graph');
+const W = container.clientWidth;
+const mob = W < 640;
+const nodeW = mob ? 130 : 160;
+const nodeH = mob ? 44 : 48;
+const tierGap = mob ? 85 : 100;
+
+const nodes = [
+  { id:'url',       label:'URL de l\'article',    type:'pill',         tx:0.50, ty:0, detail:'Collez le lien de n\'importe quel article. Le système le scrape et l\'analyse en temps réel.' },
+  { id:'curateur',  label:'Le Curateur',           type:'agent-accent', tx:0.50, ty:1, detail:'Scrape l\'article et en extrait la substantifique moelle.\nRésumé structuré en français, streaming en temps réel.' },
+  { id:'chercheur', label:'Le Chercheur',          type:'agent',        tx:0.30, ty:2, detail:'Confronte l\'article à une base de 3 000 vérités culturelles par similarité sémantique.\nGénère 5 candidats "Shower Thoughts", ne garde que le meilleur.' },
+  { id:'stratege',  label:'Le Stratège',           type:'agent',        tx:0.70, ty:2, detail:'Applique 3 prismes créatifs parmi 20 frameworks (détournement, analogie, provocation…).\nGénère une idée "Et si [marque]…" par prisme.' },
+  { id:'juge',      label:'Le Juge',               type:'agent-accent', tx:0.50, ty:3, detail:'Note chaque idée sur : surprise, profondeur, pertinence stratégique, force de provocation.\nSeule la meilleure est présentée.' },
+  { id:'idee',      label:'L\'idée créative',      type:'cta',          tx:0.50, ty:4, detail:'Une proposition stratégique scorée, ancrée dans une vérité culturelle, prête à explorer.' }
+];
+
+const links = [
+  { source:'url',       target:'curateur',  label:'' },
+  { source:'curateur',  target:'chercheur', label:'résumé' },
+  { source:'curateur',  target:'stratege',  label:'résumé' },
+  { source:'chercheur', target:'juge',      label:'shower thought' },
+  { source:'stratege',  target:'juge',      label:'idées brutes' },
+  { source:'juge',      target:'idee',      label:'' }
+];
+
+const pad = nodeW * 0.6;
+nodes.forEach(d => {
+  d.x = pad + d.tx * (W - 2 * pad);
+  d.y = 25 + d.ty * tierGap;
+});
+
+const H = 25 + 5 * tierGap;
+container.style.height = H + 'px';
+
+const C = {
+  accent:'#FF6B35', accentBg:'#FFF0E9', border:'#e0e0e4',
+  text:'#1a1a1a', muted:'#5c5c66', faint:'#9c9ca6', bg:'#fafafa', white:'#fff'
+};
+
+const svg = d3.select(container).append('svg')
+  .attr('width', W).attr('height', H)
+  .style('position','absolute').style('top',0).style('left',0)
+  .style('pointer-events','none');
+
+const defs = svg.append('defs');
+[['gray',C.faint],['accent',C.accent]].forEach(([k,c]) => {
+  defs.append('marker').attr('id','sa-'+k)
+    .attr('viewBox','0 0 10 7').attr('refX',10).attr('refY',3.5)
+    .attr('markerWidth',7).attr('markerHeight',5).attr('orient','auto-start-reverse')
+    .append('path').attr('d','M0 0 L10 3.5 L0 7z').attr('fill',c);
+});
+
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links).id(d=>d.id).distance(tierGap * 0.7).strength(0.3))
+  .force('charge', d3.forceManyBody().strength(-100))
+  .force('x', d3.forceX(d => pad + d.tx * (W - 2*pad)).strength(0.7))
+  .force('y', d3.forceY(d => 25 + d.ty * tierGap).strength(0.9))
+  .force('collide', d3.forceCollide(nodeW * 0.55))
+  .alphaDecay(0.05)
+  .velocityDecay(0.5);
+
+const linkEls = svg.selectAll('.lk').data(links).join('path')
+  .attr('class','lk').attr('fill','none')
+  .attr('stroke', C.faint).attr('stroke-width', 1.2)
+  .attr('marker-end', 'url(#sa-gray)');
+
+const linkLabels = svg.selectAll('.ll').data(links.filter(d=>d.label)).join('text')
+  .attr('class','ll').text(d=>d.label)
+  .attr('font-size', mob ? 8 : 9).attr('fill', C.faint)
+  .attr('font-style','italic').attr('text-anchor','middle')
+  .attr('font-family','Raleway,sans-serif');
+
+const agentSvg = '<svg viewBox="0 0 20 20" style="width:14px;height:14px;vertical-align:-2px;margin-right:3px"><circle cx="10" cy="10" r="4" fill="none" stroke="#FF6B35" stroke-width="1.5"/><circle cx="10" cy="10" r="1.5" fill="#FF6B35"/><line x1="10" y1="2" x2="10" y2="6" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><line x1="3.2" y1="14" x2="6.6" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><line x1="16.8" y1="14" x2="13.4" y2="12" stroke="#FF6B35" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="1.5" r="1.5" fill="#FF6B35"/><circle cx="2.5" cy="15" r="1.5" fill="#FF6B35"/><circle cx="17.5" cy="15" r="1.5" fill="#FF6B35"/></svg>';
+
+const nodeEls = d3.select(container).selectAll('.nd').data(nodes).join('div')
+  .attr('class','nd')
+  .style('position','absolute').style('width', nodeW+'px')
+  .style('padding', mob ? '6px 8px' : '8px 10px').style('box-sizing','border-box')
+  .style('border-radius', d => d.type==='pill'||d.type==='cta' ? '22px' : '8px')
+  .style('text-align', d => d.type==='pill'||d.type==='cta' ? 'center' : 'left')
+  .style('background', d => {
+    if(d.type==='cta') return C.accent;
+    if(d.type.includes('accent')) return C.accentBg;
+    return C.white;
+  })
+  .style('border', d => {
+    if(d.type==='cta') return 'none';
+    return '1px solid '+(d.type.includes('accent') ? C.accent : C.border);
+  })
+  .style('cursor', d => d.detail ? 'pointer' : 'default')
+  .style('font-family','Raleway,sans-serif')
+  .style('z-index', 2).style('box-shadow','0 1px 4px rgba(0,0,0,0.06)')
+  .html(d => {
+    const isAI = d.type.includes('agent');
+    const isCta = d.type === 'cta';
+    const col = isCta ? '#fff' : C.text;
+    const fs = mob ? 10 : 12;
+    return (isAI ? agentSvg : '') + '<span style="font-size:'+fs+'px;font-weight:600;color:'+col+'">'+d.label+'</span>';
+  })
+  .on('click', function(ev, d) {
+    if(!d.detail) return;
+    ev.stopPropagation();
+    const old = container.querySelector('.tip-pop');
+    if(old) old.remove();
+    const tip = document.createElement('div');
+    tip.className = 'tip-pop';
+    const tipX = Math.min(Math.max(10, d.x - 130), W - 280);
+    const tipY = d.y + nodeH/2 + 8;
+    tip.style.cssText = 'position:absolute;z-index:100;background:#fff;border:1px solid '+C.border+';border-radius:10px;padding:12px 14px;width:260px;font-family:Raleway,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,0.14);left:'+tipX+'px;top:'+tipY+'px';
+    tip.innerHTML = '<div style="font-size:12px;font-weight:600;color:'+C.text+';margin-bottom:6px">'+d.label+'</div>'
+      +'<div style="font-size:11px;color:'+C.muted+';line-height:1.6;white-space:pre-line">'+d.detail+'</div>'
+      +'<div style="margin-top:8px;font-size:9px;color:'+C.faint+';cursor:pointer" onclick="this.parentElement.remove()">✕ fermer</div>';
+    container.appendChild(tip);
+  });
+
+document.addEventListener('click', () => {
+  const t = container.querySelector('.tip-pop');
+  if(t) t.remove();
+});
+
+function linkPath(d) {
+  const goingDown = d.source.y < d.target.y;
+  const sx = d.source.x, sy = goingDown ? d.source.y + nodeH/2 : d.source.y - nodeH/2;
+  const tx = d.target.x, ty = goingDown ? d.target.y - nodeH/2 : d.target.y + nodeH/2;
+  const my = (sy + ty) / 2;
+  return 'M'+sx+','+sy+' C'+sx+','+my+' '+tx+','+my+' '+tx+','+ty;
+}
+
+sim.on('tick', () => {
+  nodes.forEach(d => {
+    d.x = Math.max(nodeW/2, Math.min(W - nodeW/2, d.x));
+    d.y = Math.max(nodeH/2, Math.min(H - nodeH/2, d.y));
+  });
+  nodeEls.style('left', d => (d.x - nodeW/2)+'px').style('top', d => (d.y - nodeH/2)+'px');
+  linkEls.attr('d', linkPath);
+  linkLabels
+    .attr('x', d => (d.source.x + d.target.x)/2)
+    .attr('y', d => (d.source.y + nodeH/2 + d.target.y - nodeH/2)/2 + 3);
+});
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const nw = container.clientWidth;
+    const p = nodeW * 0.6;
+    svg.attr('width', nw);
+    sim.force('x', d3.forceX(d => p + d.tx * (nw - 2*p)).strength(0.7));
+    sim.alpha(0.6).restart();
+  }, 150);
+});
+</script>
