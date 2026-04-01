@@ -17,7 +17,7 @@
   </div>
 
   <script>
-    /* Cookie banner reopener — use tarteaucitron's native API */
+    /* Cookie banner reopener — tarteaucitron loads with defer, so check availability at click time */
     (function () {
       var btn = document.getElementById('open-cookies');
       if (!btn) return;

@@ -225,6 +225,39 @@
     }, { threshold: 0.1 });
 
     appUnits.forEach(function (u) { timers.set(u, []); observer.observe(u); });
+
+  })();
+
+  /* ---- Hash scroll fix ----
+     The browser's native hash scroll fires before JS restructures the DOM
+     AND before Mermaid renders diagrams (which shift layout).
+     We re-scroll after each event that changes page height. */
+  (function () {
+    if (!window.location.hash) return;
+
+    function scrollToHash() {
+      var target = document.querySelector(window.location.hash);
+      if (target) {
+        target.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+    }
+
+    /* 1. After DOM restructuring (already happened above) */
+    requestAnimationFrame(scrollToHash);
+
+    /* 2. After Mermaid diagrams render and shift layout — observe DOM for SVG insertions */
+    var settled = false;
+    var mermaidObserver = new MutationObserver(function () {
+      if (settled) return;
+      scrollToHash();
+    });
+    mermaidObserver.observe(document.body, { childList: true, subtree: true });
+
+    /* Stop observing after 5s — everything should be rendered by then */
+    setTimeout(function () {
+      settled = true;
+      mermaidObserver.disconnect();
+    }, 5000);
   })();
 
   /* ---- Mermaid progressive reveal ---- */
