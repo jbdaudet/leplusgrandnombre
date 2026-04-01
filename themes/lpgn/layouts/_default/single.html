@@ -6,7 +6,7 @@
       {{- if eq .Section "blog" -}}
       <a href="/blog/" class="back-link">&#8592; Retour</a>
       {{- end -}}
-      <h1 class="assembly__title reveal reveal--from-bottom">{{ .Title }}</h1>
+      <h1 class="assembly__title{{ if eq .Section "blog" }} assembly__title--blog{{ end }} reveal reveal--from-bottom">{{ .Title }}</h1>
       {{- if and .Date (eq .Section "blog") -}}
       <p class="assembly__label">
         // <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
