@@ -162,33 +162,38 @@
 </script>
 
 <!-- Tarteaucitron — loaded last with defer so it never blocks rendering -->
-<script defer src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.19.0/tarteaucitron.js" onload="
-  tarteaucitron.init({
-    'lang': 'fr',
-    'privacyUrl': '/politique-de-confidentialite/',
-    'bodyPosition': 'bottom',
-    'hashtag': '#tarteaucitron',
-    'cookieName': 'tarteaucitron',
-    'orientation': 'bottom',
-    'groupServices': false,
-    'showAlertSmall': false,
-    'cookieslist': false,
-    'closePopup': false,
-    'showIcon': false,
-    'iconPosition': 'BottomRight',
-    'adblocker': false,
-    'DenyAllCta': true,
-    'AcceptAllCta': true,
-    'highPrivacy': true,
-    'handleBrowserDNTRequest': false,
-    'removeCredit': true,
-    'moreInfoLink': true,
-    'useExternalCss': false,
-    'useExternalJs': false,
-    'mandatory': false,
-    'mandatoryCta': false,
-    'googleConsentMode': true
+<script defer src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.19.0/tarteaucitron.js"></script>
+<script>
+  /* Init runs on DOMContentLoaded, which fires after all defer scripts have executed */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof tarteaucitron === 'undefined') return;
+    tarteaucitron.init({
+      "lang": "fr",
+      "privacyUrl": "/politique-de-confidentialite/",
+      "bodyPosition": "bottom",
+      "hashtag": "#tarteaucitron",
+      "cookieName": "tarteaucitron",
+      "orientation": "bottom",
+      "groupServices": false,
+      "showAlertSmall": false,
+      "cookieslist": false,
+      "closePopup": false,
+      "showIcon": false,
+      "iconPosition": "BottomRight",
+      "adblocker": false,
+      "DenyAllCta": true,
+      "AcceptAllCta": true,
+      "highPrivacy": true,
+      "handleBrowserDNTRequest": false,
+      "removeCredit": true,
+      "moreInfoLink": true,
+      "useExternalCss": false,
+      "useExternalJs": false,
+      "mandatory": false,
+      "mandatoryCta": false,
+      "googleConsentMode": true
+    });
+    (tarteaucitron.job = tarteaucitron.job || []).push('googletagmanager');
+    tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
   });
-  (tarteaucitron.job = tarteaucitron.job || []).push('googletagmanager');
-  tarteaucitron.user.googletagmanagerId = 'GTM-KQ436HFM';
-">
+</script>
