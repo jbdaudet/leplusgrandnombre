@@ -73,7 +73,25 @@
     ctx.clearRect(0, 0, w, h);
     var now = Date.now();
 
-    /* Draw lines */
+    /* Collect intersection points for proximity glow */
+    var ixPts = [];
+    for (var a = 0; a < lines.length; a++) {
+      for (var b = a + 1; b < lines.length; b++) {
+        if (lines[a].dir === lines[b].dir) continue;
+        var hl = lines[a].dir === 'h' ? lines[a] : lines[b];
+        var vl = lines[a].dir === 'v' ? lines[a] : lines[b];
+        /* Only count if both lines have reached the intersection */
+        if (hl.progress >= vl.x && vl.progress >= hl.y) {
+          ixPts.push({ x: vl.x, y: hl.y });
+        }
+      }
+    }
+
+    /* Draw lines with proximity-based opacity */
+    var GLOW_RADIUS = 80; /* px — how far the reinforcement extends */
+    var BASE_ALPHA = 0.12; /* subtle but visible away from crossings */
+    var PEAK_ALPHA = 0.35; /* strong near crossings */
+
     for (var i = lines.length - 1; i >= 0; i--) {
       var l = lines[i];
       var age = now - l.born;
@@ -91,19 +109,40 @@
         l.progress = Math.min(h, l.progress + LINE_SPEED);
       }
 
-      var alpha = fadeAlpha * 0.3;
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(' + LINE_COLOR[0] + ',' + LINE_COLOR[1] + ',' + LINE_COLOR[2] + ',' + alpha + ')';
-      ctx.lineWidth = 1;
+      /* Draw line in small segments with varying opacity */
+      var len = l.progress;
+      var step = 4; /* px per segment — smooth enough, fast enough */
+      for (var s = 0; s < len; s += step) {
+        var segEnd = Math.min(s + step, len);
+        var segMid = (s + segEnd) / 2;
 
-      if (l.dir === 'h') {
-        ctx.moveTo(0, l.y);
-        ctx.lineTo(l.progress, l.y);
-      } else {
-        ctx.moveTo(l.x, 0);
-        ctx.lineTo(l.x, l.progress);
+        /* Find max proximity to any intersection */
+        var maxProx = 0;
+        for (var p = 0; p < ixPts.length; p++) {
+          var dist;
+          if (l.dir === 'h') {
+            dist = Math.sqrt((segMid - ixPts[p].x) * (segMid - ixPts[p].x) + (l.y - ixPts[p].y) * (l.y - ixPts[p].y));
+          } else {
+            dist = Math.sqrt((l.x - ixPts[p].x) * (l.x - ixPts[p].x) + (segMid - ixPts[p].y) * (segMid - ixPts[p].y));
+          }
+          var prox = Math.max(0, 1 - dist / GLOW_RADIUS);
+          if (prox > maxProx) maxProx = prox;
+        }
+
+        var alpha = fadeAlpha * (BASE_ALPHA + (PEAK_ALPHA - BASE_ALPHA) * maxProx);
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(' + LINE_COLOR[0] + ',' + LINE_COLOR[1] + ',' + LINE_COLOR[2] + ',' + alpha + ')';
+        ctx.lineWidth = 1;
+
+        if (l.dir === 'h') {
+          ctx.moveTo(s, l.y);
+          ctx.lineTo(segEnd, l.y);
+        } else {
+          ctx.moveTo(l.x, s);
+          ctx.lineTo(l.x, segEnd);
+        }
+        ctx.stroke();
       }
-      ctx.stroke();
     }
 
     /* Draw intersection flashes */
