@@ -43,6 +43,14 @@ Mon objectif : rendre ces technologies accessibles à tous ceux qui ont de vrais
 
 La technologie ne doit pas être un privilège. Elle doit être un levier pour tous.
 
+## Derrière Le Plus Grand Nombre
+
+Jean-Baptiste Daudet: Vingt ans à mettre la data au service du marketing, des deux côtés de la table : en agence (OgilvyOne, Proximity/TBWA) et chez l'annonceur (Louis Vuitton). Des projets dans le luxe, la grande conso, l'aérien, l'automobile, le retail — et aussi l'humanitaire et l'enseignement.
+
+Ce qui relie ces missions : arriver sans recette, repartir avec un outil qui sert vraiment les équipes. Deux prix CB News en 2025.
+
+**Un consultant, pas tout seul.** Selon ce que le projet demande, je mobilise un réseau d'experts avec qui j'ai déjà livré — design, développement, data engineering, stratégie créative. L'idée : que vous ayez en face quelqu'un qui comprend votre contexte et assemble la bonne équipe, plutôt qu'une structure qui vous vend sa capacité.
+
 ## Envie de démocratiser la data ensemble ?
 
 Vous avez un défi marketing, un projet data, ou simplement une question ? [Parlons-en](/contact/).
