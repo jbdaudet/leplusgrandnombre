@@ -1,6 +1,6 @@
 ---
 title: "Contactez-nous"
-description: "Vous avez un besoin spécifique ? N'hésitez pas à nous écrire."
+description: "Vous avez un besoin spécifique ? Ecrivez-nous."
 showTableOfContents: false
 layout: "contact"
 ---

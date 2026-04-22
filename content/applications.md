@@ -35,7 +35,7 @@ L'application croise les données géographiques, temporelles et l'IA pour sécu
 
 <h2 id="signal">Trouver le bon angle <a href="https://signal.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">signal</a></h2>
 
-**Le contexte.** Le bruit étouffe l'idée. Stratèges et créatifs : vous lisez des dizaines d'articles pour nourrir vos reco. Mais entre la masse d'infos et l'urgence des délais, la "vérité universelle" — celle qui fait une grande campagne — reste souvent invisible. Faute de temps pour creuser, on finit par proposer des idées attendues, sans relief culturel.
+**Le contexte.** Le bruit étouffe l'idée. Stratèges et créatifs : vous lisez des dizaines d'articles pour nourrir vos reco. Mais entre la masse d'infos et l'urgence des délais, la "vérité universelle" — celle qui fait une grande campagne — reste souvent invisible. Faute de temps pour creuser, on finit par proposer des idées attendues, déconnectées de l'époque.
 
 **Le défi.** L'insight ne se décrète pas. Un article n'est qu'un tas de mots. En extraire une "Shower Thought" (une vérité humaine frappante) demande un recul que l'on n'a plus. Le défi n'est pas de résumer l'actualité, mais de percer la surface pour trouver l'opportunité créative unique qui fera vibrer une marque.
 
