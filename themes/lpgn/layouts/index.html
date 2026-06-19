@@ -6,11 +6,11 @@
     <div class="container">
 
       {{- with .Params.phrase -}}
-      <p class="hero__phrase reveal reveal--from-bottom">Moins de dashboards,<br>plus de <span class="accent">décisions.</span></p>
+      <p class="hero__phrase reveal reveal--from-bottom">De quoi avez-vous <span class="hero__swap"><span class="hero__swap-word hero__swap-word--out" aria-hidden="true">besoin<svg class="hero__strike" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><path d="M8,33 C6,25 11,19 19,18 C61,15 121,15 176,16 C226,16 271,13 290,17 C298,19 299,25 296,31 C300,37 295,45 285,43 C229,45 149,47 94,45 C54,44 21,47 11,41 C5,39 8,37 8,33 Z M14,43 C52,45 112,47 152,45 C118,49 58,50 19,48 C11,48 9,45 14,43 Z" /></svg></span><span class="hero__swap-word hero__swap-word--in">envie</span></span>&nbsp;?</p>
       {{- end -}}
 
       {{- with .Params.subtitle -}}
-      <p class="hero__subtitle reveal reveal--from-bottom reveal--delay-1">{{ . }}</p>
+      <p class="hero__subtitle reveal reveal--from-bottom reveal--delay-1">Des solutions <span class="hero__kw hero__kw--data">data</span> et <span class="hero__kw hero__kw--ia">IA</span> pour accompagner vos envies et résoudre vos défis — sans jargon ni usine à gaz.</p>
       {{- end -}}
 
     </div>
@@ -21,6 +21,65 @@
     <div class="hero__scroll-track">
       <div class="hero__scroll-fill"></div>
     </div>
+  </div>
+</section>
+
+<section class="manifesto">
+  <div class="data-burst" aria-hidden="true"></div>
+  <div class="manifesto__line" aria-hidden="true"><div class="manifesto__line-fill"></div></div>
+  <div class="container">
+
+    <div class="manifesto__movement reveal">
+      <p class="manifesto__statement">
+        Accéder à la <span class="manifesto__data">data</span>, c'est <span class="hero__swap hero__swap--scroll"><span class="hero__swap-word hero__swap-word--out" aria-hidden="true">long et pénible<svg class="hero__strike" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><path d="M8,33 C6,25 11,19 19,18 C61,15 121,15 176,16 C226,16 271,13 290,17 C298,19 299,25 296,31 C300,37 295,45 285,43 C229,45 149,47 94,45 C54,44 21,47 11,41 C5,39 8,37 8,33 Z M14,43 C52,45 112,47 152,45 C118,49 58,50 19,48 C11,48 9,45 14,43 Z" /></svg></span><span class="hero__swap-word hero__swap-word--in">devenu facile</span></span>
+      </p>
+      <p class="manifesto__support">
+        Exploiter la donnée coûtait cher et prenait du temps. L'IA a tout simplifié&nbsp;: l'information est désormais accessible au plus grand nombre.
+      </p>
+    </div>
+
+    <p class="manifesto__invite reveal reveal--delay-1">
+      Alors, de quoi avez-vous <span class="accent">envie</span>&nbsp;?
+      <a href="/contact/" class="manifesto__cta">Dites-le nous&nbsp;→</a>
+    </p>
+
+  </div>
+</section>
+
+<section class="illus-banner references">
+  <div class="banner__line" aria-hidden="true"><div class="banner__line-fill"></div></div>
+  <div class="container">
+    {{- with .Site.Data.references -}}
+    {{- with .eyebrow }}<p class="references__eyebrow reveal">{{ . }}</p>{{ end -}}
+    {{- range .clients }}
+    {{- $client := . }}
+    <article class="reference reveal reveal--delay-1">
+      <div class="reference__card">
+        <a class="reference__logo" href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }}">
+          {{- with .logo }}<img src="{{ . }}" alt="{{ $client.name }}" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()">{{ end }}
+          <span class="reference__wordmark">{{ .name }}</span>
+        </a>
+        <div class="reference__story">
+          <div class="reference__col">
+            <h3 class="reference__label">Leur envie</h3>
+            <p class="reference__text">{{ .envie }}</p>
+          </div>
+          <span class="reference__arrow" aria-hidden="true">→</span>
+          <div class="reference__col">
+            <h3 class="reference__label reference__label--accent">Notre réponse</h3>
+            <p class="reference__text">{{ .reponse }}</p>
+          </div>
+        </div>
+        {{- with .quote }}
+        <blockquote class="reference__quote">
+          <p>« {{ . }} »</p>
+          {{- with $client.quote_author }}<cite>{{ . }}</cite>{{ end -}}
+        </blockquote>
+        {{- end }}
+      </div>
+    </article>
+    {{- end }}
+    {{- end }}
   </div>
 </section>
 
@@ -35,7 +94,7 @@
     </div>
 
     <h2 class="journey__heading reveal">De la compréhension de votre marché à la fidélisation client :</h2>
-    <p class="journey__subheading reveal reveal--delay-1">des outils concrets, à chaque étape, que vous pouvez tester maintenant.</p>
+    <p class="journey__subheading reveal reveal--delay-1">pas des produits, des preuves — un outil concret à chaque étape, que vous pouvez tester maintenant.</p>
 
     <ol class="journey__steps">
       {{- range $i, $app := . -}}

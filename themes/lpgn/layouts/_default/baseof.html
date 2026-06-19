@@ -97,52 +97,284 @@
 
       reveals.forEach(function (el) { observer.observe(el); });
 
-      /* Continuous line: hero scroll track → journey timeline */
-      var heroFill = document.querySelector('.hero__scroll-fill');
-      var heroTrack = document.querySelector('.hero__scroll-track');
-      var lineFill = document.querySelector('.journey__line-fill');
+      /* One continuous line down the page, drawn by scroll. Every section keeps
+         its own segment (so each layers correctly over its own background); all
+         segments are driven by a single "draw head" in document coordinates, so
+         they read as one line with no per-section formulas or seam glitches. */
       var hero = document.querySelector('.hero');
-      var journey = document.querySelector('.journey');
-
-      /* Fade out the pulsing hint as soon as user scrolls */
       var heroPulse = document.querySelector('.hero__pulse-line');
 
-      if (hero && journey) {
+      /* Each entry: [fill element, track element]. Track defines the segment's
+         document position + height; fill is scaleY'd from its top. Order = top→bottom. */
+      var segments = [
+        ['.hero__scroll-fill', '.hero__scroll-track'],
+        ['.manifesto__line-fill', '.manifesto__line'],
+        ['.banner__line-fill', '.banner__line'],
+        ['.journey__line-fill', '.journey__line']
+      ].map(function (pair) {
+        return { fill: document.querySelector(pair[0]), track: document.querySelector(pair[1]) };
+      });
+
+      if (hero) {
+        function topDocOf(el) { return el.getBoundingClientRect().top + window.scrollY; }
+
+        function fillSegment(seg, head) {
+          if (!seg.fill || !seg.track) return;
+          var r = seg.track.getBoundingClientRect();
+          var topDoc = r.top + window.scrollY;
+          var h = r.height || 1;
+          var f = Math.max(0, Math.min(1, (head - topDoc) / h));
+          seg.fill.style.transform = 'scaleY(' + f.toFixed(4) + ')';
+        }
+
+        /* Mask the manifesto line so it is absent over each text block — the line
+           disappears "behind" the statement and the invite, exactly like the
+           journey heading, and reappears in the gaps between/below them. */
+        function maskManifestoLine() {
+          var line = document.querySelector('.manifesto__line');
+          if (!line) return;
+          var blocks = [
+            document.querySelector('.manifesto__movement'),
+            document.querySelector('.manifesto__invite')
+          ];
+          var lr = line.getBoundingClientRect();
+          var h = lr.height || 1;
+          var stops = ['#000 0'];
+          for (var i = 0; i < blocks.length; i++) {
+            var b = blocks[i];
+            if (!b) continue;
+            var br = b.getBoundingClientRect();
+            var top = Math.max(0, ((br.top - lr.top - 6) / h) * 100);
+            var bot = Math.min(100, ((br.bottom - lr.top + 6) / h) * 100);
+            stops.push('#000 ' + top.toFixed(2) + '%');
+            stops.push('transparent ' + top.toFixed(2) + '%');
+            stops.push('transparent ' + bot.toFixed(2) + '%');
+            stops.push('#000 ' + bot.toFixed(2) + '%');
+          }
+          stops.push('#000 100%');
+          var g = 'linear-gradient(to bottom, ' + stops.join(', ') + ')';
+          line.style.webkitMaskImage = g;
+          line.style.maskImage = g;
+        }
+
         function updateLines() {
           var viewportH = window.innerHeight;
 
-          /* Hide pulse once scrolling starts */
-          if (heroPulse) {
-            if (window.scrollY > 30) {
-              heroPulse.classList.add('is-hidden');
-            } else {
-              heroPulse.classList.remove('is-hidden');
-            }
+          /* Hide pulse the moment the line starts, and light up Data / IA */
+          if (window.scrollY > 0) {
+            if (heroPulse) { heroPulse.classList.add('is-hidden'); }
+            hero.classList.add('is-scrolled');
+          } else {
+            if (heroPulse) { heroPulse.classList.remove('is-hidden'); }
+            hero.classList.remove('is-scrolled');
           }
 
-          /* Phase 1: Hero line fills as you scroll away from hero */
-          if (heroFill && heroTrack) {
-            var heroRect = hero.getBoundingClientRect();
-            var trackRect = heroTrack.getBoundingClientRect();
-            /* Start filling once user starts scrolling, complete before hero exits */
-            var heroScrolled = -heroRect.top;
-            var heroRange = heroRect.height - viewportH * 0.5;
-            var heroProgress = Math.max(0, Math.min(1, heroScrolled / Math.max(heroRange, 1)));
-            heroFill.style.transform = 'scaleY(' + heroProgress + ')';
-          }
-
-          /* Phase 2: Journey line fills as journey scrolls into view */
-          if (lineFill) {
-            var jRect = journey.getBoundingClientRect();
-            var scrolledInto = viewportH - jRect.top;
-            var jProgress = Math.max(0, Math.min(1, scrolledInto / jRect.height));
-            lineFill.style.transform = 'scaleY(' + jProgress + ')';
-          }
+          /* Proportional draw head: empty at the top, starts the instant you
+             scroll, full exactly when you reach the bottom of the page. */
+          var first = segments[0].track;
+          var last = segments[segments.length - 1].track;
+          if (!first || !last) return;
+          var docH = document.documentElement.scrollHeight;
+          var maxScroll = Math.max(1, docH - viewportH);
+          var sp = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+          var lineStart = topDocOf(first);
+          var lineEnd = topDocOf(last) + last.getBoundingClientRect().height;
+          var head = lineStart + sp * (lineEnd - lineStart);
+          for (var i = 0; i < segments.length; i++) { fillSegment(segments[i], head); }
         }
 
         window.addEventListener('scroll', updateLines, { passive: true });
+        window.addEventListener('resize', function () { maskManifestoLine(); updateLines(); }, { passive: true });
+        maskManifestoLine();
         updateLines();
       }
+    })();
+
+    /* Binary "data" cloud, contained to the manifesto zone. Three scroll phases:
+       (1) FILL — 0s and 1s drift freely, filling the whole zone (chaos);
+       (2) ORGANISE — they snap onto a regular grid, still filling the space;
+       (3) COLLAPSE — they converge onto the big "data" word and only then fade. */
+    (function () {
+      var section = document.querySelector('.manifesto');
+      var burst = section && section.querySelector('.data-burst');
+      var word = document.querySelector('.manifesto__data');
+      if (!section || !burst || !word) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var COUNT = 140, pad = 14;
+      var W = 0, H = 0;
+      var bits = [];
+      var sums = [];   /* per-column running-sum elements, indexed by column */
+      var obstacles = [];   /* keep-out boxes (text + centre band) the drift avoids */
+      var floorY = 0;
+      var prog = 0;   /* scroll progress through the section, 0..1 */
+      var t = 0;      /* frame counter, drives the in-place float */
+
+      function rand(a, b) { return a + Math.random() * (b - a); }
+      function smooth(e0, e1, x) {
+        var s = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+        return s * s * (3 - 2 * s);
+      }
+
+      function build() {
+        burst.innerHTML = '';
+        bits = [];
+        var br = burst.getBoundingClientRect();
+        W = br.width; H = br.height;
+        /* density scales with viewport: mobile gets far fewer digits in its thin side strips */
+        COUNT = W < 560 ? 40 : (W < 900 ? 80 : 140);
+
+        /* keep-out boxes: the centred text (generous margin) + the centre line band */
+        obstacles = [];
+        ['.manifesto__movement', '.manifesto__invite'].forEach(function (sel) {
+          var e = section.querySelector(sel);
+          if (!e) return;
+          /* measure the FINAL layout box (the .reveal animation starts translated, which
+             would otherwise put the keep-out box in the wrong place) */
+          var prevT = e.style.transform;
+          e.style.transform = 'none';
+          var r = e.getBoundingClientRect();
+          e.style.transform = prevT;
+          obstacles.push({
+            x0: r.left - br.left - 40, x1: r.right - br.left + 40,
+            y0: r.top - br.top - 28, y1: r.bottom - br.top + 28
+          });
+        });
+        var cxLine = W / 2, lineGap = 34;   /* keep the centre column clear for the scroll line */
+        obstacles.push({ x0: cxLine - lineGap, x1: cxLine + lineGap, y0: -1e4, y1: 1e4 });
+        function blocked(x, y) {
+          for (var j = 0; j < obstacles.length; j++) {
+            var bl = obstacles[j];
+            if (x > bl.x0 && x < bl.x1 && y > bl.y0 && y < bl.y1) return true;
+          }
+          return false;
+        }
+
+        /* clean, fully-filled grid covering the whole zone, minus the keep-out boxes */
+        var cols = Math.max(1, Math.round(Math.sqrt(COUNT * (W / Math.max(1, H)))));
+        var rows = Math.ceil(COUNT / cols);
+        var cw = (W - pad * 2) / cols;
+        var ch = (H - pad * 2) / rows;
+        var cells = [];
+        for (var rIdx = 0; rIdx < rows; rIdx++) {
+          for (var c = 0; c < cols; c++) {
+            var gx = pad + cw * (c + 0.5);
+            var gy = pad + ch * (rIdx + 0.5);
+            if (blocked(gx, gy)) continue;
+            cells.push({ x: gx, y: gy, col: c });
+          }
+        }
+
+        floorY = H - pad;
+        sums = [];
+        var small = W < 560;
+
+        /* exactly one bit per free cell — no empty nodes, no superpositions */
+        for (var i = 0; i < cells.length; i++) {
+          var el = document.createElement('span');
+          el.className = 'data-bit';
+          el.textContent = Math.random() < 0.5 ? '0' : '1';
+          if (Math.random() < 0.16) el.style.color = 'var(--color-accent)';
+          burst.appendChild(el);
+          var cell = cells[i];
+          var sp = rand(1.2, 3.0), an = rand(0, Math.PI * 2);
+          /* seed outside the keep-out zones so the centre is clear from frame one */
+          var px = rand(pad, W - pad), py = rand(pad, H - pad), tries = 0;
+          while (blocked(px, py) && tries++ < 30) { px = rand(pad, W - pad); py = rand(pad, H - pad); }
+          bits.push({
+            el: el,
+            val: el.textContent === '1' ? 1 : 0,
+            col: cell.col, colx: cell.x,
+            x: px, y: py,
+            vx: Math.cos(an) * sp, vy: Math.sin(an) * sp,
+            gx: cell.x, gy: cell.y,
+            fa: rand(0, Math.PI * 2),           /* float phase */
+            fs: rand(0.012, 0.024),             /* float speed */
+            far: rand(2.5, 5),                  /* float radius */
+            sc: rand(0.8, small ? 1.05 : 1.6),
+            op: rand(0.5, 0.95)
+          });
+          /* one running-sum element per column, parked on the floor */
+          if (!sums[cell.col]) {
+            var s = document.createElement('span');
+            s.className = 'data-bit data-sum';
+            s.style.transform = 'translate3d(' + cell.x.toFixed(1) + 'px,' + floorY.toFixed(1) + 'px,0)';
+            s.style.opacity = '0';
+            burst.appendChild(s);
+            sums[cell.col] = { el: s, x: cell.x };
+          }
+        }
+      }
+
+      function onScroll() {
+        var vh = window.innerHeight;
+        var r = section.getBoundingClientRect();
+        /* 0 when section top hits viewport bottom, 1 when section bottom hits top */
+        prog = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+      }
+
+      function frame() {
+        t++;
+        var grid = smooth(0.20, 0.52, prog);     /* chaos -> grid */
+        var fall = smooth(0.62, 0.92, prog);      /* grid  -> floor */
+        var drift = 1 - grid;                     /* free motion only before the grid forms */
+        var floatAmt = grid * (1 - smooth(0.52, 0.62, prog));   /* float on the grid; fully stilled before the fall */
+        var drop = H * fall * fall;               /* gravity: same downward fall for every digit */
+        var colSum = [];                          /* recomputed each frame from what has landed */
+        for (var i = 0; i < bits.length; i++) {
+          var b = bits[i];
+          var px0 = b.x, py0 = b.y;
+          b.x += b.vx * drift; b.y += b.vy * drift;
+          if (b.x < pad) { b.x = pad; b.vx = -b.vx; } else if (b.x > W - pad) { b.x = W - pad; b.vx = -b.vx; }
+          if (b.y < pad) { b.y = pad; b.vy = -b.vy; } else if (b.y > H - pad) { b.y = H - pad; b.vy = -b.vy; }
+          /* bounce off the keep-out boxes so digits never drift over the text/centre */
+          for (var o = 0; o < obstacles.length; o++) {
+            var ob = obstacles[o];
+            if (b.x > ob.x0 && b.x < ob.x1 && b.y > ob.y0 && b.y < ob.y1) {
+              b.x = px0; b.y = py0; b.vx = -b.vx; b.vy = -b.vy; break;
+            }
+          }
+          /* chaos -> grid, with a gentle drift around the grid point once settled */
+          var fx = Math.cos(t * b.fs + b.fa) * b.far * floatAmt;
+          var fy = Math.sin(t * b.fs * 1.3 + b.fa) * b.far * floatAmt;
+          var bx = b.x + (b.gx - b.x) * grid + fx;
+          var by = b.y + (b.gy - b.y) * grid + fy;
+          var ry = by + drop;
+          if (ry >= floorY) {
+            /* landed: the digit is absorbed into its column's running sum */
+            b.el.style.opacity = '0';
+            colSum[b.col] = (colSum[b.col] || 0) + b.val;
+          } else {
+            /* hide a falling digit while it crosses a keep-out box (text stays clean) */
+            var hidden = false;
+            for (var o2 = 0; o2 < obstacles.length; o2++) {
+              var ob2 = obstacles[o2];
+              if (bx > ob2.x0 && bx < ob2.x1 && ry > ob2.y0 && ry < ob2.y1) { hidden = true; break; }
+            }
+            b.el.style.transform = 'translate3d(' + bx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0) scale(' + b.sc.toFixed(2) + ')';
+            b.el.style.opacity = hidden ? '0' : b.op.toFixed(3);
+          }
+        }
+        /* show each column's accumulated total on the floor */
+        for (var c2 = 0; c2 < sums.length; c2++) {
+          var sm = sums[c2];
+          if (!sm) continue;
+          if (colSum[c2] === undefined) { sm.el.style.opacity = '0'; continue; }
+          sm.el.textContent = colSum[c2];
+          sm.el.style.opacity = '1';
+        }
+        requestAnimationFrame(frame);
+      }
+
+      build();
+      onScroll();
+      frame();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      var rt;
+      window.addEventListener('resize', function () {
+        clearTimeout(rt);
+        rt = setTimeout(function () { build(); onScroll(); }, 200);
+      });
     })();
 
     /* Floating network graph — hero background */
