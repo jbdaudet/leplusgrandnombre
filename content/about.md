@@ -15,7 +15,7 @@ La data et l'IA sont des outils formidables. Mais un outil mal orienté produit 
 
 Chaque entreprise a son marché, sa culture, ses contraintes, son vocabulaire. Un artisan menuisier ne pense pas comme un coach, qui ne pense pas comme un stratège de marque.
 
-Notre travail commence toujours par là : écouter vos envies, comprendre votre métier, identifier ce qui coince. La solution technique vient après — et elle est toujours différente, parce que le contexte l'est aussi.
+Notre travail commence toujours par là : écouter vos envies, comprendre votre métier, identifier ce qui coince. La solution technique vient après, et elle est toujours différente, parce que le contexte l'est aussi.
 
 ## La data au service du projet, pas l'inverse
 
@@ -31,25 +31,25 @@ Cinq envies différentes, cinq secteurs différents, cinq approches différentes
 
 ## Pas de solution générique
 
-On ne croit pas au produit miracle qui marche pour tout le monde. On croit à la solution construite pour un contexte précis — et assez bien pensée pour que la logique soit réutilisable ailleurs.
+On ne croit pas au produit miracle qui marche pour tout le monde. On croit à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
 Nos [applications](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
 
 ## Pourquoi "Le Plus Grand Nombre"
 
-Les outils data et IA les plus puissants sont aujourd'hui réservés aux entreprises qui ont les budgets et les équipes techniques. Analyse de marché en temps réel, personnalisation de contenu, automatisation intelligente, pilotage par la donnée — tout ça existe, mais derrière des murs de consulting à six chiffres.
+Les outils data et IA les plus puissants sont aujourd'hui réservés aux entreprises qui ont les budgets et les équipes techniques. Analyse de marché en temps réel, personnalisation de contenu, automatisation intelligente, pilotage par la donnée : tout ça existe, mais derrière des murs de consulting à six chiffres.
 
-Mon objectif : rendre ces technologies accessibles à tous ceux qui ont de vrais défis à résoudre — que vous soyez artisan, coach, startup ou PME.
+Mon objectif : rendre ces technologies accessibles à tous ceux qui ont de vrais défis à résoudre, que vous soyez artisan, coach, startup ou PME.
 
 La technologie ne doit pas être un privilège. Elle doit être un levier pour tous.
 
 ## Derrière Le Plus Grand Nombre
 
-**Jean-Baptiste Daudet**. 20 ans à mettre la data au service du marketing, des deux côtés de la table : en agence (OgilvyOne, Proximity/TBWA) et chez l'annonceur (Louis Vuitton). Des projets dans le luxe, la grande conso, l'aérien, l'automobile, le retail — et aussi l'humanitaire et l'enseignement.
+**Jean-Baptiste Daudet**. 20 ans à mettre la data au service du marketing, des deux côtés de la table : en agence (OgilvyOne, Proximity/TBWA) et chez l'annonceur (Louis Vuitton). Des projets dans le luxe, la grande conso, l'aérien, l'automobile, le retail, et aussi l'humanitaire et l'enseignement.
 
 **Ce qui relie ces missions** : arriver sans recette, repartir avec un outil qui sert vraiment les équipes. Deux prix CB News en 2025.
 
-**Un consultant, pas tout seul.** Selon ce que le projet demande, je mobilise un réseau d'experts avec qui j'ai déjà livré — design, développement, data engineering, stratégie créative. L'idée : que vous ayez en face quelqu'un qui comprend votre contexte et assemble la bonne équipe, plutôt qu'une structure qui vous vend sa capacité.
+**Un consultant, pas tout seul.** Selon ce que le projet demande, je mobilise un réseau d'experts avec qui j'ai déjà livré : design, développement, data engineering, stratégie créative. L'idée : que vous ayez en face quelqu'un qui comprend votre contexte et assemble la bonne équipe, plutôt qu'une structure qui vous vend sa capacité.
 
 ## Envie de démocratiser la data ensemble ?
 
