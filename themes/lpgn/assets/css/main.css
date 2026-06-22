@@ -772,14 +772,19 @@ th {
 /* Keywords start identical to the rest of the subtitle, then light up on scroll:
    Data → black, IA → accent (same orange as "envie") */
 .hero__kw {
-  color: inherit;
-  transition: color 0.6s ease, font-weight 0.6s ease;
+  color: var(--color-text);
+  animation: kwIgnite 0.6s ease 1.2s forwards;   /* land in black, then ignite to orange */
 }
 
-.hero.is-scrolled .hero__kw--data,
-.hero.is-scrolled .hero__kw--ia {
-  color: var(--color-accent);
-  font-weight: 700;
+@keyframes kwIgnite {
+  to { color: var(--color-accent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__kw {
+    animation: none;
+    color: var(--color-accent);
+  }
 }
 
 /* "Too much data" — the word multiplies and scatters as you scroll.
@@ -1188,6 +1193,11 @@ th {
 
 .reference__label--accent {
   color: var(--color-accent);
+}
+
+.reference__hl {
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 .reference__text {

@@ -7,6 +7,6 @@ clients:
     logo: "/img/clients/nebuleuse-bijoux.svg"
     url: "https://nebuleusebijoux.com"
     envie: "Rebooster les ventes : depuis quelques mois, elles passaient sous les prévisions, sans qu'une raison claire émerge."
-    reponse: "En 4 jours, nous avons identifié les causes et les remèdes pour retrouver la croissance, à partir des données de ventes, d'investissements médias et de navigation sur le site."
+    reponse: 'En <span class="reference__hl">4 jours</span>, nous avons identifié les causes et les remèdes pour retrouver la croissance, à partir des données de ventes, d''investissements médias et de navigation sur le site.'
     quote: ""                                    # optional — a client quote, leave empty to hide
     quote_author: ""                             # e.g. "Prénom Nom, Fondatrice"
