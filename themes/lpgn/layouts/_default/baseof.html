@@ -475,7 +475,7 @@
       // 12 states; between two consecutive states, a frame sequence.
       // SEGMENTS = frame count of each transition (files t{ss}-{fff}.webp): goes with the files
       var SEGMENTS = [18, 23, 22, 18, 12, 20, 22, 22, 22, 22, 20];
-      var CADENCE = 22;         // frames drawn per second (sequence sampled at 16 fps -> ~1.4x real time)
+      var CADENCE = 28;         // frames drawn per second (sequence sampled at 16 fps -> ~1.75x real time)
       var SEUIL = 12;           // minimal gesture amplitude (deltaY)
       var ACCALMIE = 250;       // ms of calm required between two gestures (anti-inertia)
       var SORTIE = 500;         // ms of calm before giving the scroll back at the end
@@ -518,14 +518,31 @@
         charger();
       }
 
-      var idx = 0, anim = null, prev = 0, dernierGeste = 0;
-      // anim = { s: segment being played, sens: +1|-1, pos: floating frame index }
+      var idx = 0, anim = null, prev = 0;
+      var enAttente = false;    // one gesture made during a transition, played right after it
+      var finTransition = 0;    // when the last transition ended
+      // anim = { s: segment being played, pos: floating frame index }
 
       function enTransition() { return anim !== null; }
 
       function pas() {
-        anim = { s: idx, sens: 1, pos: 0 };
+        anim = { s: idx, pos: 0 };
         idx++;
+      }
+
+      // new gesture vs inertia of the same one: a trackpad keeps sending
+      // decreasing deltas for 1-2 s after a swipe. A gesture is NEW after a
+      // pause (ACCALMIE) or when the delta rises sharply again (fresh swipe
+      // during the inertia tail, not within the 150 ms ramp-up of the same
+      // swipe). A fast-spun mouse wheel = one gesture.
+      var dernierEvt = 0, dernierDelta = 0, debutGeste = -1e9;
+      function nouveauGeste(delta, t) {
+        var d = Math.abs(delta);
+        var nouveau = d >= SEUIL && (t - dernierEvt > ACCALMIE ||
+          (d > dernierDelta * 1.6 + 4 && t - debutGeste > 150));
+        dernierEvt = t; dernierDelta = d;
+        if (nouveau) debutGeste = t;
+        return nouveau;
       }
 
       // is the section "engaged" (filling the screen, ready to capture the wheel)?
@@ -534,7 +551,7 @@
         return r.top < innerHeight * 0.25 && r.bottom > innerHeight * 0.75;
       }
 
-      // engaged but not aligned: the first gesture realigns
+      // engaged but not aligned: realign while the step plays (the gesture is not lost)
       var alignement = 0;
       function malAlignee() { return Math.abs(section.getBoundingClientRect().top) > 4; }
       function recale() {
@@ -542,6 +559,13 @@
         if (t - alignement < 700) return;           // one realignment at a time
         alignement = t;
         scrollTo({ top: scrollY + section.getBoundingClientRect().top, behavior: 'smooth' });
+      }
+
+      // one gesture = one step; a gesture during a transition is queued (one max)
+      function geste() {
+        if (malAlignee()) recale();
+        if (enTransition()) { enAttente = true; return; }
+        pas();
       }
 
       // anti-crossing wall: a violent scroll down must never carry the page past
@@ -558,7 +582,7 @@
             alignement = performance.now();
           }
         } else if (r.top >= innerHeight && (idx !== 0 || anim)) {
-          idx = 0; anim = null;                                    // left upwards: rewind, unseen
+          idx = 0; anim = null; enAttente = false;                 // left upwards: rewind, unseen
         }
         dernierY = scrollY;
       }, { passive: true });
@@ -567,25 +591,16 @@
         if (!engagee()) return;
         if (e.deltaY <= 0) return;     // going up: never captured, one scroll leaves
         var t = performance.now();
-        // at the end, only give the scroll back once the last view is SETTLED:
-        // transition over, and a distinct gesture (not the previous step's inertia)
+        var nouveau = nouveauGeste(e.deltaY, t);
+        // at the end, give the scroll back once the last view is SETTLED: the
+        // inertia of the last step is held, a new gesture (or a scroll that
+        // keeps going SORTIE ms after the view settled) leaves
         if (idx === FIN) {
-          if (enTransition() || t - dernierGeste < SORTIE) {
-            e.preventDefault();
-            dernierGeste = t;          // blocked inertia resets the calm
-          }
+          if (enTransition() || (!nouveau && t - finTransition < SORTIE)) e.preventDefault();
           return;
         }
         e.preventDefault();
-        if (malAlignee()) { recale(); return; }
-        // one gesture = one step: ignore trackpad inertia and any gesture
-        // during a transition, the amount of scroll does not matter
-        if (enTransition() || Math.abs(e.deltaY) < SEUIL || t - dernierGeste < ACCALMIE) {
-          if (Math.abs(e.deltaY) >= SEUIL) dernierGeste = t;
-          return;
-        }
-        dernierGeste = t;
-        pas();
+        if (nouveau) geste();
       }, { passive: false });
 
       // touch: one swipe = one step
@@ -597,12 +612,11 @@
         if (Math.abs(d) < 30) return;
         if (d < 0) { touchY = null; return; }   // swiping back up: never captured
         if (idx === FIN) {
-          if (enTransition() || performance.now() - dernierGeste < SORTIE) { e.preventDefault(); }
+          if (enTransition() || performance.now() - finTransition < SORTIE) { e.preventDefault(); }
           touchY = null; return;
         }
         e.preventDefault();
-        if (malAlignee()) { recale(); touchY = null; return; }
-        if (!enTransition()) pas();
+        geste();
         touchY = null;
       }, { passive: false });
 
@@ -621,7 +635,11 @@
             anim.pos = cible;
             dessine(im);
             fondDessine = -1;
-            if (anim.pos >= seq.length - 1) anim = null;
+            if (anim.pos >= seq.length - 1) {
+              anim = null;
+              finTransition = now;
+              if (enAttente) { enAttente = false; if (idx < FIN) pas(); }   // queued gesture
+            }
           }
         }
         var posee = !anim;
