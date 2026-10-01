@@ -382,15 +382,26 @@
        The scroll is a GESTURE, not a position: one wheel notch / swipe = one
        step, whatever its amplitude; gestures during a transition are ignored.
        At both ends, the section gives the scroll back to the page.
-       Site adaptations vs the reference: the section aligns under the fixed
-       header (OFFSET), the anti-crossing wall uses behavior:'instant' (html has
-       scroll-behavior:smooth), and the 17 MB video loads only on approach. */
+       Site adaptations vs the reference: the fixed header slides away while
+       the demo is under it, the anti-crossing wall uses behavior:'instant'
+       (html has scroll-behavior:smooth), and the 17 MB video loads only on
+       approach. */
     (function () {
       var section = document.querySelector('.demo-steps');
       if (!section) return;
       var video = section.querySelector('video');
+
+      // hide the header as long as the demo sits under it (keeps the whole frame visible)
       var header = document.querySelector('.site-header');
-      function offset() { return header ? header.offsetHeight : 0; }
+      if (header) {
+        var cacheHeader = function () {
+          var r = section.getBoundingClientRect(), h = header.offsetHeight;
+          header.classList.toggle('is-hidden', r.top < h && r.bottom > h);
+        };
+        addEventListener('scroll', cacheHeader, { passive: true });
+        addEventListener('resize', cacheHeader, { passive: true });
+        cacheHeader();
+      }
 
       // load the video ~1.5 screens before it shows up, not on page load
       var charge = false;
@@ -446,8 +457,8 @@
 
       function enTransition() { return Math.abs(courant - POSES[idx]) > 0.08; }
 
-      // distance between the section top and its aligned position (under the header)
-      function ecart() { return section.getBoundingClientRect().top - offset(); }
+      // distance between the section top and its aligned position (viewport top)
+      function ecart() { return section.getBoundingClientRect().top; }
 
       // is the section "engaged" (filling the screen, ready to capture the wheel)?
       function engagee() {
@@ -474,7 +485,7 @@
         if (scrollY !== dernierY) descend = scrollY > dernierY;
         var r = section.getBoundingClientRect();
         if (r.bottom > 0 && r.top < innerHeight) {                // section on screen
-          var e = r.top - offset();
+          var e = r.top;
           if ((descend && idx < POSES.length - 1 && e < -4) ||
               (!descend && idx > 0 && e > 4)) {
             scrollTo({ top: scrollY + e, behavior: 'instant' });  // sharp: kills the inertia

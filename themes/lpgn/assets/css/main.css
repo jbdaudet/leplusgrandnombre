@@ -388,7 +388,11 @@ th {
   -webkit-backdrop-filter: none;
   border-bottom: none;
   z-index: 100;
-  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, transform 0.3s ease;
+}
+
+.site-header.is-hidden {
+  transform: translateY(-100%);
 }
 
 .site-header.is-scrolled {
@@ -1329,16 +1333,17 @@ th {
   }
 }
 
-/* Demo: full-bleed, sits just under the fixed header. The scroll script aligns
-   the section top on the header bottom, so the snap must agree with it. */
+/* Demo: full-screen. The header slides away while the demo is under it
+   (.site-header.is-hidden, toggled by the demo script), so the section aligns
+   on the very top of the viewport, and the snap must agree with it. */
 html:has(.demo-steps) {
   scroll-snap-type: y proximity;
-  scroll-padding-top: var(--header-height);
+  scroll-padding-top: 0;
 }
 
 .demo-steps {
-  height: calc(100vh - var(--header-height));
-  height: calc(100dvh - var(--header-height));
+  height: 100vh;
+  height: 100dvh;
   display: grid;
   align-items: center;
   overflow: hidden;
