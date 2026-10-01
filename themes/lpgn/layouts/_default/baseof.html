@@ -224,7 +224,7 @@
       var W = 0, H = 0;
       var bits = [];
       var sums = [];   /* per-column running-sum elements, indexed by column */
-      var obstacles = [];   /* keep-out boxes (text + centre band) the drift avoids */
+      var obstacles = [];   /* keep-out boxes (the text) the drift avoids */
       var floorY = 0;
       var prog = 0;   /* scroll progress through the section, 0..1 */
       var t = 0;      /* frame counter, drives the in-place float */
@@ -243,7 +243,7 @@
         /* density scales with viewport: mobile gets far fewer digits in its thin side strips */
         COUNT = W < 560 ? 40 : (W < 900 ? 80 : 140);
 
-        /* keep-out boxes: the centred text (generous margin) + the centre line band */
+        /* keep-out boxes: the centred text (generous margin) */
         obstacles = [];
         ['.manifesto__movement', '.manifesto__invite'].forEach(function (sel) {
           var e = section.querySelector(sel);
@@ -259,8 +259,6 @@
             y0: r.top - br.top - 28, y1: r.bottom - br.top + 28
           });
         });
-        var cxLine = W / 2, lineGap = 34;   /* keep the centre column clear for the scroll line */
-        obstacles.push({ x0: cxLine - lineGap, x1: cxLine + lineGap, y0: -1e4, y1: 1e4 });
         function blocked(x, y) {
           for (var j = 0; j < obstacles.length; j++) {
             var bl = obstacles[j];
@@ -297,7 +295,7 @@
           burst.appendChild(el);
           var cell = cells[i];
           var sp = rand(1.2, 3.0), an = rand(0, Math.PI * 2);
-          /* seed outside the keep-out zones so the centre is clear from frame one */
+          /* seed outside the keep-out zones so the text is clear from frame one */
           var px = rand(pad, W - pad), py = rand(pad, H - pad), tries = 0;
           while (blocked(px, py) && tries++ < 30) { px = rand(pad, W - pad); py = rand(pad, H - pad); }
           bits.push({
@@ -346,7 +344,7 @@
           b.x += b.vx * drift; b.y += b.vy * drift;
           if (b.x < pad) { b.x = pad; b.vx = -b.vx; } else if (b.x > W - pad) { b.x = W - pad; b.vx = -b.vx; }
           if (b.y < pad) { b.y = pad; b.vy = -b.vy; } else if (b.y > H - pad) { b.y = H - pad; b.vy = -b.vy; }
-          /* bounce off the keep-out boxes so digits never drift over the text/centre */
+          /* bounce off the keep-out boxes so digits never drift over the text */
           for (var o = 0; o < obstacles.length; o++) {
             var ob = obstacles[o];
             if (b.x > ob.x0 && b.x < ob.x1 && b.y > ob.y0 && b.y < ob.y1) {
