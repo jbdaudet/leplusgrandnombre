@@ -1330,17 +1330,29 @@ th {
   font-weight: 700;
   line-height: var(--line-height-heading);
   letter-spacing: -0.03em;
+  text-wrap: balance;
   color: var(--color-text);
   margin-bottom: var(--space-3);
 }
 
-.delta__title .accent {
+.delta__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.delta__subtitle .accent {
   color: var(--color-accent);
+  font-weight: 600;
 }
 
 .delta__subtitle {
   font-size: var(--text-lg);
   line-height: 1.5;
+  text-wrap: pretty;       /* no lone last word */
   color: var(--color-text-secondary);
 }
 
