@@ -150,9 +150,9 @@
   <div class="container">
     <p class="passerelle__titre reveal">Et à chaque étape de la chaîne marketing, un cas à tester&nbsp;:</p>
     <ul class="passerelle__cas reveal reveal--delay-1">
-      {{- range . }}{{ if .demo_url }}
-      <li><a href="{{ .learn_url }}">{{ strings.TrimSuffix "." .title }}</a></li>
-      {{- end }}{{ end }}
+      {{- range $i, $app := where . "demo_url" "!=" "" }}
+      <li><a href="{{ .learn_url }}"><span class="passerelle__num">{{ printf "%02d" (add $i 1) }}</span>{{ strings.TrimSuffix "." .title }}</a></li>
+      {{- end }}
     </ul>
     <a href="/applications/#parcours" class="passerelle__tout reveal reveal--delay-2">Voir tout le parcours&nbsp;→</a>
   </div>

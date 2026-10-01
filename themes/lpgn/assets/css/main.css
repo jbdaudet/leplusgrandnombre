@@ -1918,6 +1918,12 @@ a.etapes__item.is-active:hover {
   color: var(--color-accent);
 }
 
+.passerelle__num {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+}
+
 /* phones: the bridge reads from the left, set in by a wide left margin */
 @media (max-width: 767px) {
   .passerelle {
