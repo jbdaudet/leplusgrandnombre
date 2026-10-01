@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false   # themes/blowfish is declared but unused (theme = lpgn): cloning it took ~3 min
           fetch-depth: 0
 
       - name: Setup Pages
