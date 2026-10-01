@@ -110,6 +110,7 @@
         ['.hero__scroll-fill', '.hero__scroll-track'],
         ['.manifesto__line-fill', '.manifesto__line'],
         ['.banner__line-fill', '.banner__line'],
+        ['.delta__line-fill', '.delta__line'],
         ['.journey__line-fill', '.journey__line']
       ].map(function (pair) {
         return { fill: document.querySelector(pair[0]), track: document.querySelector(pair[1]) };
@@ -375,6 +376,169 @@
         clearTimeout(rt);
         rt = setTimeout(function () { build(); onScroll(); }, 200);
       });
+    })();
+
+    /* Delta demo, step by step. Reference: brief-demo-site/demo-scroll-test.html.
+       The scroll is a GESTURE, not a position: one wheel notch / swipe = one
+       step, whatever its amplitude; gestures during a transition are ignored.
+       At both ends, the section gives the scroll back to the page.
+       Site adaptations vs the reference: the section aligns under the fixed
+       header (OFFSET), the anti-crossing wall uses behavior:'instant' (html has
+       scroll-behavior:smooth), and the 17 MB video loads only on approach. */
+    (function () {
+      var section = document.querySelector('.demo-steps');
+      if (!section) return;
+      var video = section.querySelector('video');
+      var header = document.querySelector('.site-header');
+      function offset() { return header ? header.offsetHeight : 0; }
+
+      // load the video ~1.5 screens before it shows up, not on page load
+      var charge = false;
+      function charger() {
+        if (charge) return;
+        charge = true;
+        video.poster = section.getAttribute('data-poster');
+        video.preload = 'auto';
+        video.src = section.getAttribute('data-video');
+        video.load();
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) { charger(); io.disconnect(); }
+        }, { rootMargin: '150% 0px' });
+        io.observe(section);
+      } else {
+        charger();
+      }
+
+      // accessibility: visitor refuses animations -> plain video with controls
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        video.controls = true;
+        return;
+      }
+
+      // video STATES (seconds), frame-accurate for this exact mp4: do not edit
+      var POSES = [
+        0.2,    // l'arbre au repos
+        2.5,    // le volet Search payant, haut
+        3.8,    // le volet, défilé (constats + détails), souris encore posée
+        6.1,    // retour vue héros, souris encore posée
+        8.0,    // restitution : l'intro
+        9.3,    // le point de départ (cadrage), carte posée
+        10.4,   // ruptures de stock (caméra posée, swap à ~10,55)
+        11.4,   // search payant (dernière frame avant le swap)
+        12.2,   // meilleures clientes (posée, swap à ~12,3)
+        13.2,   // promotions (posée, swap à ~13,33)
+        14.1,   // retours (posée, transition catalogue à 14,2)
+        15.5    // le plan de reconquête (fin)
+      ];
+      var VITESSE = 1.6;        // transition playback speed (x real time)
+      var SEUIL = 12;           // minimal gesture amplitude (deltaY)
+      var ACCALMIE = 250;       // ms of calm required between two gestures (anti-inertia)
+      var SORTIE = 500;         // ms of calm before giving the scroll back at an end
+
+      var idx = 0, courant = POSES[0], duree = 0, prev = 0, dernierGeste = 0;
+
+      video.addEventListener('loadedmetadata', function () {
+        duree = video.duration;
+        video.currentTime = POSES[0];
+      });
+
+      function enTransition() { return Math.abs(courant - POSES[idx]) > 0.08; }
+
+      // distance between the section top and its aligned position (under the header)
+      function ecart() { return section.getBoundingClientRect().top - offset(); }
+
+      // is the section "engaged" (filling the screen, ready to capture the wheel)?
+      function engagee() {
+        var r = section.getBoundingClientRect();
+        return r.top < innerHeight * 0.25 && r.bottom > innerHeight * 0.75;
+      }
+
+      // engaged but not aligned: the first gesture realigns
+      var alignement = 0;
+      function malAlignee() { return Math.abs(ecart()) > 4; }
+      function recale() {
+        var t = performance.now();
+        if (t - alignement < 700) return;           // one realignment at a time
+        alignement = t;
+        scrollTo({ top: scrollY + ecart(), behavior: 'smooth' });
+      }
+
+      // anti-crossing wall: a violent scroll must never carry the page past the
+      // video until the sequence is at its end in the direction of travel. The
+      // realignment is SYNCHRONOUS, inside the scroll listener (an
+      // IntersectionObserver fires too late: the page overshoots then comes back).
+      var dernierY = scrollY, descend = true;
+      addEventListener('scroll', function () {
+        if (scrollY !== dernierY) descend = scrollY > dernierY;
+        var r = section.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < innerHeight) {                // section on screen
+          var e = r.top - offset();
+          if ((descend && idx < POSES.length - 1 && e < -4) ||
+              (!descend && idx > 0 && e > 4)) {
+            scrollTo({ top: scrollY + e, behavior: 'instant' });  // sharp: kills the inertia
+            alignement = performance.now();
+          }
+        }
+        dernierY = scrollY;
+      }, { passive: true });
+
+      addEventListener('wheel', function (e) {
+        if (!engagee()) return;
+        var bas = e.deltaY > 0;
+        var t = performance.now();
+        // at the ends, only give the scroll back once the last view is SETTLED:
+        // transition over, and a distinct gesture (not the previous step's inertia)
+        if ((bas && idx === POSES.length - 1) || (!bas && idx === 0)) {
+          if (enTransition() || t - dernierGeste < SORTIE) {
+            e.preventDefault();
+            dernierGeste = t;          // blocked inertia resets the calm
+          }
+          return;
+        }
+        e.preventDefault();
+        if (malAlignee()) { recale(); return; }
+        // one gesture = one step: ignore trackpad inertia and any gesture
+        // during a transition, the amount of scroll does not matter
+        if (enTransition() || Math.abs(e.deltaY) < SEUIL || t - dernierGeste < ACCALMIE) {
+          if (Math.abs(e.deltaY) >= SEUIL) dernierGeste = t;
+          return;
+        }
+        dernierGeste = t;
+        idx += bas ? 1 : -1;
+      }, { passive: false });
+
+      // touch: one swipe = one step
+      var touchY = null;
+      addEventListener('touchstart', function (e) { touchY = e.touches[0].clientY; }, { passive: true });
+      addEventListener('touchmove', function (e) {
+        if (touchY == null || !engagee()) return;
+        var d = touchY - e.touches[0].clientY;
+        if (Math.abs(d) < 30) return;
+        var bas = d > 0;
+        if ((bas && idx === POSES.length - 1) || (!bas && idx === 0)) {
+          if (enTransition() || performance.now() - dernierGeste < SORTIE) { e.preventDefault(); }
+          touchY = null; return;
+        }
+        e.preventDefault();
+        if (malAlignee()) { recale(); touchY = null; return; }
+        if (!enTransition()) idx += bas ? 1 : -1;
+        touchY = null;
+      }, { passive: false });
+
+      // never play(): currentTime is advanced in a rAF loop capped by VITESSE
+      function boucle(now) {
+        var dt = Math.min((now - prev) / 1000, 0.05) || 0.016; prev = now;
+        if (duree) {
+          var cible = Math.min(POSES[idx], duree);
+          var pas = VITESSE * dt, d = cible - courant;
+          courant += Math.abs(d) <= pas ? d : (d > 0 ? pas : -pas);
+          if (Math.abs(video.currentTime - courant) > 0.02) video.currentTime = courant;
+        }
+        requestAnimationFrame(boucle);
+      }
+      requestAnimationFrame(boucle);
     })();
 
     /* Floating network graph — hero background */

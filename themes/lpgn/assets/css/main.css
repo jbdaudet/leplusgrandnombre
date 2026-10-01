@@ -928,7 +928,8 @@ th {
 /* One continuous line segment for this section (see the others: hero scroll
    track, banner, journey). Centered, behind the text, drawn by the global head. */
 .manifesto__line,
-.banner__line {
+.banner__line,
+.delta__line {
   position: absolute;
   top: 0;
   left: 50%;
@@ -941,7 +942,8 @@ th {
 }
 
 .manifesto__line-fill,
-.banner__line-fill {
+.banner__line-fill,
+.delta__line-fill {
   position: absolute;
   inset: 0;
   background: var(--gradient-warm);
@@ -1243,6 +1245,113 @@ th {
   .reference__arrow {
     transform: rotate(90deg);   /* point downward when stacked */
   }
+}
+
+/* ============================================================
+   HOMEPAGE — DELTA (intro + scroll-driven demo)
+   ============================================================ */
+
+.delta {
+  position: relative;
+  padding: var(--space-20) 0 var(--space-16);
+  background: var(--color-white);
+  text-align: center;
+}
+
+.delta .container {
+  position: relative;
+  z-index: 1;              /* above the line segment */
+  max-width: var(--reading-width);
+}
+
+.delta__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.delta__eyebrow span {
+  background: var(--color-white);   /* masks the line behind the text */
+  padding: 0 var(--space-2);
+}
+
+.delta__pitch {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+  background: var(--color-white);   /* masks the line behind the text */
+}
+
+.delta__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.delta__cta {
+  display: inline-block;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-pill);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.delta__cta:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+}
+
+.delta__hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  background: var(--color-white);
+  padding: 0 var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .delta__pitch {
+    font-size: var(--text-3xl);
+  }
+}
+
+/* Demo: full-bleed, sits just under the fixed header. The scroll script aligns
+   the section top on the header bottom, so the snap must agree with it. */
+html:has(.demo-steps) {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: var(--header-height);
+}
+
+.demo-steps {
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  background: #edebe5;     /* matches the video background */
+  scroll-snap-align: start;
+  scroll-margin-top: 0;
+}
+
+.demo-steps video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* whole frame visible, whatever the viewport ratio */
+  display: block;
 }
 
 /* ============================================================
