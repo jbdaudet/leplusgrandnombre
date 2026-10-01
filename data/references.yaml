@@ -14,7 +14,7 @@ clients:
   - name: "Solidarités International"
     logo: "/img/clients/solidarites-international.svg"
     url: "https://www.solidarites.org"
-    envie: "Exploiter vite les questionnaires et entretiens collectés sur le terrain, souvent sur papier, pour répondre à un éventail de questions complexes en pleine urgence humanitaire."
-    reponse: 'Un outil collaboratif de capture, de transcription et d''analyse des questionnaires, qui a permis d''apporter toutes les réponses en <span class="reference__hl">2 mois</span>.'
+    envie: "Comprendre et faciliter l'accès aux moyens de subsistance des populations au Sud-Soudan, en couvrant un éventail de dimensions complexes."
+    reponse: 'Un outil collaboratif de transcription et d''analyse des interviews terrain, enrichi au fil de l''eau en fonction des besoins de l''équipe, qui a permis d''optimiser la capture de l''information et de rendre un rapport complet en <span class="reference__hl">2 mois</span>.'
     quote: ""
     quote_author: ""
