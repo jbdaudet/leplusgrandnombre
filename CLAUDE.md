@@ -58,7 +58,7 @@ Each project has its own subdomain and a README in `projects/`:
 
 ## Key conventions
 
-- The active theme is `lpgn` (set in `hugo.toml`), not the Blowfish submodule referenced in `.gitmodules`
+- The active (and only) theme is `lpgn` (set in `hugo.toml`)
 - Site language is French (`languageCode = "fr"`)
 - Content is in markdown with Hugo frontmatter
 - Custom theme files override defaults via Hugo's lookup order
