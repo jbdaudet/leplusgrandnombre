@@ -20,6 +20,8 @@
   {{- $titre = replace $titre $mot (printf `<span class="pdv__surligne">%s</span>` $mot) 1 }}
   {{- end }}
   <a class="une reveal" href="{{ .RelPermalink }}">
+    <span class="pdv__num" aria-hidden="true">01</span>
+    <div class="une__corps">
     <p class="pdv__meta">
       {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
@@ -29,6 +31,7 @@
     <p class="une__chapo">{{ . }}</p>
     {{- end }}
     <span class="une__lire">Lire&nbsp;→</span>
+    </div>
   </a>
   {{- end }}
 
