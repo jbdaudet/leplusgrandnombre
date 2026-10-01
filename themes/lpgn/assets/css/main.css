@@ -1874,6 +1874,209 @@ a.etapes__item.is-active:hover {
   opacity: 0.5;
 }
 
+/* ============================================================
+   POINTS DE VUE — the blog list, laid out like a review
+   ============================================================ */
+
+/* everything on the logo's axis */
+.pdv {
+  padding: var(--space-16) var(--axe) var(--space-24);
+}
+
+.pdv__tete {
+  margin-bottom: var(--space-16);
+}
+
+.pdv__titre {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.pdv__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-4);
+}
+
+/* category + date line */
+.pdv__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.pdv__cat {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* the front page: the latest article */
+.une {
+  display: block;
+  max-width: 1100px;
+  margin-bottom: var(--space-20);
+  color: var(--color-text);
+}
+
+.une:hover {
+  opacity: 1;
+}
+
+.une__titre {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-stretch: 87.5%;
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-6);
+  text-wrap: balance;
+}
+
+/* the highlighted phrase: an orange block under the lower half of the
+   letters, as in the reference */
+.pdv__surligne {
+  background: linear-gradient(transparent 58%, var(--color-accent) 58%, var(--color-accent) 92%, transparent 92%);
+  -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+  padding: 0 0.06em;
+}
+
+.une__chapo {
+  max-width: 40rem;
+  font-size: var(--text-xl);
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.une__lire {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+  transition: color var(--transition-base);
+}
+
+.une:hover .une__lire {
+  color: var(--color-text);
+}
+
+/* the other articles: numbered list with outlined numbers, thin orange rules */
+.pdv__suite {
+  position: relative;
+  max-width: 900px;
+}
+
+.pdv__liste {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--color-accent);
+}
+
+.pdv__item {
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.pdv__item a {
+  display: flex;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+  color: var(--color-text);
+}
+
+.pdv__item a:hover {
+  opacity: 1;
+}
+
+.pdv__num {
+  flex-shrink: 0;
+  width: 3.5rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: 300;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-accent);
+}
+
+.pdv__corps {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdv__item-titre {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-stretch: 87.5%;
+  font-size: var(--text-3xl);
+  line-height: 1.1;
+  margin-bottom: var(--space-3);
+  transition: color var(--transition-base);
+}
+
+.pdv__item a:hover .pdv__item-titre {
+  color: var(--color-accent);
+}
+
+.pdv__chapo {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* the section name, upright in the right margin, as their "De nos principes" */
+.pdv__vertical {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .pdv__vertical {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: -4rem;
+    transform: translate(50%, -50%) rotate(90deg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 639px) {
+  .pdv__item a {
+    gap: var(--space-4);
+  }
+
+  .pdv__num {
+    width: 2.5rem;
+    font-size: var(--text-3xl);
+  }
+
+  .pdv__item-titre {
+    font-size: var(--text-2xl);
+  }
+}
+
 /* Home: who is behind — a narrow right-aligned text column (eyebrow, name,
    short rule, intro, call to action) and a collage: the photo with cards laid
    over it. Stacked on phones. */

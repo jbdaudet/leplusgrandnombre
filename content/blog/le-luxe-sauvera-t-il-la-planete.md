@@ -2,6 +2,7 @@
 title: "Le luxe sauvera-t-il la planète ?"
 date: 2026-06-07
 draft: false
+surligne: "la planète"   # phrase highlighted when the article is the front page of "Points de vue"
 description: "Le luxe n'est pas l'ennemi de la sobriété, mais son laboratoire de pointe. Ce que la Formule 1 est à l'automobile, le luxe l'est à la consommation durable."
 categories: ["société", "luxe"]
 ---

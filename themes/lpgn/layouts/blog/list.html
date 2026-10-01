@@ -1,0 +1,61 @@
+{{ define "main" }}
+{{/* "Points de vue", laid out like a review: the latest article as the
+     front page (big serif title, one highlighted phrase from the `surligne`
+     front matter, its standfirst), then the others as a numbered list with
+     outlined numbers and thin orange rules. Everything on the logo's axis. */}}
+{{- $articles := .Pages.ByDate.Reverse -}}
+<div class="pdv">
+
+  <header class="pdv__tete">
+    <h1 class="pdv__titre reveal reveal--from-bottom">{{ .Title }}</h1>
+    {{- with .Description }}
+    <p class="pdv__label">// {{ . }}</p>
+    {{- end }}
+  </header>
+
+  {{- with index $articles 0 }}
+  {{- $titre := .Title | htmlEscape }}
+  {{- with .Params.surligne }}
+  {{- $mot := . | htmlEscape }}
+  {{- $titre = replace $titre $mot (printf `<span class="pdv__surligne">%s</span>` $mot) 1 }}
+  {{- end }}
+  <a class="une reveal" href="{{ .RelPermalink }}">
+    <p class="pdv__meta">
+      {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+    </p>
+    <h2 class="une__titre">{{ $titre | safeHTML }}</h2>
+    {{- with .Description }}
+    <p class="une__chapo">{{ . }}</p>
+    {{- end }}
+    <span class="une__lire">Lire&nbsp;→</span>
+  </a>
+  {{- end }}
+
+  {{- with after 1 $articles }}
+  <div class="pdv__suite">
+    <span class="pdv__vertical" aria-hidden="true">Points de vue</span>
+    <ol class="pdv__liste">
+      {{- range $i, $p := . }}
+      <li class="pdv__item reveal">
+        <a href="{{ .RelPermalink }}">
+          <span class="pdv__num" aria-hidden="true">{{ printf "%02d" (add $i 2) }}</span>
+          <span class="pdv__corps">
+            <span class="pdv__meta">
+              {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+            </span>
+            <span class="pdv__item-titre">{{ .Title }}</span>
+            {{- with .Description }}
+            <span class="pdv__chapo">{{ . }}</span>
+            {{- end }}
+          </span>
+        </a>
+      </li>
+      {{- end }}
+    </ol>
+  </div>
+  {{- end }}
+
+</div>
+{{ end }}
