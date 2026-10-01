@@ -1,19 +1,22 @@
 # Mosaic between the hero and the manifesto: analysis visuals and the
-# questions clients ask, on muted colour tiles (6 columns x 2 rows on desktop).
-# type: question | visuel ; large: true spans two columns.
-# fond: background colour ; clair: true for dark text on a light background.
-# Visuals: themes/lpgn/assets/img/situations/ (resized by Hugo; `rogne`
-# crops that many pixels off the bottom before resizing).
+# questions clients ask, on square tiles (4 columns x 2 rows on desktop,
+# 2 columns on phones). Questions and visuals alternate like a chequerboard.
+# type: question | visuel ; fond: background colour.
+# Visuals (themes/lpgn/assets/img/situations/) are cut down to the essential
+# and all brought to the same 3:2 format by Hugo: `etapes` are successive
+# crops ("WxH anchor"), then a 3:2 fill anchored on `ancre`. They are shown in
+# monochrome, multiplied onto the tile colour (tone on tone); `inverse` flips
+# a dark slide first.
 cases:
   - type: question
     texte: "Pourquoi mes ventes stagnent alors que je dépense plus en pub ?"
     lien: "#demo"
-    fond: "#FF6B35"
-    large: true
+    fond: "#c8643f"
   - type: visuel
     image: "img/situations/parcours.jpg"
     alt: "Graphe des parcours de navigation vers l'achat"
-    fond: "#d9c9a8"
+    fond: "#e3dccd"
+    ancre: "Center"
   - type: question
     texte: "Où ouvrir ma prochaine boutique ?"
     lien: "/applications/#geomarketing"
@@ -21,24 +24,26 @@ cases:
   - type: visuel
     image: "img/situations/privacy.jpg"
     alt: "Frise des réglementations sur la protection des données et des taux de consentement"
-    fond: "#6b7385"
-    large: true
+    fond: "#d6d4cf"
+    inverse: true
+    etapes: ["1073x620 Right", "1073x520 Bottom"]
+    ancre: "Right"
   - type: visuel
     image: "img/situations/first-party.jpg"
     alt: "Schéma d'enrichissement des données clients first-party"
-    fond: "#a3ad9f"
-    large: true
-    rogne: 45
+    fond: "#d6d4cf"
+    etapes: ["1389x715 Top", "1389x605 Bottom"]
+    ancre: "Left"
   - type: question
     texte: "Quel message va vraiment toucher mes clients ?"
     lien: "/applications/#signal"
-    fond: "#4a3440"
+    fond: "#3b3340"
   - type: visuel
     image: "img/situations/app-site.jpg"
     alt: "Visites, ajouts au panier et achats, entre l'application et le site"
-    fond: "#edebe5"
-    large: true
+    fond: "#e3dccd"
+    ancre: "Left"
   - type: question
     texte: "Mes indicateurs m'aident-ils vraiment à décider ?"
     lien: "/applications/#theshiftproject"
-    fond: "#b5543a"
+    fond: "#2b3a36"

@@ -33,17 +33,20 @@
   </a>
   {{- else }}
   {{- $alt := .alt }}
-  {{- $rogne := default 0 .rogne }}
-  <div class="{{ $classe }}" style="--fond: {{ .fond | safeCSS }}">
+  {{- $etapes := default (slice) .etapes }}
+  {{- $ancre := default "Center" .ancre }}
+  <div class="{{ $classe }}{{ if .inverse }} mosaique__case--inverse{{ end }}" style="--fond: {{ .fond | safeCSS }}">
     {{- with resources.Get .image }}
     {{- $img := . }}
-    {{- if gt $rogne 0 }}
-    {{- $img = $img.Crop (printf "%dx%d Top" $img.Width (sub $img.Height $rogne)) }}
-    {{- end }}
-    {{- $a := $img.Resize "720x webp q80" }}
-    {{- $b := $img.Resize "1400x webp q75" }}
-    <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 720w, {{ $b.RelPermalink }} 1400w"
-         sizes="(min-width: 900px) 45vw, 100vw" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ $alt }}" loading="lazy">
+    {{- range $etapes }}{{ $img = $img.Crop . }}{{ end }}
+    {{- /* same 3:2 format for every visual */}}
+    {{- $w := $img.Width }}{{ $h := $img.Height }}
+    {{- if gt (mul $w 2) (mul $h 3) }}{{ $w = div (mul $h 3) 2 }}{{ else }}{{ $h = div (mul $w 2) 3 }}{{ end }}
+    {{- $img = $img.Fill (printf "%dx%d %s" $w $h $ancre) }}
+    {{- $a := $img.Resize "600x webp q80" }}
+    {{- $b := $img.Resize "1200x webp q75" }}
+    <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 600w, {{ $b.RelPermalink }} 1200w"
+         sizes="(min-width: 900px) 25vw, 50vw" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ $alt }}" loading="lazy">
     {{- end }}
   </div>
   {{- end }}
