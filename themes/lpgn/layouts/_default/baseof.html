@@ -198,15 +198,11 @@
 
       reveals.forEach(function (el) { observer.observe(el); });
 
-      /* Hero: the pulsing line fades out the moment you scroll, and Data / IA
-         light up. */
+      /* Hero: Data / IA light up the moment you scroll. */
       var hero = document.querySelector('.hero');
-      var heroPulse = document.querySelector('.hero__pulse-line');
       if (hero) {
         function onScroll() {
-          var scrolled = window.scrollY > 0;
-          if (heroPulse) { heroPulse.classList.toggle('is-hidden', scrolled); }
-          hero.classList.toggle('is-scrolled', scrolled);
+          hero.classList.toggle('is-scrolled', window.scrollY > 0);
         }
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
@@ -725,17 +721,35 @@
         }
       }
 
+      /* The clearing follows the text block (title + subtitle, bottom-left):
+         an ellipse around its box, with a margin, measured in hero coords */
+      var bloc = canvas.parentElement.querySelector('.hero__content .container');
+      var zone = { cx: 0, cy: 0, rx: 1, ry: 1 };
+      function mesurerZone() {
+        if (!bloc) return;
+        var p = canvas.parentElement.getBoundingClientRect();
+        // the extent of the text itself (the paragraphs span the whole row)
+        function encre(el) {
+          var r = document.createRange();
+          r.selectNodeContents(el || bloc);
+          return r.getBoundingClientRect();
+        }
+        var a = encre(bloc.querySelector('.hero__phrase')), b = encre(bloc.querySelector('.hero__subtitle'));
+        var left = Math.min(a.left, b.left), right = Math.max(a.right, b.right);
+        zone.cx = (left + right) / 2 - p.left;
+        zone.cy = (a.top + b.bottom) / 2 - p.top;
+        zone.rx = (right - left) / 2 * 1.25 + 60;
+        zone.ry = (b.bottom - a.top) / 2 * 1.4 + 60;
+      }
+
       function update() {
-        var cx = w / 2;
-        var cy = h * 0.45; /* center of the text area */
         for (var i = 0; i < nodes.length; i++) {
           var n = nodes[i];
-          /* Repulsive force from center (vertical strip where title + pulse line sit) */
-          var dx = n.x - cx;
-          var dy = n.y - cy;
-          /* Elliptical zone: wider horizontally for the title, narrower vertically */
-          var rx = REPULSE_RADIUS * 1.8;
-          var ry = REPULSE_RADIUS;
+          /* Repulsive force from the text block */
+          var dx = n.x - zone.cx;
+          var dy = n.y - zone.cy;
+          var rx = zone.rx;
+          var ry = zone.ry;
           var normDist = Math.sqrt((dx * dx) / (rx * rx) + (dy * dy) / (ry * ry));
           if (normDist < 1) {
             var force = (1 - normDist) * REPULSE_STRENGTH;
@@ -767,8 +781,11 @@
       }
 
       init();
+      mesurerZone();
       loop();
-      window.addEventListener('resize', function () { resize(); });
+      window.addEventListener('resize', function () { resize(); mesurerZone(); });
+      window.addEventListener('load', mesurerZone);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(mesurerZone);
     })();
   </script>
 

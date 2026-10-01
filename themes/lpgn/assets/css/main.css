@@ -60,6 +60,7 @@
   --container-width: 980px;
   --reading-width:   720px;
   --header-height:   80px;
+  --axe:             clamp(1.5rem, 8vw, 10rem);   /* left axis shared by the header logo and the hero title */
 
   /* Radii */
   --radius-sm:   4px;
@@ -438,11 +439,16 @@ th {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
 }
 
-.site-header__inner {
+/* the header spans the page on the --axe margins: the logo sits on the same
+   left axis as the hero title */
+.site-header .site-header__inner {   /* beats the later .container paddings */
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  max-width: none;
+  padding-left: var(--axe);
+  padding-right: var(--axe);
 }
 
 .site-header__brand {
@@ -463,6 +469,7 @@ th {
   height: 40px;
   width: auto;
   display: block;
+  margin-left: -13px;      /* the PNG's transparent margin: the drawn "l" sits on the axis */
 }
 
 /* ============================================================
@@ -691,7 +698,7 @@ th {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  padding-bottom: 8rem;
+  padding-bottom: calc(8rem + 160px);   /* same room as when the pulse line sat below */
 }
 
 /* Floating network canvas */
@@ -710,7 +717,7 @@ th {
   width: 100%;
   max-width: none;
   margin-left: 0;            /* a flex item: auto margins would centre it */
-  padding-left: clamp(2rem, 7vw, 7rem);
+  padding-left: var(--axe);
   padding-right: clamp(1.5rem, 4vw, 4rem);
 }
 
@@ -872,36 +879,6 @@ th {
   font-weight: 700;
   color: var(--color-text);
   transition: opacity 0.2s ease;
-}
-
-/* Line zone — sits below hero content, contains pulse + scroll track */
-.hero__line-zone {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  height: 160px;
-  position: relative;
-  flex-shrink: 0;
-}
-
-/* Pulsing line — visible on load, fades out on scroll */
-.hero__pulse-line {
-  width: 2px;
-  height: 48px;
-  background: var(--gradient-warm);
-  border-radius: 1px;
-  animation: heroPulse 2s ease-in-out infinite;
-  transition: opacity 0.2s ease;
-}
-
-@keyframes heroPulse {
-  0%, 100% { opacity: 0.2; transform: scaleY(0.5); transform-origin: top; }
-  50%      { opacity: 1;   transform: scaleY(1);   transform-origin: top; }
-}
-
-.hero__pulse-line.is-hidden {
-  animation: none;   /* stop heroPulse, otherwise it keeps forcing opacity */
-  opacity: 0;
 }
 
 .hero__body {
