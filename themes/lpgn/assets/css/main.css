@@ -1011,8 +1011,6 @@ th {
 /* Closing invitation — turns the question back on the reader */
 .manifesto__invite {
   margin-top: var(--space-16);
-  padding-top: var(--space-10);
-  border-top: 1px solid var(--color-border);
   font-family: var(--font-heading);
   font-size: var(--text-xl);
   font-weight: 700;
