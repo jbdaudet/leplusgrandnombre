@@ -1136,6 +1136,17 @@ th {
   text-align: center;
 }
 
+/* a line break that only exists on desktop */
+.br-desktop {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .br-desktop {
+    display: inline;
+  }
+}
+
 .manifesto__support strong {
   color: var(--color-text);
   font-weight: 600;
