@@ -381,7 +381,8 @@
     /* Delta demo, step by step. Reference: brief-demo-site/demo-scroll-test.html.
        The scroll is a GESTURE, not a position: one wheel notch / swipe = one
        step, whatever its amplitude; gestures during a transition are ignored.
-       At both ends, the section gives the scroll back to the page.
+       Only going DOWN is captured: scrolling up always leaves the demo in one
+       go, and the demo silently rewinds once it is out of sight below.
        Site adaptations vs the reference: the fixed header slides away while
        the demo is under it, the anti-crossing wall uses behavior:'instant'
        (html has scroll-behavior:smooth), and the 17 MB video loads only on
@@ -476,8 +477,8 @@
         scrollTo({ top: scrollY + ecart(), behavior: 'smooth' });
       }
 
-      // anti-crossing wall: a violent scroll must never carry the page past the
-      // video until the sequence is at its end in the direction of travel. The
+      // anti-crossing wall: a violent scroll down must never carry the page past
+      // the video until the sequence is at its end. The
       // realignment is SYNCHRONOUS, inside the scroll listener (an
       // IntersectionObserver fires too late: the page overshoots then comes back).
       var dernierY = scrollY, descend = true;
@@ -485,12 +486,12 @@
         if (scrollY !== dernierY) descend = scrollY > dernierY;
         var r = section.getBoundingClientRect();
         if (r.bottom > 0 && r.top < innerHeight) {                // section on screen
-          var e = r.top;
-          if ((descend && idx < POSES.length - 1 && e < -4) ||
-              (!descend && idx > 0 && e > 4)) {
-            scrollTo({ top: scrollY + e, behavior: 'instant' });  // sharp: kills the inertia
+          if (descend && idx < POSES.length - 1 && r.top < -4) {
+            scrollTo({ top: scrollY + r.top, behavior: 'instant' });  // sharp: kills the inertia
             alignement = performance.now();
           }
+        } else if (r.top >= innerHeight && idx !== 0) {
+          idx = 0; courant = POSES[0];                             // left upwards: rewind, unseen
         }
         dernierY = scrollY;
       }, { passive: true });
@@ -498,10 +499,11 @@
       addEventListener('wheel', function (e) {
         if (!engagee()) return;
         var bas = e.deltaY > 0;
+        if (!bas) return;              // going up: never captured, one scroll leaves
         var t = performance.now();
-        // at the ends, only give the scroll back once the last view is SETTLED:
+        // at the end, only give the scroll back once the last view is SETTLED:
         // transition over, and a distinct gesture (not the previous step's inertia)
-        if ((bas && idx === POSES.length - 1) || (!bas && idx === 0)) {
+        if (idx === POSES.length - 1) {
           if (enTransition() || t - dernierGeste < SORTIE) {
             e.preventDefault();
             dernierGeste = t;          // blocked inertia resets the calm
@@ -517,7 +519,7 @@
           return;
         }
         dernierGeste = t;
-        idx += bas ? 1 : -1;
+        idx++;
       }, { passive: false });
 
       // touch: one swipe = one step
@@ -527,14 +529,14 @@
         if (touchY == null || !engagee()) return;
         var d = touchY - e.touches[0].clientY;
         if (Math.abs(d) < 30) return;
-        var bas = d > 0;
-        if ((bas && idx === POSES.length - 1) || (!bas && idx === 0)) {
+        if (d < 0) { touchY = null; return; }   // swiping back up: never captured
+        if (idx === POSES.length - 1) {
           if (enTransition() || performance.now() - dernierGeste < SORTIE) { e.preventDefault(); }
           touchY = null; return;
         }
         e.preventDefault();
         if (malAlignee()) { recale(); touchY = null; return; }
-        if (!enTransition()) idx += bas ? 1 : -1;
+        if (!enTransition()) idx++;
         touchY = null;
       }, { passive: false });
 
