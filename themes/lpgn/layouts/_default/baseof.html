@@ -210,7 +210,6 @@
       var segments = [
         ['.hero__scroll-fill', '.hero__scroll-track'],
         ['.manifesto__line-fill', '.manifesto__line'],
-        ['.delta__line-fill', '.delta__line'],
         ['.banner__line-fill', '.banner__line'],
         ['.journey__line-fill', '.journey__line']
       ].map(function (pair) {
@@ -231,7 +230,8 @@
 
         /* Mask the manifesto line so it is absent over each text block — the line
            disappears "behind" the statement and the invite, exactly like the
-           journey heading, and reappears in the gaps between/below them. */
+           journey heading, and reappears in the gaps between them. It stops at
+           the invite: from there the curved thread (.fil) takes over. */
         function maskManifestoLine() {
           var line = document.querySelector('.manifesto__line');
           if (!line) return;
@@ -250,10 +250,11 @@
             var bot = Math.min(100, ((br.bottom - lr.top + 6) / h) * 100);
             stops.push('#000 ' + top.toFixed(2) + '%');
             stops.push('transparent ' + top.toFixed(2) + '%');
+            if (i === blocks.length - 1) break;      // the line ends inside the invite
             stops.push('transparent ' + bot.toFixed(2) + '%');
             stops.push('#000 ' + bot.toFixed(2) + '%');
           }
-          stops.push('#000 100%');
+          stops.push(stops[stops.length - 1].indexOf('transparent') === 0 ? 'transparent 100%' : '#000 100%');
           var g = 'linear-gradient(to bottom, ' + stops.join(', ') + ')';
           line.style.webkitMaskImage = g;
           line.style.maskImage = g;
@@ -290,6 +291,71 @@
         maskManifestoLine();
         updateLines();
       }
+    })();
+
+    /* The thread (.fil): a thin curve that leaves the word "envie", sweeps into
+       the right margin around the poster, then dives to the top of the demo.
+       The path is built from the real positions of those elements (rebuilt on
+       resize / layout changes) and drawn by scroll: the pen sits at PLUME of
+       the viewport height, the path is revealed down to that depth. */
+    (function () {
+      var svg = document.querySelector('.fil');
+      var trace = svg && svg.querySelector('.fil__trace');
+      var section = document.querySelector('.delta');
+      var mot = document.querySelector('.manifesto__invite .accent');
+      var affiche = document.querySelector('.affiche');
+      var piste = document.querySelector('.demo-piste');
+      if (!trace || !section || !mot || !piste) return;
+      var PLUME = 0.8;
+      var immobile = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var longueur = 0, profils = [];     // samples [length along the path, y]
+
+      function construire() {
+        var s = section.getBoundingClientRect();
+        var W = s.width;
+        var m = mot.getBoundingClientRect();
+        var yDemo = piste.getBoundingClientRect().top - s.top;
+        var yAff = affiche ? affiche.getBoundingClientRect().bottom - s.top : yDemo - 200;
+        var x0 = m.left - s.left, x1 = m.right - s.left, y0 = m.bottom - s.top + 4;
+        var R = W - Math.max(16, W * 0.05);          // the right margin
+        var yMil = (y0 + yAff) / 2;
+        var xFin = W / 2;
+        var d = 'M' + x0 + ',' + y0 + ' L' + x1 + ',' + y0 +
+          ' C' + (x1 + (R - x1) * 0.75) + ',' + y0 + ' ' + R + ',' + (y0 + (yMil - y0) * 0.3) + ' ' + R + ',' + yMil +
+          // straight down the margin until past the poster, then the dive
+          ' L' + R + ',' + yAff +
+          ' C' + R + ',' + (yAff + (yDemo - yAff) * 0.6) + ' ' + (xFin + (R - xFin) * 0.3) + ',' + yDemo + ' ' + xFin + ',' + yDemo;
+        // the svg covers the section plus the stretch above it, up to the word
+        var haut = Math.min(0, y0 - 8);
+        svg.style.top = haut + 'px';
+        svg.style.height = (yDemo - haut + 2) + 'px';
+        svg.setAttribute('viewBox', '0 ' + haut + ' ' + W + ' ' + (yDemo - haut + 2));
+        trace.setAttribute('d', d);
+        longueur = trace.getTotalLength();
+        profils = [];
+        for (var i = 0; i <= 200; i++) {
+          var l = longueur * i / 200;
+          profils.push([l, trace.getPointAtLength(l).y]);
+        }
+        trace.style.strokeDasharray = longueur + ' ' + longueur;
+        dessiner();
+      }
+
+      function dessiner() {
+        if (!longueur) return;
+        if (immobile) { trace.style.strokeDashoffset = 0; return; }
+        var plume = innerHeight * PLUME - section.getBoundingClientRect().top;   // pen depth, section coords
+        var l = 0;
+        for (var i = 0; i < profils.length && profils[i][1] <= plume; i++) l = profils[i][0];
+        trace.style.strokeDashoffset = (longueur - l).toFixed(1);
+      }
+
+      addEventListener('scroll', dessiner, { passive: true });
+      addEventListener('resize', construire);
+      addEventListener('load', construire);
+      if (window.ResizeObserver) new ResizeObserver(construire).observe(section);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(construire);
+      construire();
     })();
 
     /* Binary "data" cloud, contained to the manifesto zone. Three scroll phases:
