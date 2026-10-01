@@ -143,35 +143,18 @@
   </div>
 </section>
 
+{{/* Bridge to the applications page: the live steps of the journey, each
+     linking straight to its case there (the full journey lives on that page). */}}
 {{- with .Site.Data.apps -}}
-<section class="journey">
+<section class="passerelle">
   <div class="container">
-
-    <h2 class="journey__heading reveal">De la compréhension de votre marché à la fidélisation client :</h2>
-    <p class="journey__subheading reveal reveal--delay-1">pas des produits, des preuves — un outil concret à chaque étape, que vous pouvez tester maintenant.</p>
-
-    <ol class="journey__steps">
-      {{- range $i, $app := . -}}
-      <li class="step{{ if not $app.demo_url }} step--soon{{ end }} reveal{{ if eq (mod $i 2) 1 }} reveal--from-right{{ end }}">
-        <div class="step__marker" aria-hidden="true">
-          <span class="step__number">{{ .number }}</span>
-        </div>
-        <div class="step__card">
-          <h3 class="step__title">{{ .title }}</h3>
-          <p class="step__question">{{ .question }}</p>
-          {{- if .demo_url -}}
-          <div class="step__actions">
-            <a href="{{ .learn_url }}" class="step__btn step__btn--outline">En savoir plus</a>
-            <a href="{{ .demo_url }}" class="step__btn step__btn--solid" target="_blank" rel="noopener noreferrer">Essayer</a>
-          </div>
-          {{- else -}}
-          <span class="step__badge">Bientôt</span>
-          {{- end -}}
-        </div>
-      </li>
-      {{- end -}}
-    </ol>
-
+    <p class="passerelle__titre reveal">Et à chaque étape de la chaîne marketing, un cas à tester&nbsp;:</p>
+    <ul class="passerelle__cas reveal reveal--delay-1">
+      {{- range . }}{{ if .demo_url }}
+      <li><a href="{{ .learn_url }}"><span class="passerelle__num">{{ .number }}</span>{{ strings.TrimSuffix "." .title }}</a></li>
+      {{- end }}{{ end }}
+    </ul>
+    <a href="/applications/#parcours" class="passerelle__tout reveal reveal--delay-2">Voir tout le parcours&nbsp;→</a>
   </div>
 </section>
 {{- end -}}

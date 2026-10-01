@@ -10,6 +10,8 @@
     </div>
   </header>
 
+  {{ partial "journey.html" . }}
+
   <div class="applications__content">
     <div class="container">
       {{ .Content }}
@@ -226,6 +228,72 @@
 
     appUnits.forEach(function (u) { timers.set(u, []); observer.observe(u); });
 
+  })();
+
+  /* ---- Journey thread + sticky step bar ----
+     The thread: a thin line through the step markers, drawn by scroll (the pen
+     sits at 75% of the viewport height). The bar: shown once the journey map
+     is above the screen and while the cases are on it; it highlights the
+     case under the reading line (40% of the viewport height). */
+  (function () {
+    var steps = document.querySelector('.journey__steps');
+    var journey = document.querySelector('.journey');
+    var bar = document.querySelector('.etapes');
+    var content = document.querySelector('.applications__content');
+    if (!steps || !journey) return;
+
+    var fil = document.createElement('div');
+    fil.className = 'journey__fil';
+    fil.setAttribute('aria-hidden', 'true');
+    fil.innerHTML = '<div class="journey__fil-trait"></div>';
+    steps.insertBefore(fil, steps.firstChild);
+    var trait = fil.firstChild;
+
+    /* layout position inside .journey__steps (offsets ignore the transforms
+       of the reveal animation, which would shift the measure by 40px) */
+    function position(el) {
+      var x = 0, y = 0;
+      while (el && el !== steps) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+      return { x: x, y: y };
+    }
+
+    function placer() {
+      var markers = steps.querySelectorAll('.step__marker');
+      if (markers.length < 2) return;
+      var a = position(markers[0]), b = position(markers[markers.length - 1]);
+      var m = markers[0];
+      fil.style.left = (a.x + m.offsetWidth / 2) + 'px';
+      fil.style.top = (a.y + m.offsetHeight / 2) + 'px';
+      fil.style.height = (b.y - a.y) + 'px';
+      dessiner();
+    }
+
+    function dessiner() {
+      var r = fil.getBoundingClientRect();
+      var f = Math.max(0, Math.min(1, (innerHeight * 0.75 - r.top) / (r.height || 1)));
+      trait.style.transform = 'scaleY(' + f.toFixed(4) + ')';
+    }
+
+    var items = bar ? Array.prototype.slice.call(bar.querySelectorAll('[data-cible]')) : [];
+    function suivre() {
+      if (!bar || !content) return;
+      var j = journey.getBoundingClientRect(), c = content.getBoundingClientRect();
+      bar.hidden = !(j.bottom < 0 && c.bottom > innerHeight * 0.4);
+      if (bar.hidden) return;
+      var actif = null;
+      items.forEach(function (it) {
+        var cas = document.getElementById(it.getAttribute('data-cible'));
+        if (cas && cas.getBoundingClientRect().top <= innerHeight * 0.4) actif = it;
+      });
+      items.forEach(function (it) { it.classList.toggle('is-active', it === actif); });
+    }
+
+    addEventListener('scroll', function () { dessiner(); suivre(); }, { passive: true });
+    addEventListener('resize', placer);
+    addEventListener('load', placer);
+    if (window.ResizeObserver) new ResizeObserver(placer).observe(steps);
+    placer();
+    suivre();
   })();
 
   /* ---- Hash scroll fix ----
