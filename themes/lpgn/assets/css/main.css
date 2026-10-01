@@ -1519,8 +1519,25 @@ th {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-accent);
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2cqw;
+}
+
+/* download icon */
+.affiche__icone {
+  width: 6cqw;
+  height: 6cqw;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--transition-base);
+}
+
+.affiche:hover .affiche__icone {
+  transform: translateY(2px);
 }
 
 .delta__hint {
