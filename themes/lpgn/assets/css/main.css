@@ -984,7 +984,7 @@ th {
   font-family: var(--font-poster);
   font-weight: 800;
   font-stretch: 87.5%;
-  font-size: clamp(1.05rem, 1.6vw, 1.7rem);   /* one size for every question tile */
+  font-size: clamp(1.25rem, 2.2vw, 2.4rem);   /* one size for every question tile */
   line-height: 1.12;
   letter-spacing: -0.01em;
   text-wrap: balance;
