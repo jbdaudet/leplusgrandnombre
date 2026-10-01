@@ -1874,6 +1874,76 @@ a.etapes__item.is-active:hover {
   opacity: 0.5;
 }
 
+/* Home: who is behind — photo left, bio right; stacked on phones */
+.fondateur {
+  padding: var(--space-20) 0;
+  background: var(--color-white);
+}
+
+.fondateur__inner {
+  display: grid;
+  gap: var(--space-10);
+  max-width: 1040px;
+}
+
+.fondateur__photo {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 480 / 540;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.fondateur__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.fondateur__nom {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--space-6);
+}
+
+.fondateur__texte p:not(.fondateur__eyebrow) {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.fondateur__texte strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .fondateur__inner {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .fondateur__photo {
+    max-width: none;
+  }
+}
+
+/* phones: same wide left margin as the bridge below */
+@media (max-width: 767px) {
+  .fondateur .container {
+    padding-left: 15%;
+  }
+}
+
 /* Home: bridge to the cases of the applications page */
 .passerelle {
   padding: var(--space-20) 0;

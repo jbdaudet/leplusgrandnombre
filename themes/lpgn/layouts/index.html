@@ -143,6 +143,28 @@
   </div>
 </section>
 
+{{/* Who is behind: photo + short bio (data/fondateur.yaml). The photo is
+     cropped square and resized by Hugo (1x / 2x webp). */}}
+{{- with .Site.Data.fondateur -}}
+<section class="fondateur">
+  <div class="container fondateur__inner">
+    {{- with resources.Get "img/jean-baptiste-daudet.jpg" }}
+    {{- $a := .Fill "480x540 Center webp q80" }}
+    {{- $b := .Fill "960x1080 Center webp q75" }}
+    <img class="fondateur__photo reveal" src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 1x, {{ $b.RelPermalink }} 2x"
+         width="{{ $a.Width }}" height="{{ $a.Height }}" alt="Jean-Baptiste Daudet" loading="lazy">
+    {{- end }}
+    <div class="fondateur__texte reveal reveal--delay-1">
+      <p class="fondateur__eyebrow">{{ .eyebrow }}</p>
+      <h2 class="fondateur__nom">{{ .nom }}</h2>
+      {{- range .paragraphes }}
+      <p>{{ . | markdownify }}</p>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}
+
 {{/* Bridge to the applications page: the live steps of the journey, each
      linking straight to its case there (the full journey lives on that page). */}}
 {{- with .Site.Data.apps -}}
