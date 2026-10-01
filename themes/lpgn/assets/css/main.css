@@ -1841,18 +1841,6 @@ html:has(.demo-steps) {
   display: block;
 }
 
-/* HD still of the current state, over the canvas */
-.demo-steps .arret {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  max-width: none;
-  opacity: 0;
-  transition: opacity .15s;
-  pointer-events: none;
-}
-
 /* the mp4 is only the prefers-reduced-motion fallback */
 .demo-steps video { display: none; }
 .demo-steps--video video {
@@ -1861,8 +1849,7 @@ html:has(.demo-steps) {
   aspect-ratio: 1916 / 1028;
   object-fit: contain;
 }
-.demo-steps--video canvas,
-.demo-steps--video .arret { display: none; }
+.demo-steps--video canvas { display: none; }
 
 /* ============================================================
    HOMEPAGE — JOURNEY TIMELINE

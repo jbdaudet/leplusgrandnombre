@@ -402,7 +402,7 @@
        Rendering is 100% images (no <video> displayed: GPU drivers retouch the
        video layer's colours, and drawImage(video) is unreliable on Windows):
        transitions are WebP frame sequences drawn on a canvas, still states are
-       HD WebP shown in an overlay. The mp4 is only the reduced-motion fallback.
+       HD WebP drawn on the same canvas. The mp4 is only the reduced-motion fallback.
        Site adaptations vs the reference: the fixed header slides away while
        the demo is under it, the anti-crossing wall uses behavior:'instant'
        (html has scroll-behavior:smooth), the ~10 MB of images load only on
@@ -414,7 +414,6 @@
       var video = section.querySelector('video');
       var toile = section.querySelector('canvas');
       var pinceau = toile.getContext('2d');
-      var calque = section.querySelector('.arret');
       // the track: all scroll positions are measured on it (the section is sticky)
       var piste = section.parentElement;
       var libre = false;        // sequence over: spare height removed, scroll free
@@ -612,7 +611,23 @@
       function prete(im) { return im && im.complete && im.naturalWidth > 0; }
       function dessine(im) { pinceau.drawImage(im, 0, 0, toile.width, toile.height); }
 
-      var fondDessine = -1;   // last still painted in the canvas (under the overlay)
+      var fondDessine = -1;   // last still painted in the canvas
+
+      // the canvas is sized to the screen pixels it covers (between the
+      // frames' 1916 px and the stills' 2874 px): the browser then hardly
+      // rescales it. Shown as an <img>, the 2874 px still was shrunk 2x or
+      // more by the GPU, which blurs it (sharp again during transitions).
+      function ajuste() {
+        var w = Math.round(toile.clientWidth * (window.devicePixelRatio || 1));
+        w = Math.max(1916, Math.min(2874, w));
+        if (toile.width === w) return;
+        toile.width = w;
+        toile.height = Math.round(w * 1028 / 1916);
+        pinceau.imageSmoothingQuality = 'high';
+        fondDessine = -1;       // resizing clears the canvas: repaint the still
+      }
+      ajuste();
+      addEventListener('resize', ajuste, { passive: true });
 
       function boucle(now) {
         var dt = Math.min((now - prev) / 1000, 0.05) || 0.016; prev = now;
@@ -632,13 +647,8 @@
           }
         }
         if (!libre && idx === FIN && !anim && now - finTransition > SORTIE) liberer();
-        var posee = !anim;
-        if (posee && arrets[idx]) {
-          if (calque.src !== arrets[idx].src) calque.src = arrets[idx].src;
-          // the canvas under the overlay gets the still too: never an empty background
-          if (fondDessine !== idx && prete(arrets[idx])) { dessine(arrets[idx]); fondDessine = idx; }
-        }
-        calque.style.opacity = posee && prete(arrets[idx]) ? '1' : '0';
+        // at rest, the HD still replaces the last frame (same picture, pixel-aligned)
+        if (!anim && fondDessine !== idx && prete(arrets[idx])) { dessine(arrets[idx]); fondDessine = idx; }
         requestAnimationFrame(boucle);
       }
       requestAnimationFrame(boucle);
