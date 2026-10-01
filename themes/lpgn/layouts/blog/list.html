@@ -26,7 +26,7 @@
             {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
           </p>
-          <h2 class="une__titre">{{ .Title }}</h2>
+          <h2 class="une__titre">{{ partial "titre-insecable.html" .Title }}</h2>
           {{- with .Description }}
           <p class="une__chapo">{{ . }}</p>
           {{- end }}
@@ -47,7 +47,7 @@
                   {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
                   <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
                 </span>
-                <span class="pdv__item-titre">{{ .Title }}</span>
+                <span class="pdv__item-titre">{{ partial "titre-insecable.html" .Title }}</span>
                 {{- with .Description }}
                 <span class="pdv__chapo">{{ . }}</span>
                 {{- end }}
@@ -61,16 +61,7 @@
 
     </div>
 
-    {{- with $une }}{{ with .Params.citation }}
-    {{/* the front page's quote on the crumpled paper poster (same photo as
-         the white paper poster on the home page); it links to the article */}}
-    <aside class="pdv__affiche">
-      <a class="pdv__affiche-papier" href="{{ $une.RelPermalink }}" tabindex="-1" aria-hidden="true">
-        <span class="pdv__affiche-citation{{ if gt (len .) 60 }} pdv__affiche-citation--longue{{ end }}">«&nbsp;{{ . }}&nbsp;»</span>
-        <span class="pdv__affiche-pied">Points de vue</span>
-      </a>
-    </aside>
-    {{- end }}{{ end }}
+    {{- with $une }}{{ partial "affiche-citation.html" . }}{{ end }}
   </div>
 
 </div>

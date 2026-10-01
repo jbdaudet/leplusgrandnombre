@@ -1769,7 +1769,8 @@ html:has(.demo-steps) {
   font-size: var(--text-sm);
   color: var(--color-text-tertiary);
   text-align: center;
-  margin-bottom: var(--space-12);
+  max-width: 44rem;
+  margin: 0 auto var(--space-12);
   font-weight: 400;
   letter-spacing: 0.02em;
   position: relative;
@@ -1974,10 +1975,27 @@ a.etapes__item.is-active:hover {
   .pdv__affiche {
     display: block;
     position: sticky;
-    top: calc(var(--header-height) + var(--space-4));
+    top: calc(var(--header-height) + var(--space-16));   /* = its place on arrival (page top padding): it never moves */
     width: min(36vw, calc((100vh - var(--header-height) - var(--space-16) - 2rem) * 736 / 1102));
     container-type: inline-size;
     background: var(--color-bg);      /* what the photo multiplies onto */
+  }
+}
+
+/* narrow screens: the copy placed in the article's text, before the
+   paragraph the quote comes from (script in blog/single.html) */
+.pdv__affiche.pdv__affiche--texte {
+  display: block;
+  position: static;
+  width: min(100%, 360px);
+  margin: var(--space-8) auto;
+  container-type: inline-size;
+  background: var(--color-bg);
+}
+
+@media (min-width: 1100px) {
+  .pdv__affiche.pdv__affiche--texte {
+    display: none;
   }
 }
 
@@ -1996,7 +2014,7 @@ a.etapes__item.is-active:hover {
   font-family: var(--font-poster);
   font-weight: 800;
   font-stretch: 87.5%;
-  font-size: 14cqw;
+  font-size: 10cqw;
   margin-block: auto;      /* centred on the paper */
   line-height: 1.05;
   color: var(--color-text);
@@ -2005,7 +2023,7 @@ a.etapes__item.is-active:hover {
 
 /* quotes over 60 characters: smaller, so they stay on the paper */
 .pdv__affiche-citation--longue {
-  font-size: 9.5cqw;
+  font-size: 8cqw;
 }
 
 .pdv__affiche-pied {
@@ -2037,6 +2055,38 @@ a.etapes__item.is-active:hover {
 
 .une:hover .une__lire {
   color: var(--color-text);
+}
+
+/* an article page: same header codes as the front page, then the text at
+   reading width */
+.article__tete {
+  max-width: 52rem;
+  margin-bottom: var(--space-12);
+}
+
+.article__tete .back-link {
+  display: inline-block;
+  margin-bottom: var(--space-8);
+}
+
+.article__titre {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-stretch: 87.5%;
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-6);
+  text-wrap: balance;
+}
+
+.article__texte {
+  max-width: var(--reading-width);
+}
+
+/* hyphenated words in titles never break at the hyphen */
+.insecable {
+  white-space: nowrap;
 }
 
 /* the other articles: numbered list with outlined numbers, thin orange rules */

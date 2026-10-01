@@ -1,0 +1,13 @@
+{{/* The crumpled paper poster with an article's quote (`citation` front
+     matter), pinned in the right column of "Points de vue" and of the
+     articles (wide screens only). Context: the article page.
+     Same photo as the white paper poster on the home page. */}}
+{{- $page := . -}}
+{{- with .Params.citation }}
+<aside class="pdv__affiche">
+  <a class="pdv__affiche-papier" href="{{ $page.RelPermalink }}" tabindex="-1" aria-hidden="true">
+    <span class="pdv__affiche-citation{{ if gt (len .) 60 }} pdv__affiche-citation--longue{{ end }}">«&nbsp;{{ . }}&nbsp;»</span>
+    <span class="pdv__affiche-pied">Points de vue</span>
+  </a>
+</aside>
+{{- end }}

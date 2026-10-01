@@ -5,10 +5,6 @@ showTableOfContents: true
 layout: "applications"
 ---
 
-Chaque projet ci-dessous répond à une étape clé d'un projet marketing. Ce sont des applications construites pour des secteurs très différents, qui illustrent une même capacité : comprendre un contexte, identifier le bon levier, et construire la solution adaptée.
-
----
-
 <h2 id="geomarketing">Comprendre son marché <a href="https://geomarketing.leplusgrandnombre.fr/" target="_blank" rel="noopener noreferrer" class="tool-name">geomarketing</a></h2>
 
 **Le contexte.** L'emplacement est un pari à haut risque. Porteurs de projets ou enseignes : choisir une adresse pour un commerce est une décision lourde de conséquences financières. Pourtant, elle repose souvent sur l'intuition. Faute d'une vision consolidée du quartier, vous risquez d'investir là où vos clients ne passent pas ou dans une zone en déclin.

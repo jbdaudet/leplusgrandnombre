@@ -1,0 +1,58 @@
+{{ define "main" }}
+{{/* An article of "Points de vue", in the same layout as the list: on the
+     logo's axis, category + date, big serif title, standfirst, then the text;
+     on wide screens the poster with the article's quote stays pinned on the
+     right. */}}
+<div class="pdv pdv--article">
+  <div class="pdv__grille">
+    <article class="pdv__contenu">
+
+      <header class="article__tete">
+        <a href="/blog/" class="back-link">&#8592; Points de vue</a>
+        <p class="pdv__meta">
+          {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+        </p>
+        <h1 class="article__titre reveal reveal--from-bottom">{{ partial "titre-insecable.html" .Title }}</h1>
+        {{- with .Description }}
+        <p class="une__chapo">{{ . }}</p>
+        {{- end }}
+      </header>
+
+      <div class="page-content article__texte">
+        {{ .Content }}
+      </div>
+
+    </article>
+    {{ partial "affiche-citation.html" . }}
+  </div>
+</div>
+
+<script>
+  /* Narrow screens: the poster has no column, so a copy goes into the text,
+     just before the paragraph its quote comes from (the paragraph sharing
+     the most words with the quote; quotes may be slightly reworded). */
+  (function () {
+    var affiche = document.querySelector('.pdv__affiche');
+    var texte = document.querySelector('.article__texte');
+    if (!affiche || !texte) return;
+    function mots(s) {
+      return s.toLowerCase().replace(/[’']/g, ' ').replace(/[^a-zà-ÿ0-9 ]/g, ' ')
+              .split(/\s+/).filter(function (m) { return m.length > 2; });
+    }
+    var cite = mots(affiche.querySelector('.pdv__affiche-citation').textContent);
+    var meilleur = null, score = 0;
+    texte.querySelectorAll('p').forEach(function (p) {
+      var dans = mots(p.textContent), n = 0;
+      cite.forEach(function (m) { if (dans.indexOf(m) !== -1) n++; });
+      if (n > score) { score = n; meilleur = p; }
+    });
+    if (!meilleur) return;
+    // a paragraph inside a box (e.g. the conclusion): the poster goes before the box
+    while (meilleur.parentNode !== texte) meilleur = meilleur.parentNode;
+    var copie = affiche.cloneNode(true);
+    copie.classList.add('pdv__affiche--texte');
+    meilleur.parentNode.insertBefore(copie, meilleur);
+  })();
+</script>
+{{ end }}

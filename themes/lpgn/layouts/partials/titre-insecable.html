@@ -1,0 +1,12 @@
+{{/* A title whose hyphenated words never break at the hyphen
+     ("sauvera-t-il" stays whole). Usage: {{ partial "titre-insecable.html" .Title }}
+     Returns safe HTML. */}}
+{{- $mots := slice -}}
+{{- range split . " " -}}
+  {{- if in . "-" -}}
+    {{- $mots = $mots | append (printf `<span class="insecable">%s</span>` (. | htmlEscape)) -}}
+  {{- else -}}
+    {{- $mots = $mots | append (. | htmlEscape) -}}
+  {{- end -}}
+{{- end -}}
+{{- delimit $mots " " | safeHTML -}}
