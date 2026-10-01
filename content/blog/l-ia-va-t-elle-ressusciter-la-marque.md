@@ -2,7 +2,6 @@
 title: "L'IA va-t-elle ressusciter la marque ?"
 date: 2026-10-01
 draft: false
-surligne: "la marque"   # phrase highlighted when the article is the front page of "Points de vue"
 citation: "Il choisira ce qui lui fait envie."   # quote on the poster beside the front page of "Points de vue"
 description: "Quand l'IA filtre les critères objectifs et ne laisse que deux ou trois options valides, le consommateur choisit ce qui lui fait envie. De quoi faire remonter la pub vers le désir."
 categories: ["marketing", "IA"]

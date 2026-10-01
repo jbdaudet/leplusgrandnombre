@@ -1949,15 +1949,6 @@ a.etapes__item.is-active:hover {
   text-wrap: balance;
 }
 
-/* the highlighted phrase: an orange block under the lower half of the
-   letters, as in the reference */
-.pdv__surligne {
-  background: linear-gradient(transparent 58%, var(--color-accent) 58%, var(--color-accent) 92%, transparent 92%);
-  -webkit-box-decoration-break: clone;
-          box-decoration-break: clone;
-  padding: 0 0.06em;
-}
-
 .une__corps {
   flex: 1;
   min-width: 0;
@@ -1970,16 +1961,21 @@ a.etapes__item.is-active:hover {
   display: none;
 }
 
+/* wide screens: the poster has its own right column and stays pinned under
+   the header while the articles scroll; as large as the screen height allows */
 @media (min-width: 1100px) {
-  .une {
-    max-width: 1400px;
+  .pdv__grille {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-16);
+    align-items: start;
   }
 
   .pdv__affiche {
     display: block;
-    flex-shrink: 0;
-    align-self: center;
-    width: clamp(280px, 24vw, 380px);
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
+    width: min(36vw, calc((100vh - var(--header-height) - 2rem) * 736 / 1102));
     container-type: inline-size;
     background: var(--color-bg);      /* what the photo multiplies onto */
   }
@@ -1987,6 +1983,7 @@ a.etapes__item.is-active:hover {
 
 .pdv__affiche-papier {
   display: flex;
+  color: inherit;
   flex-direction: column;
   justify-content: space-between;
   aspect-ratio: 736 / 1102;
@@ -2099,27 +2096,6 @@ a.etapes__item.is-active:hover {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-text-secondary);
-}
-
-/* the section name, upright in the right margin, as their "De nos principes" */
-.pdv__vertical {
-  display: none;
-}
-
-@media (min-width: 1100px) {
-  .pdv__vertical {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: -4rem;
-    transform: translate(50%, -50%) rotate(90deg);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: var(--color-accent);
-    white-space: nowrap;
-  }
 }
 
 @media (max-width: 639px) {

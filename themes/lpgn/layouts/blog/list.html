@@ -1,9 +1,11 @@
 {{ define "main" }}
 {{/* "Points de vue", laid out like a review: the latest article as the
-     front page (big serif title, one highlighted phrase from the `surligne`
-     front matter, its standfirst), then the others as a numbered list with
-     outlined numbers and thin orange rules. Everything on the logo's axis. */}}
+     front page (big serif title, its standfirst), then the others as a numbered list with
+     outlined numbers and thin orange rules. On wide screens, a large poster
+     with the front page's quote (`citation`) stays pinned in a right column
+     while the list scrolls. Everything on the logo's axis. */}}
 {{- $articles := .Pages.ByDate.Reverse -}}
+{{- $une := index $articles 0 -}}
 <div class="pdv">
 
   <header class="pdv__tete">
@@ -13,62 +15,63 @@
     {{- end }}
   </header>
 
-  {{- with index $articles 0 }}
-  {{- $titre := .Title | htmlEscape }}
-  {{- with .Params.surligne }}
-  {{- $mot := . | htmlEscape }}
-  {{- $titre = replace $titre $mot (printf `<span class="pdv__surligne">%s</span>` $mot) 1 }}
-  {{- end }}
-  <a class="une reveal" href="{{ .RelPermalink }}">
-    <span class="pdv__num" aria-hidden="true">01</span>
-    <div class="une__corps">
-    <p class="pdv__meta">
-      {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
-    </p>
-    <h2 class="une__titre">{{ $titre | safeHTML }}</h2>
-    {{- with .Description }}
-    <p class="une__chapo">{{ . }}</p>
-    {{- end }}
-    <span class="une__lire">Lire&nbsp;→</span>
+  <div class="pdv__grille">
+    <div class="pdv__contenu">
+
+      {{- with $une }}
+      <a class="une reveal" href="{{ .RelPermalink }}">
+        <span class="pdv__num" aria-hidden="true">01</span>
+        <div class="une__corps">
+          <p class="pdv__meta">
+            {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+          </p>
+          <h2 class="une__titre">{{ .Title }}</h2>
+          {{- with .Description }}
+          <p class="une__chapo">{{ . }}</p>
+          {{- end }}
+          <span class="une__lire">Lire&nbsp;→</span>
+        </div>
+      </a>
+      {{- end }}
+
+      {{- with after 1 $articles }}
+      <div class="pdv__suite">
+        <ol class="pdv__liste">
+          {{- range $i, $p := . }}
+          <li class="pdv__item reveal">
+            <a href="{{ .RelPermalink }}">
+              <span class="pdv__num" aria-hidden="true">{{ printf "%02d" (add $i 2) }}</span>
+              <span class="pdv__corps">
+                <span class="pdv__meta">
+                  {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
+                  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
+                </span>
+                <span class="pdv__item-titre">{{ .Title }}</span>
+                {{- with .Description }}
+                <span class="pdv__chapo">{{ . }}</span>
+                {{- end }}
+              </span>
+            </a>
+          </li>
+          {{- end }}
+        </ol>
+      </div>
+      {{- end }}
+
     </div>
-    {{- with .Params.citation }}
-    {{/* the article's quote on the crumpled paper poster (same photo as the
-         white paper poster on the home page) */}}
-    <span class="pdv__affiche" aria-hidden="true">
-      <span class="pdv__affiche-papier">
+
+    {{- with $une }}{{ with .Params.citation }}
+    {{/* the front page's quote on the crumpled paper poster (same photo as
+         the white paper poster on the home page); it links to the article */}}
+    <aside class="pdv__affiche">
+      <a class="pdv__affiche-papier" href="{{ $une.RelPermalink }}" tabindex="-1" aria-hidden="true">
         <span class="pdv__affiche-citation">«&nbsp;{{ . }}&nbsp;»</span>
         <span class="pdv__affiche-pied">Points de vue</span>
-      </span>
-    </span>
-    {{- end }}
-  </a>
-  {{- end }}
-
-  {{- with after 1 $articles }}
-  <div class="pdv__suite">
-    <span class="pdv__vertical" aria-hidden="true">Points de vue</span>
-    <ol class="pdv__liste">
-      {{- range $i, $p := . }}
-      <li class="pdv__item reveal">
-        <a href="{{ .RelPermalink }}">
-          <span class="pdv__num" aria-hidden="true">{{ printf "%02d" (add $i 2) }}</span>
-          <span class="pdv__corps">
-            <span class="pdv__meta">
-              {{- with .Params.categories }}<span class="pdv__cat">{{ index . 0 }}</span>{{ end -}}
-              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-fr.html" .Date }}</time>
-            </span>
-            <span class="pdv__item-titre">{{ .Title }}</span>
-            {{- with .Description }}
-            <span class="pdv__chapo">{{ . }}</span>
-            {{- end }}
-          </span>
-        </a>
-      </li>
-      {{- end }}
-    </ol>
+      </a>
+    </aside>
+    {{- end }}{{ end }}
   </div>
-  {{- end }}
 
 </div>
 {{ end }}
