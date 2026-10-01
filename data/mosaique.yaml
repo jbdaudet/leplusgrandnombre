@@ -2,47 +2,32 @@
 # questions clients ask, on square tiles (4 columns x 2 rows on desktop,
 # 2 columns on phones). Questions and visuals alternate like a chequerboard.
 # type: question | visuel ; fond: background colour.
-# Visuals (themes/lpgn/assets/img/situations/) are cut down to the essential
-# and all brought to the same 3:2 format by Hugo: `etapes` are successive
-# crops ("WxH anchor"), then a 3:2 fill anchored on `ancre`. They are shown in
-# monochrome, multiplied onto the tile colour (tone on tone); `inverse` flips
-# a dark slide first.
+# Visuals: `image` (path under themes/lpgn/assets/), optional; a visual tile
+# without one stays an empty colour tile. Cropping options: `etapes` are
+# successive crops ("WxH anchor"), then a 3:2 fill anchored on `ancre`;
+# `inverse` flips a dark slide. Images are shown in monochrome, multiplied
+# onto the tile colour (tone on tone).
 cases:
   - type: question
     texte: "Pourquoi mes ventes stagnent alors que je dépense plus en pub ?"
     lien: "#demo"
     fond: "#c8643f"
   - type: visuel
-    image: "img/situations/parcours.jpg"
-    alt: "Graphe des parcours de navigation vers l'achat"
     fond: "#e3dccd"
-    ancre: "Center"
   - type: question
     texte: "Où ouvrir ma prochaine boutique ?"
     lien: "/applications/#geomarketing"
     fond: "#1f2a3a"
   - type: visuel
-    image: "img/situations/privacy.jpg"
-    alt: "Frise des réglementations sur la protection des données et des taux de consentement"
     fond: "#d6d4cf"
-    inverse: true
-    etapes: ["1073x620 Right", "1073x520 Bottom"]
-    ancre: "Right"
   - type: visuel
-    image: "img/situations/first-party.jpg"
-    alt: "Schéma d'enrichissement des données clients first-party"
     fond: "#d6d4cf"
-    etapes: ["1389x715 Top", "1389x605 Bottom"]
-    ancre: "Left"
   - type: question
     texte: "Quel message va vraiment toucher mes clients ?"
     lien: "/applications/#signal"
     fond: "#3b3340"
   - type: visuel
-    image: "img/situations/app-site.jpg"
-    alt: "Visites, ajouts au panier et achats, entre l'application et le site"
     fond: "#e3dccd"
-    ancre: "Left"
   - type: question
     texte: "Mes indicateurs m'aident-ils vraiment à décider ?"
     lien: "/applications/#theshiftproject"
