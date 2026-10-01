@@ -1945,7 +1945,7 @@ a.etapes__item.is-active:hover {
 .fondateur__carte {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);   /* barely there: the border draws the tile, as in the reference */
 }
 
 .fondateur__photo {
@@ -2011,14 +2011,16 @@ a.etapes__item.is-active:hover {
     grid-column: 7 / 13;
     grid-row: 2 / 3;
     align-self: end;
-    margin-bottom: var(--space-12);
+    margin-bottom: 3.5rem;
   }
 
-  /* second card below, overlapping the photo's bottom edge */
+  /* second card below, laid over the bottom of the photo and of the first
+     card (it sits on top) */
   .fondateur__carte--2 {
     grid-column: 3 / 11;
     grid-row: 3;
-    margin-top: calc(-1 * var(--space-12));
+    margin-top: -5rem;   /* overlaps only the bottom padding of the first card */
+    z-index: 2;
   }
 }
 
