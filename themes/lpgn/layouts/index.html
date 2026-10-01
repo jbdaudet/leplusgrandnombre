@@ -60,9 +60,15 @@
   </div>
 </section>
 
-{{/* Scroll-driven demo: one wheel/swipe gesture = one step. Script in baseof. */}}
-<section class="demo-steps" data-video="/demo/demo-arbre-light.mp4" data-poster="/demo/demo-arbre-light-poster.jpg" aria-label="Démo de la restitution Delta">
+{{/* Scroll-driven demo: one wheel/swipe gesture = one step, images only. Script in baseof. */}}
+<section class="demo-steps"
+         data-sequence="/demo/sequence-hd/t{ss}-{fff}.webp"
+         data-arrets="/demo/arrets-hd/arret-{nn}.webp"
+         data-video="/demo/demo-arbre-hd.mp4" data-poster="/demo/demo-arbre-hd-poster.jpg"
+         aria-label="Démo de la restitution Delta">
   <video muted playsinline preload="none"></video>
+  <canvas width="1916" height="1028"></canvas>
+  <img class="arret" alt="" aria-hidden="true">
 </section>
 
 <section class="illus-banner references">

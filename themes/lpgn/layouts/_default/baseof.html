@@ -383,14 +383,21 @@
        step, whatever its amplitude; gestures during a transition are ignored.
        Only going DOWN is captured: scrolling up always leaves the demo in one
        go, and the demo silently rewinds once it is out of sight below.
+       Rendering is 100% images (no <video> displayed: GPU drivers retouch the
+       video layer's colours, and drawImage(video) is unreliable on Windows):
+       transitions are WebP frame sequences drawn on a canvas, still states are
+       HD WebP shown in an overlay. The mp4 is only the reduced-motion fallback.
        Site adaptations vs the reference: the fixed header slides away while
        the demo is under it, the anti-crossing wall uses behavior:'instant'
-       (html has scroll-behavior:smooth), and the 17 MB video loads only on
-       approach. */
+       (html has scroll-behavior:smooth), and the ~10 MB of images load only
+       on approach. */
     (function () {
       var section = document.querySelector('.demo-steps');
       if (!section) return;
       var video = section.querySelector('video');
+      var toile = section.querySelector('canvas');
+      var pinceau = toile.getContext('2d');
+      var calque = section.querySelector('.arret');
 
       // hide the header as long as the demo sits under it (keeps the whole frame visible)
       var header = document.querySelector('.site-header');
@@ -404,62 +411,72 @@
         cacheHeader();
       }
 
-      // load the video ~1.5 screens before it shows up, not on page load
+      // accessibility: visitor refuses animations -> plain video with controls
+      // (the only case where the mp4 is loaded)
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        video.src = section.getAttribute('data-video');
+        video.poster = section.getAttribute('data-poster');
+        video.preload = 'metadata';
+        video.controls = true;
+        section.classList.add('demo-steps--video');
+        return;
+      }
+
+      // 12 states; between two consecutive states, a frame sequence.
+      // SEGMENTS = frame count of each transition (files t{ss}-{fff}.webp): goes with the files
+      var SEGMENTS = [18, 23, 22, 18, 12, 20, 22, 22, 22, 22, 20];
+      var CADENCE = 22;         // frames drawn per second (sequence sampled at 16 fps -> ~1.4x real time)
+      var SEUIL = 12;           // minimal gesture amplitude (deltaY)
+      var ACCALMIE = 250;       // ms of calm required between two gestures (anti-inertia)
+      var SORTIE = 500;         // ms of calm before giving the scroll back at the end
+      var FIN = SEGMENTS.length;          // index of the last state
+
+      var gabaritSeq = section.getAttribute('data-sequence');
+      var gabaritArr = section.getAttribute('data-arrets');
+      function ch2(n) { return ('0' + n).slice(-2); }
+      function ch3(n) { return ('00' + n).slice(-3); }
+
+      // preload, ~2 screens before the section shows up: the 12 HD stills first,
+      // then the transitions segment by segment, in playing order
+      var arrets = [], frames = SEGMENTS.map(function () { return []; });
       var charge = false;
       function charger() {
         if (charge) return;
         charge = true;
-        video.poster = section.getAttribute('data-poster');
-        video.preload = 'auto';
-        video.src = section.getAttribute('data-video');
-        video.load();
+        for (var i = 0; i <= FIN; i++) {
+          var im = new Image();
+          im.src = gabaritArr.replace('{nn}', ch2(i + 1));
+          arrets.push(im);
+        }
+        (function suite(s) {
+          if (s >= FIN) return;
+          var restants = SEGMENTS[s];
+          for (var f = 1; f <= SEGMENTS[s]; f++) (function (f) {
+            var im = new Image();
+            im.onload = im.onerror = function () { if (--restants === 0) suite(s + 1); };
+            im.src = gabaritSeq.replace('{ss}', ch2(s + 1)).replace('{fff}', ch3(f));
+            frames[s][f - 1] = im;
+          })(f);
+        })(0);
       }
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
           if (entries[0].isIntersecting) { charger(); io.disconnect(); }
-        }, { rootMargin: '150% 0px' });
+        }, { rootMargin: '200% 0px' });
         io.observe(section);
       } else {
         charger();
       }
 
-      // accessibility: visitor refuses animations -> plain video with controls
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        video.controls = true;
-        return;
+      var idx = 0, anim = null, prev = 0, dernierGeste = 0;
+      // anim = { s: segment being played, sens: +1|-1, pos: floating frame index }
+
+      function enTransition() { return anim !== null; }
+
+      function pas() {
+        anim = { s: idx, sens: 1, pos: 0 };
+        idx++;
       }
-
-      // video STATES (seconds), frame-accurate for this exact mp4: do not edit
-      var POSES = [
-        0.2,    // l'arbre au repos
-        2.5,    // le volet Search payant, haut
-        3.8,    // le volet, défilé (constats + détails), souris encore posée
-        6.1,    // retour vue héros, souris encore posée
-        8.0,    // restitution : l'intro
-        9.3,    // le point de départ (cadrage), carte posée
-        10.4,   // ruptures de stock (caméra posée, swap à ~10,55)
-        11.4,   // search payant (dernière frame avant le swap)
-        12.2,   // meilleures clientes (posée, swap à ~12,3)
-        13.2,   // promotions (posée, swap à ~13,33)
-        14.1,   // retours (posée, transition catalogue à 14,2)
-        15.5    // le plan de reconquête (fin)
-      ];
-      var VITESSE = 1.6;        // transition playback speed (x real time)
-      var SEUIL = 12;           // minimal gesture amplitude (deltaY)
-      var ACCALMIE = 250;       // ms of calm required between two gestures (anti-inertia)
-      var SORTIE = 500;         // ms of calm before giving the scroll back at an end
-
-      var idx = 0, courant = POSES[0], duree = 0, prev = 0, dernierGeste = 0;
-
-      video.addEventListener('loadedmetadata', function () {
-        duree = video.duration;
-        video.currentTime = POSES[0];
-      });
-
-      function enTransition() { return Math.abs(courant - POSES[idx]) > 0.08; }
-
-      // distance between the section top and its aligned position (viewport top)
-      function ecart() { return section.getBoundingClientRect().top; }
 
       // is the section "engaged" (filling the screen, ready to capture the wheel)?
       function engagee() {
@@ -469,41 +486,40 @@
 
       // engaged but not aligned: the first gesture realigns
       var alignement = 0;
-      function malAlignee() { return Math.abs(ecart()) > 4; }
+      function malAlignee() { return Math.abs(section.getBoundingClientRect().top) > 4; }
       function recale() {
         var t = performance.now();
         if (t - alignement < 700) return;           // one realignment at a time
         alignement = t;
-        scrollTo({ top: scrollY + ecart(), behavior: 'smooth' });
+        scrollTo({ top: scrollY + section.getBoundingClientRect().top, behavior: 'smooth' });
       }
 
       // anti-crossing wall: a violent scroll down must never carry the page past
-      // the video until the sequence is at its end. The
-      // realignment is SYNCHRONOUS, inside the scroll listener (an
-      // IntersectionObserver fires too late: the page overshoots then comes back).
+      // the section until the sequence is at its end. The realignment is
+      // SYNCHRONOUS, inside the scroll listener (an IntersectionObserver fires
+      // too late: the page overshoots then comes back).
       var dernierY = scrollY, descend = true;
       addEventListener('scroll', function () {
         if (scrollY !== dernierY) descend = scrollY > dernierY;
         var r = section.getBoundingClientRect();
         if (r.bottom > 0 && r.top < innerHeight) {                // section on screen
-          if (descend && idx < POSES.length - 1 && r.top < -4) {
+          if (descend && idx < FIN && r.top < -4) {
             scrollTo({ top: scrollY + r.top, behavior: 'instant' });  // sharp: kills the inertia
             alignement = performance.now();
           }
-        } else if (r.top >= innerHeight && idx !== 0) {
-          idx = 0; courant = POSES[0];                             // left upwards: rewind, unseen
+        } else if (r.top >= innerHeight && (idx !== 0 || anim)) {
+          idx = 0; anim = null;                                    // left upwards: rewind, unseen
         }
         dernierY = scrollY;
       }, { passive: true });
 
       addEventListener('wheel', function (e) {
         if (!engagee()) return;
-        var bas = e.deltaY > 0;
-        if (!bas) return;              // going up: never captured, one scroll leaves
+        if (e.deltaY <= 0) return;     // going up: never captured, one scroll leaves
         var t = performance.now();
         // at the end, only give the scroll back once the last view is SETTLED:
         // transition over, and a distinct gesture (not the previous step's inertia)
-        if (idx === POSES.length - 1) {
+        if (idx === FIN) {
           if (enTransition() || t - dernierGeste < SORTIE) {
             e.preventDefault();
             dernierGeste = t;          // blocked inertia resets the calm
@@ -519,7 +535,7 @@
           return;
         }
         dernierGeste = t;
-        idx++;
+        pas();
       }, { passive: false });
 
       // touch: one swipe = one step
@@ -530,25 +546,41 @@
         var d = touchY - e.touches[0].clientY;
         if (Math.abs(d) < 30) return;
         if (d < 0) { touchY = null; return; }   // swiping back up: never captured
-        if (idx === POSES.length - 1) {
+        if (idx === FIN) {
           if (enTransition() || performance.now() - dernierGeste < SORTIE) { e.preventDefault(); }
           touchY = null; return;
         }
         e.preventDefault();
         if (malAlignee()) { recale(); touchY = null; return; }
-        if (!enTransition()) idx++;
+        if (!enTransition()) pas();
         touchY = null;
       }, { passive: false });
 
-      // never play(): currentTime is advanced in a rAF loop capped by VITESSE
+      function prete(im) { return im && im.complete && im.naturalWidth > 0; }
+      function dessine(im) { pinceau.drawImage(im, 0, 0, toile.width, toile.height); }
+
+      var fondDessine = -1;   // last still painted in the canvas (under the overlay)
+
       function boucle(now) {
         var dt = Math.min((now - prev) / 1000, 0.05) || 0.016; prev = now;
-        if (duree) {
-          var cible = Math.min(POSES[idx], duree);
-          var pas = VITESSE * dt, d = cible - courant;
-          courant += Math.abs(d) <= pas ? d : (d > 0 ? pas : -pas);
-          if (Math.abs(video.currentTime - courant) > 0.02) video.currentTime = courant;
+        if (anim) {
+          var seq = frames[anim.s];
+          var cible = Math.min(anim.pos + CADENCE * dt, seq.length - 1);
+          var im = seq[Math.round(cible)];
+          if (prete(im)) {               // frame not loaded yet -> hold the previous one
+            anim.pos = cible;
+            dessine(im);
+            fondDessine = -1;
+            if (anim.pos >= seq.length - 1) anim = null;
+          }
         }
+        var posee = !anim;
+        if (posee && arrets[idx]) {
+          if (calque.src !== arrets[idx].src) calque.src = arrets[idx].src;
+          // the canvas under the overlay gets the still too: never an empty background
+          if (fondDessine !== idx && prete(arrets[idx])) { dessine(arrets[idx]); fondDessine = idx; }
+        }
+        calque.style.opacity = posee && prete(arrets[idx]) ? '1' : '0';
         requestAnimationFrame(boucle);
       }
       requestAnimationFrame(boucle);
