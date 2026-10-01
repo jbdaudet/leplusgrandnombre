@@ -1569,19 +1569,74 @@ html:has(.demo-steps) {
 .demo-steps {
   /* --b: tablet bezel; --demo-w: width of the screen, which canvas and HD
      overlay share exactly (pixel-aligned frames, the cross-fade must stay
-     invisible). The tablet fits 92% of the width and 88% of the height. */
+     invisible). The tablet fits 92% of the width (minus --cote, the room
+     for "Passer la démo" on its right) and 88% of the height (minus --sous,
+     the room for it below on narrow screens). */
   --b: clamp(8px, 1.4vw, 20px);
-  --demo-w: min(calc(92vw - 2 * var(--b)), calc((88vh - 2 * var(--b)) * 1916 / 1028));
-  --demo-w: min(calc(92vw - 2 * var(--b)), calc((88dvh - 2 * var(--b)) * 1916 / 1028));
+  --cote: 0px;
+  --sous: 4rem;
+  --demo-w: min(calc(92vw - 2 * var(--b) - var(--cote)), calc((88vh - var(--sous) - 2 * var(--b)) * 1916 / 1028));
+  --demo-w: min(calc(92vw - 2 * var(--b) - var(--cote)), calc((88dvh - var(--sous) - 2 * var(--b)) * 1916 / 1028));
   position: relative;
   height: 100vh;
   height: 100dvh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
   overflow: hidden;
   background: var(--color-bg);   /* breaks with the grey bands around */
   position: sticky;
   top: 0;
+}
+
+/* "Passer la démo": arrow in a circle, label beside it; right of the tablet
+   on wide screens, below it on narrow ones */
+@media (min-width: 900px) {
+  .demo-steps {
+    --cote: 12rem;
+    --sous: 0px;
+    flex-direction: row;
+  }
+}
+
+.demo-passer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.demo-passer__rond {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-white);
+  font-size: var(--text-lg);
+  line-height: 1;
+  transition: border-color var(--transition-base), transform var(--transition-base);
+}
+
+.demo-passer:hover {
+  color: var(--color-accent);
+}
+
+.demo-passer:hover .demo-passer__rond {
+  border-color: var(--color-accent);
+  transform: translateY(2px);
 }
 
 /* the tablet: dark bezel, thin metal edge, camera on the top bezel */

@@ -426,6 +426,14 @@
       var libre = false;        // sequence over: spare height removed, scroll free
       function liberer() { libre = true; piste.classList.add('is-libre'); }
 
+      // "Passer la démo": free the scroll, then glide to what follows the demo
+      var passer = section.querySelector('.demo-passer');
+      if (passer) passer.addEventListener('click', function () {
+        liberer();
+        var suite = piste.nextElementSibling;
+        if (suite) scrollTo({ top: scrollY + suite.getBoundingClientRect().top, behavior: 'smooth' });
+      });
+
       // hide the header as long as the demo sits under it (keeps the whole frame visible)
       var header = document.querySelector('.site-header');
       if (header) {
