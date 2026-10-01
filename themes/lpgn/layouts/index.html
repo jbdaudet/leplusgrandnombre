@@ -6,7 +6,7 @@
     <div class="container">
 
       {{- with .Params.phrase -}}
-      <p class="hero__phrase reveal reveal--from-bottom">Des solutions <span class="hero__kw hero__kw--data">data</span> et <span class="hero__kw hero__kw--ia">IA</span></p>
+      <p class="hero__phrase reveal reveal--from-bottom">Des solutions <span class="hero__groupe"><span class="hero__kw hero__kw--data">data</span> et <span class="hero__kw hero__kw--ia">IA</span></span></p>
       {{- end -}}
 
       {{- with .Params.subtitle -}}
@@ -151,7 +151,7 @@
     <p class="passerelle__titre reveal">Et à chaque étape de la chaîne marketing, un cas à tester&nbsp;:</p>
     <ul class="passerelle__cas reveal reveal--delay-1">
       {{- range . }}{{ if .demo_url }}
-      <li><a href="{{ .learn_url }}"><span class="passerelle__num">{{ .number }}</span>{{ strings.TrimSuffix "." .title }}</a></li>
+      <li><a href="{{ .learn_url }}">{{ strings.TrimSuffix "." .title }}</a></li>
       {{- end }}{{ end }}
     </ul>
     <a href="/applications/#parcours" class="passerelle__tout reveal reveal--delay-2">Voir tout le parcours&nbsp;→</a>
