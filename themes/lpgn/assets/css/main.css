@@ -1445,12 +1445,16 @@ th {
   color: var(--color-text-secondary);
 }
 
-/* White paper poster: the photo of a crumpled white poster, as is (only its
-   white margins cropped). Sizes follow the poster width (cqw). */
+/* White paper poster: the photo of a crumpled white poster, whole and as is.
+   Multiply lets its white surround melt into the grey band while keeping
+   the photo's own shading. The padding puts the text on the paper (the
+   paper spans ~7% to 95% of the photo's width, ~8% to 91% of its height).
+   Sizes follow the photo width (cqw). */
 .affiche {
   display: block;
-  width: min(100%, 360px);
+  width: min(100%, 400px);
   container-type: inline-size;
+  background: var(--color-surface);   /* what the photo multiplies onto (.reveal isolates the blend) */
   color: var(--color-text);
   text-align: left;
 }
@@ -1463,17 +1467,17 @@ th {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  aspect-ratio: 1 / 1.414;
-  padding: 9cqw 8cqw 8cqw;
-  container-type: inline-size;
-  background: url("/img/affiche.jpg") 50% 46% / 116% 122% no-repeat #fff;
+  aspect-ratio: 736 / 1102;
+  padding: 19cqw 13cqw 22cqw 15cqw;
+  background: url("/img/affiche.jpg") center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
 }
 
 .affiche__marque {
   color: var(--color-accent);
   font-family: var(--font-poster);
   font-weight: 800;
-  font-size: 6cqw;
+  font-size: 5.2cqw;
   letter-spacing: 0.18em;
 }
 
@@ -1484,7 +1488,7 @@ th {
   font-family: var(--font-poster);
   font-weight: 800;
   font-stretch: 87.5%;
-  font-size: 17.5cqw;
+  font-size: 15cqw;
   line-height: 0.92;
   letter-spacing: -0.02em;
 }
@@ -1497,7 +1501,7 @@ th {
 .affiche__pied {
   align-self: flex-end;
   font-family: var(--font-mono);
-  font-size: 4.2cqw;
+  font-size: 3.6cqw;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-accent);
