@@ -79,9 +79,12 @@
   <div class="container">
     {{- with .Site.Data.references -}}
     {{- with .eyebrow }}<p class="references__eyebrow reveal">{{ . }}</p>{{ end -}}
-    {{- range .clients }}
+    {{/* Carousel: one card per client, swiped or switched with the arrows / dots. Script in baseof. */}}
+    <div class="references__carousel reveal reveal--delay-1">
+    <div class="references__track">
+    {{- range $i, $c := .clients }}
     {{- $client := . }}
-    <article class="reference reveal reveal--delay-1">
+    <article class="reference" aria-roledescription="slide" aria-label="{{ add $i 1 }} / {{ len $.Site.Data.references.clients }}">
       <div class="reference__card">
         <a class="reference__logo" href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }}">
           {{- with .logo }}<img src="{{ . }}" alt="{{ $client.name }}" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()">{{ end }}
@@ -107,6 +110,19 @@
       </div>
     </article>
     {{- end }}
+    </div>
+    {{- if gt (len .clients) 1 }}
+    <div class="references__nav">
+      <button type="button" class="references__btn references__btn--prev" aria-label="Référence précédente">←</button>
+      <div class="references__dots">
+        {{- range $i, $c := .clients }}
+        <button type="button" class="references__dot" aria-label="{{ $c.name }}"></button>
+        {{- end }}
+      </div>
+      <button type="button" class="references__btn references__btn--next" aria-label="Référence suivante">→</button>
+    </div>
+    {{- end }}
+    </div>
     {{- end }}
   </div>
 </section>

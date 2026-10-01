@@ -1166,9 +1166,96 @@ th {
   color: var(--color-text-tertiary);
 }
 
-.reference {
+/* carousel: the cards sit side by side in a horizontal snap track */
+.references__carousel {
   max-width: 880px;
   margin: 0 auto;
+}
+
+.references__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  /* room for the card shadow, which overflow would otherwise clip */
+  padding-bottom: var(--space-12);
+  margin-bottom: calc(-1 * var(--space-8));
+}
+
+.references__track::-webkit-scrollbar {
+  display: none;
+}
+
+.reference {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  display: flex;           /* cards of a row share the tallest height */
+}
+
+.reference + .reference {
+  margin-left: var(--space-6);
+}
+
+.reference .reference__card {
+  flex: 1;
+}
+
+/* sits on the band's grey so the scroll line stops behind it, as behind the cards */
+.references__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  width: fit-content;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-surface);
+}
+
+.references__btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity var(--transition-base), border-color var(--transition-base), color var(--transition-base);
+}
+
+.references__btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.references__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.references__dots {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.references__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+  transition: background var(--transition-base), transform var(--transition-base);
+}
+
+.references__dot.is-active {
+  background: var(--color-accent);
+  transform: scale(1.25);
 }
 
 /* white card sits on the grey band and hides the scroll line behind it */
@@ -1240,6 +1327,7 @@ th {
 .reference__hl {
   color: var(--color-accent);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .reference__text {

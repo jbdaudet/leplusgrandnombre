@@ -94,6 +94,57 @@
       thumb.addEventListener('pointercancel', lacher);
     })();
 
+    /* References carousel: arrows and dots drive the horizontal snap track,
+       which also scrolls natively (swipe, trackpad). It moves on by itself
+       every AUTO ms while on screen, and holds while hovered, focused or
+       touched (never under prefers-reduced-motion). */
+    (function () {
+      var track = document.querySelector('.references__track');
+      if (!track) return;
+      var slides = track.children;
+      var prev = document.querySelector('.references__btn--prev');
+      var next = document.querySelector('.references__btn--next');
+      var dots = document.querySelectorAll('.references__dot');
+      if (!prev || slides.length < 2) return;
+      function courant() { return Math.round(track.scrollLeft / track.clientWidth); }
+      function aller(i) {
+        i = Math.max(0, Math.min(slides.length - 1, i));
+        track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+      }
+      function maj() {
+        var i = Math.min(slides.length - 1, Math.round(track.scrollLeft / (track.scrollWidth - track.clientWidth) * (slides.length - 1)));
+        prev.disabled = i === 0;
+        next.disabled = i === slides.length - 1;
+        for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('is-active', k === i);
+      }
+      prev.addEventListener('click', function () { aller(courant() - 1); relancer(); });
+      next.addEventListener('click', function () { aller(courant() + 1); relancer(); });
+      for (var k = 0; k < dots.length; k++) (function (k) { dots[k].addEventListener('click', function () { aller(k); relancer(); }); })(k);
+      track.addEventListener('scroll', maj, { passive: true });
+      addEventListener('resize', maj);
+      maj();
+
+      var AUTO = 7000;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var carousel = track.parentElement, timer = null, visible = false, tenu = false;
+      function relancer() {
+        clearInterval(timer); timer = null;
+        if (visible && !tenu) timer = setInterval(function () {
+          var i = courant();
+          aller(i === slides.length - 1 ? 0 : i + 1);        // loops back to the first
+        }, AUTO);
+      }
+      function tenir(v) { return function () { tenu = v; relancer(); }; }
+      carousel.addEventListener('mouseenter', tenir(true));
+      carousel.addEventListener('mouseleave', tenir(false));
+      carousel.addEventListener('focusin', tenir(true));
+      carousel.addEventListener('focusout', tenir(false));
+      track.addEventListener('touchstart', relancer, { passive: true });
+      new IntersectionObserver(function (es) {
+        visible = es[0].isIntersecting; relancer();
+      }, { threshold: 0.5 }).observe(carousel);
+    })();
+
     /* Burger menu */
     (function () {
       var burger = document.querySelector('.burger');
