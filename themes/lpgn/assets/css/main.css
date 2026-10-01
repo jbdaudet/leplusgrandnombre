@@ -1102,9 +1102,13 @@ th {
 }
 
 /* Client references band */
+.references {
+  padding: var(--space-16) 0;   /* room around the carousel (it was flush with the band edges) */
+}
+
 .references .container {
   position: relative;
-  z-index: 1;              /* above the line segment */
+  z-index: 1;
 }
 
 .references__eyebrow {

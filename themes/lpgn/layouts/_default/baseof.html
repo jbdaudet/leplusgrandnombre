@@ -431,7 +431,8 @@
       if (passer) passer.addEventListener('click', function () {
         liberer();
         var suite = piste.nextElementSibling;
-        if (suite) scrollTo({ top: scrollY + suite.getBoundingClientRect().top, behavior: 'smooth' });
+        // stop where the band starts just under the (reappearing) site header
+        if (suite) scrollTo({ top: scrollY + suite.getBoundingClientRect().top - (header ? header.offsetHeight : 0), behavior: 'smooth' });
       });
 
       // hide the header as long as the demo sits under it (keeps the whole frame visible)
