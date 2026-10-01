@@ -1452,7 +1452,7 @@ th {
    Sizes follow the photo width (cqw). */
 .affiche {
   display: block;
-  width: min(100%, 400px);
+  width: min(100%, 520px);
   container-type: inline-size;
   background: var(--color-surface);   /* what the photo multiplies onto (.reveal isolates the blend) */
   color: var(--color-text);
@@ -1570,7 +1570,7 @@ th {
   .delta__head .affiche {
     margin-top: 0;
     justify-self: start;
-    width: min(100%, 400px);
+    width: min(100%, 520px);
   }
 }
 
