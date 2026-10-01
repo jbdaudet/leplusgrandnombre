@@ -1572,6 +1572,20 @@ html:has(.demo-steps) {
     pointer-events: none;
     text-decoration: none;
   }
+
+  /* without the demo below, the intro band and the references close up */
+  .delta {
+    min-height: 0;
+    padding-bottom: var(--space-4);
+  }
+
+  .delta__head {
+    margin-bottom: 0;
+  }
+
+  .references {
+    padding-top: var(--space-8);
+  }
 }
 
 .demo-steps {
