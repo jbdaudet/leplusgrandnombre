@@ -18,15 +18,11 @@
 
   <div class="hero__line-zone" aria-hidden="true">
     <div class="hero__pulse-line"></div>
-    <div class="hero__scroll-track">
-      <div class="hero__scroll-fill"></div>
-    </div>
   </div>
 </section>
 
 <section class="manifesto">
   <div class="data-burst" aria-hidden="true"></div>
-  <div class="manifesto__line" aria-hidden="true"><div class="manifesto__line-fill"></div></div>
   <div class="container">
 
     <div class="manifesto__movement reveal">
@@ -47,10 +43,6 @@
 </section>
 
 <section class="delta">
-  {{/* The thread: a thin curve leaving the word "envie", sweeping through the
-       right margin around the poster, then diving to the demo. Path computed and
-       drawn on scroll in baseof. */}}
-  <svg class="fil" aria-hidden="true"><path class="fil__trace"/></svg>
   <div class="container">
     <div class="delta__head reveal">
       <div class="delta__text">
@@ -100,7 +92,6 @@
 </div>
 
 <section class="illus-banner references">
-  <div class="banner__line" aria-hidden="true"><div class="banner__line-fill"></div></div>
   <div class="container">
     {{- with .Site.Data.references -}}
     {{- with .eyebrow }}<p class="references__eyebrow reveal">{{ . }}</p>{{ end -}}
@@ -155,12 +146,6 @@
 {{- with .Site.Data.apps -}}
 <section class="journey">
   <div class="container">
-
-    <div class="journey__line" aria-hidden="true">
-      <div class="journey__line-fill"></div>
-      {{/* Blur overlay in the heading zone */}}
-      <div class="journey__line-blur"></div>
-    </div>
 
     <h2 class="journey__heading reveal">De la compréhension de votre marché à la fidélisation client :</h2>
     <p class="journey__subheading reveal reveal--delay-1">pas des produits, des preuves — un outil concret à chaque étape, que vous pouvez tester maintenant.</p>

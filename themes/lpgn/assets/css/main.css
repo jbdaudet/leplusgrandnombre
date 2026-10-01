@@ -892,28 +892,6 @@ th {
   opacity: 0;
 }
 
-/* Scroll track — first segment of the continuous line (connects into the
-   manifesto segment below). */
-.hero__scroll-track {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.hero__scroll-fill {
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-warm);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 50ms linear;
-}
-
 .hero__body {
   max-width: var(--reading-width);
   margin: 0 auto;
@@ -964,33 +942,6 @@ th {
   min-height: 100vh;
   display: flex;
   align-items: center;
-}
-
-/* One continuous line segment for this section (see the others: hero scroll
-   track, banner, journey). Centered, behind the text, drawn by the global head. */
-.manifesto__line,
-.banner__line,
-.delta__line {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 3px;
-  height: 100%;
-  transform: translateX(-50%);
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.manifesto__line-fill,
-.banner__line-fill,
-.delta__line-fill {
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-warm);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 60ms linear;
 }
 
 .manifesto .container {
@@ -1391,24 +1342,6 @@ th {
   text-align: center;
 }
 
-/* the thread: thin, plain orange, behind the content (the containers are
-   z-index 1), reaching up into the manifesto to start from "envie" */
-.fil {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  z-index: 0;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.fil__trace {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
 .delta .container {
   position: relative;
   z-index: 1;              /* above the line segment */
@@ -1737,45 +1670,6 @@ html:has(.demo-steps) {
   letter-spacing: 0.02em;
   position: relative;
   z-index: 2;
-}
-
-/* Vertical connecting line */
-/* Sharp line — hidden in the heading zone */
-.journey__line {
-  position: absolute;
-  left: 19px;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--color-border);
-  overflow: hidden;
-  /* Invisible in heading zone, sharp below it */
-  mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 160px, black 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 140px, black 160px, black 100%);
-}
-
-/* Blurred duplicate — only visible in the heading zone */
-.journey__line-blur {
-  position: absolute;
-  left: 19px;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--color-border);
-  filter: blur(3px);
-  pointer-events: none;
-  /* Visible in heading zone, fades out before the sharp line takes over */
-  mask-image: linear-gradient(to bottom, black 0%, black 110px, transparent 160px, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 110px, transparent 160px, transparent 100%);
-}
-
-.journey__line-fill {
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-warm);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 50ms linear;
 }
 
 .journey__steps {
@@ -3306,19 +3200,6 @@ pre.mermaid svg .cluster-label {
     max-width: 860px;
   }
 
-  .journey__line {
-    left: 50%;
-    transform: translateX(-50%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 240px, black 280px, black 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 240px, black 280px, black 100%);
-  }
-
-  .journey__line-blur {
-    left: 50%;
-    transform: translateX(-50%);
-    mask-image: linear-gradient(to bottom, black 0%, black 200px, transparent 280px, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 200px, transparent 280px, transparent 100%);
-  }
 
   .journey__steps {
     gap: var(--space-8);
