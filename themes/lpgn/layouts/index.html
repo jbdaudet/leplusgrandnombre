@@ -18,6 +18,39 @@
 
 </section>
 
+{{/* Mosaic (data/mosaique.yaml): analysis visuals and the questions clients
+     ask, on muted colour tiles. A still pause between the two animations
+     (hero network, manifesto data cloud). Visuals are cropped and resized by
+     Hugo; question tiles link to the matching case. */}}
+{{- with .Site.Data.mosaique }}
+<section class="mosaique" aria-label="Les questions qu'on nous pose">
+  {{- range .cases }}
+  {{- $classe := printf "mosaique__case mosaique__case--%s%s reveal" .type (cond (default false .large) " mosaique__case--large" "") }}
+  {{- if eq .type "question" }}
+  <a class="{{ $classe }}" href="{{ .lien }}" style="--fond: {{ .fond | safeCSS }}">
+    <span class="mosaique__question">{{ .texte }}</span>
+    <span class="mosaique__voir" aria-hidden="true">→</span>
+  </a>
+  {{- else }}
+  {{- $alt := .alt }}
+  {{- $rogne := default 0 .rogne }}
+  <div class="{{ $classe }}" style="--fond: {{ .fond | safeCSS }}">
+    {{- with resources.Get .image }}
+    {{- $img := . }}
+    {{- if gt $rogne 0 }}
+    {{- $img = $img.Crop (printf "%dx%d Top" $img.Width (sub $img.Height $rogne)) }}
+    {{- end }}
+    {{- $a := $img.Resize "720x webp q80" }}
+    {{- $b := $img.Resize "1400x webp q75" }}
+    <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 720w, {{ $b.RelPermalink }} 1400w"
+         sizes="(min-width: 900px) 45vw, 100vw" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ $alt }}" loading="lazy">
+    {{- end }}
+  </div>
+  {{- end }}
+  {{- end }}
+</section>
+{{- end }}
+
 <section class="manifesto">
   <div class="data-burst" aria-hidden="true"></div>
   <div class="container">
