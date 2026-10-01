@@ -459,6 +459,7 @@ th {
   letter-spacing: -0.015em;
   white-space: nowrap;
   flex-shrink: 0;
+  margin-left: -13px;      /* the logo PNG's transparent margin: the drawn "l" sits on the axis (on the link, not the img, or max-width squeezes it) */
 }
 
 .site-header__brand:hover {
@@ -469,7 +470,6 @@ th {
   height: 40px;
   width: auto;
   display: block;
-  margin-left: -13px;      /* the PNG's transparent margin: the drawn "l" sits on the axis */
 }
 
 /* ============================================================
