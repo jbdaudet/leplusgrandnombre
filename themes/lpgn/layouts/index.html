@@ -25,7 +25,7 @@
 {{- with .Site.Data.mosaique }}
 <section class="mosaique" aria-label="Les questions qu'on nous pose">
   {{- range .cases }}
-  {{- $classe := printf "mosaique__case mosaique__case--%s%s reveal" .type (cond (default false .large) " mosaique__case--large" "") }}
+  {{- $classe := printf "mosaique__case mosaique__case--%s%s" .type (cond (default false .large) " mosaique__case--large" "") }}
   {{- if eq .type "question" }}
   <a class="{{ $classe }}" href="{{ .lien }}" style="--fond: {{ .fond | safeCSS }}">
     <span class="mosaique__question">{{ partial "titre-insecable.html" .texte }}</span>

@@ -941,7 +941,9 @@ th {
    HOMEPAGE — MOSAIC (analysis visuals + client questions)
    ============================================================ */
 
-/* edge to edge, thin white gutters; 6 columns x square rows on desktop,
+/* No animation at all (no reveal, no hover motion): a still pause for the
+   eye between the hero and the manifesto. Edge to edge, thin white
+   gutters; 6 columns x square rows on desktop,
    2 columns on phones (a "large" tile spans two columns) */
 .mosaique {
   display: grid;
@@ -991,11 +993,6 @@ th {
   align-self: flex-end;
   font-size: clamp(1rem, 1.4vw, 1.5rem);
   line-height: 1;
-  transition: transform var(--transition-base);
-}
-
-.mosaique__case--question:hover .mosaique__voir {
-  transform: translateX(6px);
 }
 
 /* visual tile: the analysis laid on the colour, like a poster on a wall */
