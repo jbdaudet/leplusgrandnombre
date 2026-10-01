@@ -1559,6 +1559,21 @@ html:has(.demo-steps) {
   height: auto;
 }
 
+/* Phones: the tablet is too small to read, the demo is left out (its images
+   are never loaded: the preload waits for it to approach the screen). What
+   pointed to it goes too: the hint, and Δelta stays plain text. */
+@media (max-width: 767px) {
+  .demo-piste,
+  .delta__hint {
+    display: none;
+  }
+
+  .delta__subtitle a.accent {
+    pointer-events: none;
+    text-decoration: none;
+  }
+}
+
 .demo-steps {
   /* --b: tablet bezel; --demo-w: width of the screen, which canvas and HD
      overlay share exactly (pixel-aligned frames, the cross-fade must stay
