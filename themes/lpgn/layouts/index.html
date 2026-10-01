@@ -28,7 +28,7 @@
   {{- $classe := printf "mosaique__case mosaique__case--%s%s reveal" .type (cond (default false .large) " mosaique__case--large" "") }}
   {{- if eq .type "question" }}
   <a class="{{ $classe }}" href="{{ .lien }}" style="--fond: {{ .fond | safeCSS }}">
-    <span class="mosaique__question">{{ .texte }}</span>
+    <span class="mosaique__question">{{ partial "titre-insecable.html" .texte }}</span>
     <span class="mosaique__voir" aria-hidden="true">→</span>
   </a>
   {{- else }}
