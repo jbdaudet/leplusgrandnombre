@@ -20,7 +20,7 @@
 <!-- CSS first — critical for rendering -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Raleway:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Raleway:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&family=Playfair:opsz,wdth,wght@5..1200,87.5,800&display=swap">
 
 {{- $css := resources.Get "css/main.css" | fingerprint -}}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">

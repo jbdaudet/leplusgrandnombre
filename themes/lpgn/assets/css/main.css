@@ -25,6 +25,7 @@
   --font-sans:     'Raleway', 'Segoe UI', sans-serif;
   --font-heading:  'Space Grotesk', 'Raleway', sans-serif;
   --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+  --font-poster:   'Playfair', 'Didot', Georgia, serif;   /* white paper poster only */
   --font-size-base: 16px;
   --line-height: 1.6;
   --line-height-heading: 1.08;
@@ -1444,24 +1445,107 @@ th {
   color: var(--color-text-secondary);
 }
 
-.delta__cta {
-  white-space: nowrap;
-  display: inline-block;
-  padding: var(--space-3) var(--space-6);
-  background: var(--color-accent);
+/* White paper poster: a crumpled orange poster pasted, slightly askew, over
+   a glimpse of the restitution. Sizes follow the poster width (cqw). */
+.affiche {
+  position: relative;
+  display: block;
+  width: min(100%, 360px);
+  padding: 18% 0 0 14%;        /* room for the picture behind, top-left */
+  container-type: inline-size;
   color: var(--color-white);
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-pill);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  text-align: left;
 }
 
-.delta__cta:hover {
+.affiche:hover {
   opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+}
+
+.affiche__fond {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 92%;
+  max-width: none;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
+  filter: saturate(0.6);
+}
+
+.affiche__papier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1 / 1.414;
+  padding: 9cqw 8cqw 8cqw;
+  container-type: inline-size;
+  background: linear-gradient(160deg, #ff7d4d 0%, var(--color-accent) 45%, #e8551f 100%);
+  transform: rotate(1.5deg);
+  box-shadow:
+    0 30px 50px -24px rgba(0, 0, 0, 0.45),
+    0 6px 12px -6px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.affiche:hover .affiche__papier {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow:
+    0 40px 60px -26px rgba(0, 0, 0, 0.5),
+    0 8px 16px -8px rgba(0, 0, 0, 0.25);
+}
+
+/* the creases: an SVG lighting of a stretched noise, blended over the orange */
+.affiche__plis {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: soft-light;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.affiche__marque,
+.affiche__titre,
+.affiche__pied {
+  position: relative;          /* above the creases */
+}
+
+.affiche__marque {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-size: 6cqw;
+  letter-spacing: 0.18em;
+}
+
+/* the title in steps, like a typeset poster */
+.affiche__titre {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-stretch: 87.5%;
+  font-size: 17.5cqw;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.affiche__titre span:nth-child(1) { padding-left: 0; }
+.affiche__titre span:nth-child(2) { padding-left: 18%; }
+.affiche__titre span:nth-child(3) { padding-left: 42%; }
+.affiche__titre span:nth-child(4) { padding-left: 4%; }
+
+.affiche__pied {
+  align-self: flex-end;
+  font-family: var(--font-mono);
+  font-size: 4.2cqw;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  padding-bottom: 2px;
 }
 
 .delta__hint {
@@ -1472,36 +1556,29 @@ th {
   padding: 0 var(--space-2);
 }
 
-/* side by side only where the button fits beside the centred text */
-@media (min-width: 1200px) {
-  .delta .container {
-    max-width: 1280px;
-  }
+.delta__head .affiche {
+  margin-top: var(--space-6);
+}
 
+/* text on the left, poster on the right, the line running between them */
+@media (min-width: 960px) {
   .delta__head {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);   /* equal sides: text stays centred */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
-    gap: var(--space-6);
+    column-gap: var(--space-16);
   }
 
   .delta__text {
-    grid-column: 2;
-    max-width: none;
-  }
-
-  .delta__title {
-    white-space: nowrap;
-  }
-
-  .delta__subtitle {
-    max-width: 30em;
-    margin: 0 auto;
-  }
-
-  .delta__cta {
-    grid-column: 3;
     justify-self: end;
+    max-width: 30em;
+    text-align: left;
+  }
+
+  .delta__head .affiche {
+    margin-top: 0;
+    justify-self: start;
+    width: min(100%, 400px);
   }
 }
 
