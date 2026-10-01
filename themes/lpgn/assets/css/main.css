@@ -2024,12 +2024,6 @@ a.etapes__item.is-active:hover {
   }
 }
 
-/* phones: same wide left margin as the bridge */
-@media (max-width: 767px) {
-  .fondateur .container {
-    padding-left: 15%;
-  }
-}
 
 /* Home: bridge to the cases of the applications page */
 .passerelle {
