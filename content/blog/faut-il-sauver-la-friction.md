@@ -3,6 +3,7 @@ title: "Faut-il sauver la friction ?"
 date: 2026-07-17
 draft: false
 surligne: "la friction"   # phrase highlighted when the article is the front page of "Points de vue"
+citation: "La friction faisait le travail de sélection naturelle."   # quote on the poster beside the front page of "Points de vue"
 description: "Le vibe working absorbe les frictions et sauve des projets qui auraient capoté. Mais la friction faisait aussi le tri : sans elle, on se noie sous les idées presque bonnes."
 categories: ["IA", "organisation"]
 ---

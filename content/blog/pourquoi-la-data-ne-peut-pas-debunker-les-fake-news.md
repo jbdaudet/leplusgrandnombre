@@ -3,6 +3,7 @@ title: "Pourquoi la data ne pourra jamais « débunker » les fake news"
 date: 2026-04-01
 draft: false
 surligne: "« débunker »"   # phrase highlighted when the article is the front page of "Points de vue"
+citation: "Nous sommes tous le complotiste de quelqu'un d'autre."   # quote on the poster beside the front page of "Points de vue"
 description: "Face à une fake news, notre premier réflexe est de sortir les chiffres. Mais la data est souvent le problème, pas la solution."
 categories: ["data", "société"]
 ---

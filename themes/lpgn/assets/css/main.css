@@ -1958,6 +1958,63 @@ a.etapes__item.is-active:hover {
   padding: 0 0.06em;
 }
 
+.une__corps {
+  flex: 1;
+  min-width: 0;
+}
+
+/* the poster beside the front page: the crumpled paper photo, whole, its
+   white surround melted into the page (multiply on the page colour), the
+   article's quote in the poster serif. Wide screens only. */
+.pdv__affiche {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .une {
+    max-width: 1400px;
+  }
+
+  .pdv__affiche {
+    display: block;
+    flex-shrink: 0;
+    align-self: center;
+    width: clamp(280px, 24vw, 380px);
+    container-type: inline-size;
+    background: var(--color-bg);      /* what the photo multiplies onto */
+  }
+}
+
+.pdv__affiche-papier {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 736 / 1102;
+  padding: 22cqw 15cqw 24cqw 17cqw;   /* the text stays on the paper */
+  background: url("/img/affiche.jpg") center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+}
+
+.pdv__affiche-citation {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-stretch: 87.5%;
+  font-size: 14cqw;
+  margin-block: auto;      /* centred on the paper */
+  line-height: 1.05;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.pdv__affiche-pied {
+  align-self: flex-end;
+  font-family: var(--font-mono);
+  font-size: 3.6cqw;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+}
+
 .une__chapo {
   max-width: 40rem;
   font-size: var(--text-xl);

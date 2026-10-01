@@ -32,6 +32,16 @@
     {{- end }}
     <span class="une__lire">Lire&nbsp;→</span>
     </div>
+    {{- with .Params.citation }}
+    {{/* the article's quote on the crumpled paper poster (same photo as the
+         white paper poster on the home page) */}}
+    <span class="pdv__affiche" aria-hidden="true">
+      <span class="pdv__affiche-papier">
+        <span class="pdv__affiche-citation">«&nbsp;{{ . }}&nbsp;»</span>
+        <span class="pdv__affiche-pied">Points de vue</span>
+      </span>
+    </span>
+    {{- end }}
   </a>
   {{- end }}
 
