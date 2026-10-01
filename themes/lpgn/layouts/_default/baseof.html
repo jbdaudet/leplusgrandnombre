@@ -44,6 +44,56 @@
       checkScroll();
     })();
 
+    /* Floating scrollbar: the native one is hidden in CSS (it took its own
+       lane, a light strip beside dark sections). Mouse/trackpad devices only. */
+    (function () {
+      if (!matchMedia('(pointer: fine)').matches) return;
+      var bar = document.createElement('div');
+      bar.className = 'scrollbar';
+      bar.setAttribute('aria-hidden', 'true');
+      var thumb = document.createElement('div');
+      thumb.className = 'scrollbar__thumb';
+      bar.appendChild(thumb);
+      document.body.appendChild(bar);
+
+      var doc = document.documentElement, idle;
+      function place() {
+        var vh = innerHeight, full = doc.scrollHeight;
+        if (full <= vh + 1) { bar.hidden = true; return; }
+        bar.hidden = false;
+        var h = Math.max(40, vh * vh / full);
+        thumb.style.height = h + 'px';
+        thumb.style.top = (scrollY / (full - vh)) * (vh - h) + 'px';
+      }
+      addEventListener('scroll', function () {
+        place();
+        bar.classList.add('is-active');
+        clearTimeout(idle);
+        idle = setTimeout(function () { bar.classList.remove('is-active'); }, 900);
+      }, { passive: true });
+      addEventListener('resize', place, { passive: true });
+      addEventListener('load', place);
+      place();
+
+      // drag the thumb to scroll
+      var startY, startScroll;
+      thumb.addEventListener('pointerdown', function (e) {
+        startY = e.clientY; startScroll = scrollY;
+        thumb.setPointerCapture(e.pointerId);
+        thumb.classList.add('is-dragging');
+        e.preventDefault();
+      });
+      thumb.addEventListener('pointermove', function (e) {
+        if (!thumb.classList.contains('is-dragging')) return;
+        var vh = innerHeight, full = doc.scrollHeight;
+        var ratio = (full - vh) / (vh - thumb.offsetHeight);
+        scrollTo({ top: startScroll + (e.clientY - startY) * ratio, behavior: 'instant' });
+      });
+      function lacher() { thumb.classList.remove('is-dragging'); }
+      thumb.addEventListener('pointerup', lacher);
+      thumb.addEventListener('pointercancel', lacher);
+    })();
+
     /* Burger menu */
     (function () {
       var burger = document.querySelector('.burger');

@@ -95,29 +95,43 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + var(--space-6));
-  scrollbar-gutter: stable;   /* no layout shift when the scrollbar appears (no left gutter: it showed as a light strip beside dark sections) */
-  /* light, thin, almost transparent scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  /* native scrollbar hidden: on desktop it took its own lane, showing as a
+     light strip beside dark sections. A floating one replaces it (.scrollbar) */
+  scrollbar-width: none;
 }
 
-/* same look for browsers without scrollbar-color (older Safari) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Floating scrollbar, drawn over the content by the script in baseof */
+.scrollbar {
+  position: fixed;
+  top: 0;
+  right: 2px;
+  bottom: 0;
+  width: 10px;
+  z-index: 200;            /* above the fixed header */
+  pointer-events: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+.scrollbar__thumb {
+  position: absolute;
+  right: 0;
+  width: 6px;
   border-radius: var(--radius-pill);
+  background: rgba(128, 128, 128, 0.35);   /* neutral grey: readable on light and dark sections */
+  opacity: 0.4;
+  pointer-events: auto;
+  cursor: default;
+  transition: opacity 0.3s ease, width 0.15s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+.scrollbar.is-active .scrollbar__thumb,
+.scrollbar__thumb:hover,
+.scrollbar__thumb.is-dragging {
+  opacity: 1;
+  width: 8px;
 }
 
 body {
