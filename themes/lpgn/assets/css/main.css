@@ -1975,7 +1975,7 @@ a.etapes__item.is-active:hover {
     display: block;
     position: sticky;
     top: calc(var(--header-height) + var(--space-4));
-    width: min(36vw, calc((100vh - var(--header-height) - 2rem) * 736 / 1102));
+    width: min(36vw, calc((100vh - var(--header-height) - var(--space-16) - 2rem) * 736 / 1102));
     container-type: inline-size;
     background: var(--color-bg);      /* what the photo multiplies onto */
   }
@@ -2001,6 +2001,11 @@ a.etapes__item.is-active:hover {
   line-height: 1.05;
   color: var(--color-text);
   text-wrap: balance;
+}
+
+/* quotes over 60 characters: smaller, so they stay on the paper */
+.pdv__affiche-citation--longue {
+  font-size: 9.5cqw;
 }
 
 .pdv__affiche-pied {

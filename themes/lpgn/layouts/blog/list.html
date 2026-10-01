@@ -8,15 +8,15 @@
 {{- $une := index $articles 0 -}}
 <div class="pdv">
 
-  <header class="pdv__tete">
-    <h1 class="pdv__titre reveal reveal--from-bottom">{{ .Title }}</h1>
-    {{- with .Description }}
-    <p class="pdv__label">// {{ . }}</p>
-    {{- end }}
-  </header>
-
   <div class="pdv__grille">
     <div class="pdv__contenu">
+
+      <header class="pdv__tete">
+        <h1 class="pdv__titre reveal reveal--from-bottom">{{ .Title }}</h1>
+        {{- with .Description }}
+        <p class="pdv__label">// {{ . }}</p>
+        {{- end }}
+      </header>
 
       {{- with $une }}
       <a class="une reveal" href="{{ .RelPermalink }}">
@@ -66,7 +66,7 @@
          the white paper poster on the home page); it links to the article */}}
     <aside class="pdv__affiche">
       <a class="pdv__affiche-papier" href="{{ $une.RelPermalink }}" tabindex="-1" aria-hidden="true">
-        <span class="pdv__affiche-citation">«&nbsp;{{ . }}&nbsp;»</span>
+        <span class="pdv__affiche-citation{{ if gt (len .) 60 }} pdv__affiche-citation--longue{{ end }}">«&nbsp;{{ . }}&nbsp;»</span>
         <span class="pdv__affiche-pied">Points de vue</span>
       </a>
     </aside>
