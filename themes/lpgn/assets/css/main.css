@@ -1473,7 +1473,21 @@ th {
   mix-blend-mode: multiply;
 }
 
+.affiche__logo {
+  align-self: flex-start;
+  height: 9cqw;
+  width: auto;
+}
+
+/* Delta centred just above the title */
+.affiche__corps {
+  display: flex;
+  flex-direction: column;
+}
+
 .affiche__marque {
+  align-self: center;
+  margin-bottom: 3cqw;
   color: var(--color-accent);
   font-family: var(--font-poster);
   font-weight: 800;
