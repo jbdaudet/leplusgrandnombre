@@ -1431,6 +1431,22 @@ html:has(.demo-steps) {
   scroll-padding-top: 0;
 }
 
+/* The demo is pinned (sticky) in a track taller than the screen: when a fast
+   scroll overshoots before the script can stop it, the overshoot happens in
+   the spare height, the picture does not move, and the script brings the
+   page back unseen. Once the sequence is over (.is-libre) the spare height
+   goes, and the page scrolls on normally. */
+.demo-piste {
+  position: relative;
+  height: 160vh;
+  height: 160dvh;
+  scroll-snap-align: start;
+}
+
+.demo-piste.is-libre {
+  height: auto;
+}
+
 .demo-steps {
   /* canvas and HD overlay share this exact box (pixel-aligned frames, the
      cross-fade must stay invisible): full width, or full height on wide screens */
@@ -1443,8 +1459,8 @@ html:has(.demo-steps) {
   place-items: center;
   overflow: hidden;
   background: #edebe5;     /* matches the images background */
-  scroll-snap-align: start;
-  scroll-margin-top: 0;
+  position: sticky;
+  top: 0;
 }
 
 .demo-steps canvas {

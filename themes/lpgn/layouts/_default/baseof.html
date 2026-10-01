@@ -439,8 +439,9 @@
        HD WebP shown in an overlay. The mp4 is only the reduced-motion fallback.
        Site adaptations vs the reference: the fixed header slides away while
        the demo is under it, the anti-crossing wall uses behavior:'instant'
-       (html has scroll-behavior:smooth), and the ~10 MB of images load only
-       on approach. */
+       (html has scroll-behavior:smooth), the ~10 MB of images load only on
+       approach, and the section is sticky in a taller track (.demo-piste) so
+       that an overshoot the script cannot cancel never moves the picture. */
     (function () {
       var section = document.querySelector('.demo-steps');
       if (!section) return;
@@ -448,12 +449,16 @@
       var toile = section.querySelector('canvas');
       var pinceau = toile.getContext('2d');
       var calque = section.querySelector('.arret');
+      // the track: all scroll positions are measured on it (the section is sticky)
+      var piste = section.parentElement;
+      var libre = false;        // sequence over: spare height removed, scroll free
+      function liberer() { libre = true; piste.classList.add('is-libre'); }
 
       // hide the header as long as the demo sits under it (keeps the whole frame visible)
       var header = document.querySelector('.site-header');
       if (header) {
         var cacheHeader = function () {
-          var r = section.getBoundingClientRect(), h = header.offsetHeight;
+          var r = piste.getBoundingClientRect(), h = header.offsetHeight;
           header.classList.toggle('is-hidden', r.top < h && r.bottom > h);
         };
         addEventListener('scroll', cacheHeader, { passive: true });
@@ -469,6 +474,7 @@
         video.preload = 'metadata';
         video.controls = true;
         section.classList.add('demo-steps--video');
+        liberer();
         return;
       }
 
@@ -547,18 +553,18 @@
 
       // is the section "engaged" (filling the screen, ready to capture the wheel)?
       function engagee() {
-        var r = section.getBoundingClientRect();
+        var r = piste.getBoundingClientRect();
         return r.top < innerHeight * 0.25 && r.bottom > innerHeight * 0.75;
       }
 
       // engaged but not aligned: realign while the step plays (the gesture is not lost)
       var alignement = 0;
-      function malAlignee() { return Math.abs(section.getBoundingClientRect().top) > 4; }
+      function malAlignee() { return Math.abs(piste.getBoundingClientRect().top) > 4; }
       function recale() {
         var t = performance.now();
         if (t - alignement < 700) return;           // one realignment at a time
         alignement = t;
-        scrollTo({ top: scrollY + section.getBoundingClientRect().top, behavior: 'smooth' });
+        scrollTo({ top: scrollY + piste.getBoundingClientRect().top, behavior: 'smooth' });
       }
 
       // one gesture = one step; a gesture during a transition is queued (one max)
@@ -569,20 +575,22 @@
       }
 
       // anti-crossing wall: a violent scroll down must never carry the page past
-      // the section until the sequence is at its end. The realignment is
-      // SYNCHRONOUS, inside the scroll listener (an IntersectionObserver fires
-      // too late: the page overshoots then comes back).
+      // the section until the sequence is over. The realignment is SYNCHRONOUS,
+      // inside the scroll listener (an IntersectionObserver fires too late).
+      // A scroll the browser would not let us cancel (gesture started before
+      // the demo) overshoots into the track's spare height: unseen.
       var dernierY = scrollY, descend = true;
       addEventListener('scroll', function () {
         if (scrollY !== dernierY) descend = scrollY > dernierY;
-        var r = section.getBoundingClientRect();
-        if (r.bottom > 0 && r.top < innerHeight) {                // section on screen
-          if (descend && idx < FIN && r.top < -4) {
+        var r = piste.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < innerHeight) {                // track on screen
+          if (descend && !libre && r.top < -4) {
             scrollTo({ top: scrollY + r.top, behavior: 'instant' });  // sharp: kills the inertia
             alignement = performance.now();
           }
-        } else if (r.top >= innerHeight && (idx !== 0 || anim)) {
+        } else if (r.top >= innerHeight && (idx !== 0 || anim || libre)) {
           idx = 0; anim = null; enAttente = false;                 // left upwards: rewind, unseen
+          libre = false; piste.classList.remove('is-libre');
         }
         dernierY = scrollY;
       }, { passive: true });
@@ -593,10 +601,13 @@
         var t = performance.now();
         var nouveau = nouveauGeste(e.deltaY, t);
         // at the end, give the scroll back once the last view is SETTLED: the
-        // inertia of the last step is held, a new gesture (or a scroll that
-        // keeps going SORTIE ms after the view settled) leaves
+        // inertia of the last step is held, a new gesture leaves at once (and
+        // the loop frees the scroll anyway SORTIE ms after the view settled)
         if (idx === FIN) {
-          if (enTransition() || (!nouveau && t - finTransition < SORTIE)) e.preventDefault();
+          if (!libre) {
+            if (!enTransition() && nouveau) liberer();
+            else e.preventDefault();
+          }
           return;
         }
         e.preventDefault();
@@ -612,7 +623,10 @@
         if (Math.abs(d) < 30) return;
         if (d < 0) { touchY = null; return; }   // swiping back up: never captured
         if (idx === FIN) {
-          if (enTransition() || performance.now() - finTransition < SORTIE) { e.preventDefault(); }
+          if (!libre) {
+            if (!enTransition()) liberer();
+            else e.preventDefault();
+          }
           touchY = null; return;
         }
         e.preventDefault();
@@ -642,6 +656,7 @@
             }
           }
         }
+        if (!libre && idx === FIN && !anim && now - finTransition > SORTIE) liberer();
         var posee = !anim;
         if (posee && arrets[idx]) {
           if (calque.src !== arrets[idx].src) calque.src = arrets[idx].src;
