@@ -55,20 +55,10 @@
         <h2 class="delta__title">Retrouver la croissance</h2>
         <p class="delta__subtitle">Votre chiffre d'affaires recule ou stagne&nbsp;? Nous avons construit <span class="accent">Δelta</span> pour remonter jusqu'aux causes, chiffrées en euros, en un mois.</p>
       </div>
-      {{/* White paper as a crumpled poster pasted over a glimpse of the restitution; the whole collage downloads the PDF */}}
+      {{/* White paper as a crumpled poster; a click downloads the PDF */}}
       <a href="/docs/LPGN-delta-livre-blanc-2026-09.pdf" class="affiche" download
          aria-label="Télécharger le livre blanc Δelta : Retrouver le chemin de la croissance">
-        <img class="affiche__fond" src="/demo/demo-arbre-hd-poster.jpg" alt="" loading="lazy">
         <span class="affiche__papier">
-          <svg class="affiche__plis" aria-hidden="true">
-            <filter id="affiche-plis" x="0" y="0" width="100%" height="100%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.03 0.005" numOctaves="3" seed="7"/>
-              <feDiffuseLighting lighting-color="#fff" surfaceScale="3">
-                <feDistantLight azimuth="210" elevation="55"/>
-              </feDiffuseLighting>
-            </filter>
-            <rect width="100%" height="100%" filter="url(#affiche-plis)"/>
-          </svg>
           <span class="affiche__marque">ΔELTA</span>
           <span class="affiche__titre" aria-hidden="true">
             <span>Retrouver</span>

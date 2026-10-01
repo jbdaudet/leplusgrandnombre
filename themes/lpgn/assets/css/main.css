@@ -1445,15 +1445,13 @@ th {
   color: var(--color-text-secondary);
 }
 
-/* White paper poster: a crumpled orange poster pasted, slightly askew, over
-   a glimpse of the restitution. Sizes follow the poster width (cqw). */
+/* White paper poster: the photo of a crumpled white poster, as is (only its
+   white margins cropped). Sizes follow the poster width (cqw). */
 .affiche {
-  position: relative;
   display: block;
   width: min(100%, 360px);
-  padding: 18% 0 0 14%;        /* room for the picture behind, top-left */
   container-type: inline-size;
-  color: var(--color-white);
+  color: var(--color-text);
   text-align: left;
 }
 
@@ -1461,60 +1459,18 @@ th {
   opacity: 1;
 }
 
-.affiche__fond {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 92%;
-  max-width: none;
-  border-radius: 2px;
-  transform: rotate(-3deg);
-  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
-  filter: saturate(0.6);
-}
-
 .affiche__papier {
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   aspect-ratio: 1 / 1.414;
   padding: 9cqw 8cqw 8cqw;
   container-type: inline-size;
-  background: linear-gradient(160deg, #ff7d4d 0%, var(--color-accent) 45%, #e8551f 100%);
-  transform: rotate(1.5deg);
-  box-shadow:
-    0 30px 50px -24px rgba(0, 0, 0, 0.45),
-    0 6px 12px -6px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-}
-
-.affiche:hover .affiche__papier {
-  transform: rotate(0deg) translateY(-4px);
-  box-shadow:
-    0 40px 60px -26px rgba(0, 0, 0, 0.5),
-    0 8px 16px -8px rgba(0, 0, 0, 0.25);
-}
-
-/* the creases: an SVG lighting of a stretched noise, blended over the orange */
-.affiche__plis {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  mix-blend-mode: soft-light;
-  opacity: 0.75;
-  pointer-events: none;
-}
-
-.affiche__marque,
-.affiche__titre,
-.affiche__pied {
-  position: relative;          /* above the creases */
+  background: url("/img/affiche.jpg") 50% 46% / 116% 122% no-repeat #fff;
 }
 
 .affiche__marque {
+  color: var(--color-accent);
   font-family: var(--font-poster);
   font-weight: 800;
   font-size: 6cqw;
@@ -1544,7 +1500,8 @@ th {
   font-size: 4.2cqw;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  color: var(--color-accent);
+  border-bottom: 1px solid currentColor;
   padding-bottom: 2px;
 }
 
