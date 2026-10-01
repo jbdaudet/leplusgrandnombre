@@ -679,17 +679,19 @@ th {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  text-align: center;
+  text-align: left;
   background: var(--color-bg);
   position: relative;
   overflow: hidden;
 }
 
+/* title + subtitle in the bottom-left corner, aligned on the header logo,
+   with a generous margin below */
 .hero__content {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: var(--space-20);
 }
 
 /* Floating network canvas */
@@ -701,9 +703,15 @@ th {
   pointer-events: none;
 }
 
+/* the hero text hugs the left edge, further out than the page container */
 .hero .container {
   position: relative;
   z-index: 2;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;            /* a flex item: auto margins would centre it */
+  padding-left: clamp(1.5rem, 4vw, 4rem);
+  padding-right: clamp(1.5rem, 4vw, 4rem);
 }
 
 .hero__phrase {
@@ -713,10 +721,16 @@ th {
   color: var(--color-text);
   line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: var(--space-6);
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: var(--space-4);
+}
+
+/* one line each from tablet width up */
+@media (min-width: 900px) {
+  .hero__phrase,
+  .hero__subtitle {
+    white-space: nowrap;
+    max-width: none !important;
+  }
 }
 
 /* Accent word highlight */
@@ -803,11 +817,9 @@ th {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
   font-weight: 400;
-  margin-bottom: var(--space-8);
+  margin-bottom: 0;
   line-height: 1.6;
   max-width: 540px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Keywords start identical to the rest of the subtitle, then light up on scroll:
