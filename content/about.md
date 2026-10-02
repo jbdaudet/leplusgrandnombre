@@ -4,7 +4,7 @@ description: "Ce que je crois, comment je travaille, et pourquoi ça change quel
 layout: "approche"
 
 # 1. The manifesto line, then the story behind the name
-manifeste: "L'expertise data des grands comptes, pour les entreprises qui n'ont pas d'équipe data."
+manifeste: '<span class="approche__ligne">L''expertise data des grands comptes,</span> <span class="approche__ligne">pour les entreprises qui n''ont pas d''équipe data.</span>'
 recit:
   - "Pendant 20 ans, j'ai mis la data au service du marketing de grands comptes : le luxe, l'aérien, l'automobile, la grande consommation. Ces entreprises ont des équipes data, des outils, des années d'historique. Elles savent ce que leur rapporte chaque euro dépensé. (En principe.)"
   - "Avec la digitalisation, votre marque a souvent autant de données, mais personne en interne pour les faire parler. C'est pour vous que j'ai créé Le Plus Grand Nombre.<br>Avec l'aide de l'IA, ce qui demandait une équipe et des temps longs, je le fais aujourd'hui en moins d'un mois."

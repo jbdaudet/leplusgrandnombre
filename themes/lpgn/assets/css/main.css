@@ -4266,44 +4266,28 @@ pre.mermaid svg .cluster-label {
   margin-bottom: var(--space-8);
 }
 
-/* --- grey band across the page: how many convictions, the subtitle
-       beside them, each under a dark rule --- */
-.bandeau {
-  display: grid;
-  gap: var(--space-8) var(--space-12);
-  margin: var(--space-20) calc(-1 * var(--axe)) var(--space-16);
-  padding: var(--space-16) var(--axe);
-  background: var(--color-surface);
+/* --- convictions: a title like the mission's, the page's subtitle below --- */
+.convictions {
+  margin-top: var(--space-24);
+  margin-bottom: var(--space-24);
 }
 
-.bandeau__titre,
-.bandeau__texte {
-  padding-top: var(--space-4);
-  border-top: 2px solid var(--color-text);
-  margin: 0;
+.convictions .approche__h2 {
+  margin-bottom: var(--space-3);
 }
 
-.bandeau__titre {
-  font-family: var(--font-heading);
-  font-size: var(--text-4xl);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
-}
-
-.bandeau__texte {
+.approche__sous-titre {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  letter-spacing: 0.04em;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-12);
 }
 
 /* --- principles: side by side, a small orange number on top --- */
 .principes {
   display: grid;
   gap: var(--space-12);
-  margin-bottom: var(--space-24);
 }
 
 .principe__num {
@@ -4442,9 +4426,14 @@ pre.mermaid svg .cluster-label {
   opacity: 1;
 }
 
+/* the manifesto in two lines, cut after the comma */
+.approche__ligne {
+  display: block;
+}
+
 @media (min-width: 768px) {
   .approche__manifeste {
-    font-size: var(--text-5xl);
+    font-size: var(--text-4xl);
   }
 
   .approche__recit {
@@ -4452,14 +4441,6 @@ pre.mermaid svg .cluster-label {
     column-gap: var(--space-12);
   }
 
-  /* the count on the left, the subtitle beside it */
-  .bandeau {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .bandeau__titre {
-    font-size: var(--text-5xl);
-  }
 }
 
 @media (min-width: 960px) {
@@ -4484,5 +4465,19 @@ pre.mermaid svg .cluster-label {
   .etape::before {
     left: 0;
     top: -7px;
+  }
+}
+
+/* wide screens: each line holds on one row, the size following the width
+   left between the margins (the longer line is ~25em wide), up to 5xl.
+   Narrower, the lines wrap at the 4xl size so the title stays big. */
+@media (min-width: 1200px) {
+  .approche__manifeste {
+    max-width: none;
+    font-size: min(var(--text-5xl), calc((100vw - 2 * var(--axe)) / 25));
+  }
+
+  .approche__ligne {
+    white-space: nowrap;
   }
 }
