@@ -3,7 +3,8 @@
 # 2 columns on phones). Questions and visuals alternate like a chequerboard.
 # type: question | visuel ; fond: background colour of a question tile.
 # Visuals: `image` (path under themes/lpgn/assets/), square, shown edge to
-# edge on white, as is.
+# edge on white, in black and white. Optional `fonce` (gamma, < 1) darkens
+# pale lines while white stays white.
 cases:
   - type: question
     texte: "Pourquoi mes ventes stagnent alors que je dépense plus en pub ?"
@@ -11,6 +12,7 @@ cases:
     fond: "#c8643f"
   - type: visuel
     image: "img/mosaique/visuel3.jpg"
+    fonce: 0.5
     alt: "Graphe des parcours de navigation vers l'achat"
   - type: question
     texte: "Où ouvrir ma prochaine boutique ?"

@@ -39,6 +39,8 @@
          Lanczos resize per likely tile width (never upscaled), so that the
          browser picks one within a few pixels and barely rescales it */}}
     {{- $src := . }}
+    {{- /* `fonce` (< 1) darkens pale lines, white stays white */}}
+    {{- with $case.fonce }}{{ $src = $src.Filter (images.Gamma .) }}{{ end }}
     {{- $c := cond (lt .Width .Height) .Width .Height }}
     {{- $tailles := slice }}
     {{- range slice 320 400 480 560 640 720 800 900 1000 1100 1200 }}{{ if le . $c }}{{ $tailles = $tailles | append . }}{{ end }}{{ end }}
