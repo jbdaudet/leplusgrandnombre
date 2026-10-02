@@ -744,10 +744,14 @@ th {
   margin-bottom: var(--space-4);
 }
 
-/* the Δelta question runs on two balanced lines */
+/* the question, then the promise on its own line */
 .hero__phrase {
-  max-width: 16em;
+  max-width: 22em;
   text-wrap: balance;
+}
+
+.hero__ligne {
+  display: block;
 }
 
 @media (min-width: 768px) {
