@@ -8,7 +8,7 @@
       {{- with .Site.Params.linkedin }}
       <a href="{{ . }}" class="site-footer__link site-footer__link--icone" target="_blank" rel="noopener noreferrer me">{{ partial "icone-linkedin.html" . }}LinkedIn</a>
       {{- end }}
-      <a href="/politique-de-confidentialite/" class="site-footer__link">Politique de confidentialité</a>
+      <a href="/politique-de-confidentialite/" class="site-footer__link site-footer__link--icone">{{ partial "icone-cadenas.html" . }}Politique de confidentialité</a>
       <a href="#" class="site-footer__link site-footer__link--icone" id="open-cookies">{{ partial "icone-cookie.html" . }}Choix des cookies</a>
     </div>
 
