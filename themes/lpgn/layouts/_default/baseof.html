@@ -751,7 +751,7 @@
           r.selectNodeContents(el || bloc);
           return r.getBoundingClientRect();
         }
-        var a = encre(bloc.querySelector('.hero__phrase')), b = encre(bloc.querySelector('.hero__subtitle'));
+        var a = encre(bloc.querySelector('.hero__phrase')), b = encre(bloc.querySelector('.hero__actions') || bloc.querySelector('.hero__subtitle'));
         var left = Math.min(a.left, b.left), right = Math.max(a.right, b.right);
         zone.cx = (left + right) / 2 - p.left;
         zone.cy = (a.top + b.bottom) / 2 - p.top;

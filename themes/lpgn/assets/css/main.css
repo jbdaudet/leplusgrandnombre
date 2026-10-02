@@ -744,13 +744,43 @@ th {
   margin-bottom: var(--space-4);
 }
 
-/* one line each from tablet width up */
-@media (min-width: 900px) {
-  .hero__phrase,
-  .hero__subtitle {
-    white-space: nowrap;
-    max-width: none !important;
+/* the Δelta question runs on two balanced lines */
+.hero__phrase {
+  max-width: 16em;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .hero__phrase {
+    font-size: var(--text-4xl);
   }
+}
+
+.hero__subtitle .accent {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* demo button, white paper as a plain link beside it (stacked on phones) */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.hero__lien {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.hero__lien:hover {
+  color: var(--color-accent);
+  opacity: 1;
 }
 
 /* "data et IA" never splits: on phones the title breaks after "solutions" */

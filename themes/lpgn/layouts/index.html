@@ -5,18 +5,78 @@
   <div class="hero__content">
     <div class="container">
 
+      {{- /* Δelta is the offer the site sells: the client's question as the title */ -}}
       {{- with .Params.phrase -}}
-      <p class="hero__phrase reveal reveal--from-bottom">Des solutions <span class="hero__groupe"><span class="hero__kw hero__kw--data">data</span> et <span class="hero__kw hero__kw--ia">IA</span></span></p>
+      <h1 class="hero__phrase reveal reveal--from-bottom">{{ . | safeHTML }}</h1>
       {{- end -}}
 
       {{- with .Params.subtitle -}}
-      <p class="hero__subtitle reveal reveal--from-bottom reveal--delay-1">pour accompagner vos envies et relever vos défis, sans jargon ni usine à gaz.</p>
+      <p class="hero__subtitle reveal reveal--from-bottom reveal--delay-1">{{ . | safeHTML }}</p>
       {{- end -}}
+
+      <div class="hero__actions reveal reveal--from-bottom reveal--delay-2">
+        <a href="#demo" class="btn">Voir un exemple de restitution&nbsp;↓</a>
+        <a href="/docs/LPGN-delta-livre-blanc-2026-09.pdf" class="hero__lien" download>Télécharger le livre blanc</a>
+      </div>
 
     </div>
   </div>
 
 </section>
+
+<section class="delta">
+  <div class="container">
+    <div class="delta__head reveal">
+      <div class="delta__text">
+        <p class="delta__eyebrow">Comment fonctionne Δelta</p>
+        <h2 class="delta__title">Ventes, pub, navigation&nbsp;: tout croiser pour trouver les causes</h2>
+        <p class="delta__subtitle"><a href="#demo" class="accent">Δelta</a> isole ce qui fait reculer votre chiffre d'affaires et chiffre chaque cause en euros, pour savoir quoi corriger en premier. La méthode complète est dans le livre blanc.</p>
+      </div>
+      {{/* White paper as a crumpled poster; a click downloads the PDF */}}
+      <a href="/docs/LPGN-delta-livre-blanc-2026-09.pdf" class="affiche" download
+         aria-label="Télécharger le livre blanc Δelta : Retrouver le chemin de la croissance">
+        <span class="affiche__papier">
+          <img class="affiche__logo" src="/logo_lpgn.png" alt="">
+          <span class="affiche__corps">
+            <span class="affiche__marque">ΔELTA</span>
+            <span class="affiche__titre" aria-hidden="true">
+              <span>Retrouver</span>
+              <span>le chemin</span>
+              <span>de la</span>
+              <span>croissance.</span>
+            </span>
+          </span>
+          <span class="affiche__pied">Livre blanc
+            <svg class="affiche__icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 17v3h16v-3"/></svg>
+          </span>
+        </span>
+      </a>
+    </div>
+    <span class="delta__hint reveal reveal--delay-1">Voir un exemple de restitution&nbsp;↓</span>
+  </div>
+</section>
+
+{{/* Scroll-driven demo: one wheel/swipe gesture = one step, images only. Script in baseof. */}}
+<div class="demo-piste" id="demo">
+<section class="demo-steps"
+         data-sequence="/demo/sequence-hd/t{ss}-{fff}.webp"
+         data-arrets="/demo/arrets-hd/arret-{nn}.webp"
+         data-video="/demo/demo-arbre-hd.mp4" data-poster="/demo/demo-arbre-hd-poster.jpg"
+         data-sequence-mobile="/demo/sequence-mobile/t{ss}-{fff}.webp"
+         data-arrets-mobile="/demo/arrets-mobile/arret-{nn}.webp"
+         data-video-mobile="/demo/demo-arbre-mobile.mp4" data-poster-mobile="/demo/demo-arbre-mobile-poster.jpg"
+         aria-label="Démo de la restitution Delta">
+  <div class="demo-ipad">
+    <div class="demo-ipad__screen">
+      <video muted playsinline preload="none"></video>
+      <canvas width="1916" height="1028"></canvas>
+    </div>
+  </div>
+  <button type="button" class="demo-passer">
+    <span class="demo-passer__rond" aria-hidden="true">↓</span>Passer la démo
+  </button>
+</section>
+</div>
 
 {{/* Mosaic (data/mosaique.yaml): analysis visuals and the questions clients
      ask, on muted colour tiles. A still pause between the two animations
@@ -82,60 +142,6 @@
 
   </div>
 </section>
-
-<section class="delta">
-  <div class="container">
-    <div class="delta__head reveal">
-      <div class="delta__text">
-        <p class="delta__eyebrow">La situation qu'on rencontre le plus souvent</p>
-        <h2 class="delta__title">Votre chiffre d'affaires recule ou stagne&nbsp;?</h2>
-        <p class="delta__subtitle">Nous avons construit <a href="#demo" class="accent">Δelta</a> pour remonter jusqu'aux causes, chiffrées en euros, en un mois. Tout est expliqué dans le livre blanc.</p>
-      </div>
-      {{/* White paper as a crumpled poster; a click downloads the PDF */}}
-      <a href="/docs/LPGN-delta-livre-blanc-2026-09.pdf" class="affiche" download
-         aria-label="Télécharger le livre blanc Δelta : Retrouver le chemin de la croissance">
-        <span class="affiche__papier">
-          <img class="affiche__logo" src="/logo_lpgn.png" alt="">
-          <span class="affiche__corps">
-            <span class="affiche__marque">ΔELTA</span>
-            <span class="affiche__titre" aria-hidden="true">
-              <span>Retrouver</span>
-              <span>le chemin</span>
-              <span>de la</span>
-              <span>croissance.</span>
-            </span>
-          </span>
-          <span class="affiche__pied">Livre blanc
-            <svg class="affiche__icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 17v3h16v-3"/></svg>
-          </span>
-        </span>
-      </a>
-    </div>
-    <span class="delta__hint reveal reveal--delay-1">Voir un exemple de restitution&nbsp;↓</span>
-  </div>
-</section>
-
-{{/* Scroll-driven demo: one wheel/swipe gesture = one step, images only. Script in baseof. */}}
-<div class="demo-piste" id="demo">
-<section class="demo-steps"
-         data-sequence="/demo/sequence-hd/t{ss}-{fff}.webp"
-         data-arrets="/demo/arrets-hd/arret-{nn}.webp"
-         data-video="/demo/demo-arbre-hd.mp4" data-poster="/demo/demo-arbre-hd-poster.jpg"
-         data-sequence-mobile="/demo/sequence-mobile/t{ss}-{fff}.webp"
-         data-arrets-mobile="/demo/arrets-mobile/arret-{nn}.webp"
-         data-video-mobile="/demo/demo-arbre-mobile.mp4" data-poster-mobile="/demo/demo-arbre-mobile-poster.jpg"
-         aria-label="Démo de la restitution Delta">
-  <div class="demo-ipad">
-    <div class="demo-ipad__screen">
-      <video muted playsinline preload="none"></video>
-      <canvas width="1916" height="1028"></canvas>
-    </div>
-  </div>
-  <button type="button" class="demo-passer">
-    <span class="demo-passer__rond" aria-hidden="true">↓</span>Passer la démo
-  </button>
-</section>
-</div>
 
 {{/* Bridge to the applications page: the live steps of the journey, each
      linking straight to its case there (the full journey lives on that page). */}}

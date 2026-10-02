@@ -1,6 +1,6 @@
 ---
 title: "Le Plus Grand Nombre"
-description: "Data et IA au service de votre projet marketing : étude de marché, stratégie créative, contenu, automatisation, pilotage par les résultats."
-phrase: "De quoi avez-vous envie ?"
-subtitle: "Des solutions Data et IA pour accompagner vos envies et relever vos défis, sans jargon ni usine à gaz."
+description: "Vos ventes stagnent alors que vous dépensez plus en pub ? Δelta remonte aux causes, chiffrées en euros, à partir de vos données de ventes, de pub et de navigation."
+phrase: "Vos ventes stagnent alors que vous dépensez plus en pub&nbsp;?"
+subtitle: '<span class="accent">Δelta</span> remonte aux causes, chiffrées en euros, à partir de vos données de ventes, de pub et de navigation.'
 ---
