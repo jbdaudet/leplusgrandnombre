@@ -33,7 +33,7 @@ Le point commun : à chaque fois, une réponse chiffrée en euros, pour savoir q
 
 Je ne crois pas au produit miracle qui marche pour tout le monde. Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
-C'est aussi pour ça que je construis ce que je conseille. Mes [démos](/applications/) en sont la preuve : choisir un emplacement, trouver un angle créatif, interroger des données en langage naturel. Des sujets très différents, la même méthode : écouter, comprendre, construire.
+Je ne me contente pas de recommander : je construis les outils que je conseille. Plusieurs sont en ligne, et vous pouvez les [tester](/applications/). Chacun répond à une question différente, mais tous suivent la même méthode : écouter, comprendre, construire.
 
 ## Pourquoi "Le Plus Grand Nombre"
 
