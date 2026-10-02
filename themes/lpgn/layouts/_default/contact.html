@@ -13,9 +13,31 @@
 
   <div class="container">
     <div class="reading-width">
+
+      {{- /* Booking first (Google Calendar page, opened in a new tab: no
+           third-party script, no cookie), the form below for those who
+           prefer to write, LinkedIn last */}}
+      {{- with site.Params.rdv }}
+      <section class="rdv reveal">
+        {{- with $.Params.rdv_texte }}<p class="rdv__texte">{{ . }}</p>{{ end }}
+        <a href="{{ . }}" class="btn" target="_blank" rel="noopener noreferrer">{{ $.Params.rdv_bouton | default "Réserver un créneau" }}&nbsp;→</a>
+      </section>
+      {{- end }}
+
+      {{- with .Params.ecrire }}
+      <h2 class="contact__ecrire">{{ . }}</h2>
+      {{- end }}
+
       <div class="page-content">
         {{ .Content }}
       </div>
+
+      {{- with site.Params.linkedin }}
+      <p class="contact__linkedin">
+        <a href="{{ . }}" target="_blank" rel="noopener noreferrer me">{{ partial "icone-linkedin.html" . }}Ou retrouvez-moi sur LinkedIn</a>
+      </p>
+      {{- end }}
+
     </div>
   </div>
 

@@ -3583,6 +3583,56 @@ a.etapes__item.is-active:hover {
 }
 
 /* ============================================================
+   CONTACT PAGE — booking first, then the form, then LinkedIn
+   ============================================================ */
+
+.rdv {
+  margin-bottom: var(--space-16);
+}
+
+.rdv__texte {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+  max-width: 36em;
+}
+
+/* "Vous préférez écrire ?": a thin rule above, like the lists of the blog */
+.contact__ecrire {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  padding-top: var(--space-10);
+  border-top: 1px solid var(--color-border);
+  margin-bottom: 0;
+}
+
+.contact__linkedin {
+  margin-top: var(--space-10);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.contact__linkedin a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+}
+
+.contact__linkedin a:hover {
+  color: var(--color-accent);
+  opacity: 1;
+}
+
+.contact__linkedin svg {
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+}
+
+/* ============================================================
    CONTACT FORM
    ============================================================ */
 
