@@ -33,7 +33,7 @@ Le point commun : à chaque fois, une réponse chiffrée en euros, pour savoir q
 
 Je ne crois pas au produit miracle qui marche pour tout le monde. Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
-Je ne me contente pas de recommander. Δelta fait d'abord ressortir les causes et les chiffre en euros. Ensuite, selon ce qui en ressort, je vous propose un accompagnement sur mesure pour mettre en place les solutions.
+Je ne me contente pas de recommander : en fonction de ce qui ressort de Δelta, je vous propose un accompagnement sur mesure pour mettre en place les solutions pour récupérer ce CA qui vous échappait jusqu'à aujourd'hui.
 
 ## Pourquoi "Le Plus Grand Nombre"
 
