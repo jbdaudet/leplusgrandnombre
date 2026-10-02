@@ -6,7 +6,7 @@ layout: "approche"
 # 1. The manifesto line, then the story behind the name
 manifeste: "L'expertise data des grands comptes, pour les entreprises qui n'ont pas d'équipe data."
 recit:
-  - "Pendant 20 ans, j'ai mis la data au service du marketing de grands comptes : le luxe, l'aérien, l'automobile, la grande consommation. Ces entreprises ont des équipes data, des outils, des années d'historique. Elles savent ce que leur rapporte chaque euro dépensé."
+  - "Pendant 20 ans, j'ai mis la data au service du marketing de grands comptes : le luxe, l'aérien, l'automobile, la grande consommation. Ces entreprises ont des équipes data, des outils, des années d'historique. Elles savent ce que leur rapporte chaque euro dépensé. (En principe.)"
   - "Une marque qui vend surtout en ligne a souvent autant de données, mais personne en interne pour les faire parler. C'est pour elle que j'ai créé Le Plus Grand Nombre. L'IA rend ça possible : ce qui demandait une équipe et des mois se fait aujourd'hui en moins d'un mois."
 
 # 2. Big figures (only facts already public)
