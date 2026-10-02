@@ -9,17 +9,17 @@
   weight = 10
 
 [[main]]
-  name = "Quelques applications"
+  name = "Démos"
   pageRef = "applications"
   weight = 20
 
 [[main]]
-  name = "Points de vue"
+  name = "Blog"
   pageRef = "blog"
   weight = 30
 
 [[main]]
-  name = "Contact commercial"
+  name = "Parlons-en"
   pageRef = "contact"
   weight = 40
   [main.params]
