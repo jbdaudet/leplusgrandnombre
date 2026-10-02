@@ -1664,35 +1664,6 @@ html:has(.demo-steps) {
   height: auto;
 }
 
-/* Phones: the tablet is too small to read, the demo is left out (its images
-   are never loaded: the preload waits for it to approach the screen). What
-   pointed to it goes too: the hint, and Δelta stays plain text. */
-@media (max-width: 767px) {
-  .demo-piste,
-  .delta__hint {
-    display: none;
-  }
-
-  .delta__subtitle a.accent {
-    pointer-events: none;
-    text-decoration: none;
-  }
-
-  /* without the demo below, the intro band and the references close up */
-  .delta {
-    min-height: 0;
-    padding-bottom: var(--space-4);
-  }
-
-  .delta__head {
-    margin-bottom: 0;
-  }
-
-  .references {
-    padding-top: var(--space-8);
-  }
-}
-
 .demo-steps {
   /* --b: tablet bezel; --demo-w: width of the screen, which canvas and HD
      overlay share exactly (pixel-aligned frames, the cross-fade must stay
@@ -1813,6 +1784,23 @@ html:has(.demo-steps) {
   object-fit: contain;
 }
 .demo-steps--video canvas { display: none; }
+
+/* Phones (.demo-steps--mobile, set by the demo script below 768px): the
+   portrait capture of Delta on a phone, in a phone instead of the tablet.
+   Thin bezel, rounder corners, no camera dot; "Passer la démo" below. */
+.demo-steps.demo-steps--mobile {
+  --b: 7px;
+  --cote: 0px;
+  --sous: 4rem;
+  --demo-w: min(calc(92vw - 2 * var(--b)), calc((88vh - var(--sous) - 2 * var(--b)) * 780 / 1688));
+  --demo-w: min(calc(92vw - 2 * var(--b)), calc((88dvh - var(--sous) - 2 * var(--b)) * 780 / 1688));
+  flex-direction: column;
+}
+
+.demo-steps--mobile .demo-ipad { border-radius: calc(var(--b) * 5); }
+.demo-steps--mobile .demo-ipad::before { display: none; }
+.demo-steps--mobile .demo-ipad__screen { border-radius: calc(var(--b) * 4); }
+.demo-steps--mobile.demo-steps--video video { aspect-ratio: 780 / 1688; }
 
 /* ============================================================
    HOMEPAGE — JOURNEY TIMELINE

@@ -414,6 +414,13 @@
       var video = section.querySelector('video');
       var toile = section.querySelector('canvas');
       var pinceau = toile.getContext('2d');
+      // phones get the portrait variant (brief-demo-site-mobile), picked once at
+      // load: its frames, stills and SEGMENTS always go together
+      var mobile = matchMedia('(max-width: 767px)').matches;
+      if (mobile) section.classList.add('demo-steps--mobile');
+      function attr(n) { return section.getAttribute('data-' + n + (mobile ? '-mobile' : '')); }
+      // frame size of the transitions, width of the HD stills
+      var SEQ_W = mobile ? 780 : 1916, SEQ_H = mobile ? 1688 : 1028, ARRET_W = mobile ? 1170 : 2874;
       // the track: all scroll positions are measured on it (the section is sticky)
       var piste = section.parentElement;
       var libre = false;        // sequence over: spare height removed, scroll free
@@ -443,8 +450,8 @@
       // accessibility: visitor refuses animations -> plain video with controls
       // (the only case where the mp4 is loaded)
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        video.src = section.getAttribute('data-video');
-        video.poster = section.getAttribute('data-poster');
+        video.src = attr('video');
+        video.poster = attr('poster');
         video.preload = 'metadata';
         video.controls = true;
         section.classList.add('demo-steps--video');
@@ -454,15 +461,17 @@
 
       // 12 states; between two consecutive states, a frame sequence.
       // SEGMENTS = frame count of each transition (files t{ss}-{fff}.webp): goes with the files
-      var SEGMENTS = [18, 23, 22, 18, 12, 20, 22, 22, 22, 22, 20];
-      var CADENCE = 28;         // frames drawn per second (sequence sampled at 16 fps -> ~1.75x real time)
+      var SEGMENTS = mobile ? [7, 19, 17, 14, 12, 21, 19, 21, 19, 19, 6]
+                            : [18, 23, 22, 18, 12, 20, 22, 22, 22, 22, 20];
+      // frames drawn per second (sequences sampled at 16 fps -> ~1.75x real time)
+      var CADENCE = 28;
       var SEUIL = 12;           // minimal gesture amplitude (deltaY)
       var ACCALMIE = 250;       // ms of calm required between two gestures (anti-inertia)
       var SORTIE = 500;         // ms of calm before giving the scroll back at the end
       var FIN = SEGMENTS.length;          // index of the last state
 
-      var gabaritSeq = section.getAttribute('data-sequence');
-      var gabaritArr = section.getAttribute('data-arrets');
+      var gabaritSeq = attr('sequence');
+      var gabaritArr = attr('arrets');
       function ch2(n) { return ('0' + n).slice(-2); }
       function ch3(n) { return ('00' + n).slice(-3); }
 
@@ -614,15 +623,15 @@
       var fondDessine = -1;   // last still painted in the canvas
 
       // the canvas is sized to the screen pixels it covers (between the
-      // frames' 1916 px and the stills' 2874 px): the browser then hardly
+      // frames' width and the stills' width): the browser then hardly
       // rescales it. Shown as an <img>, the 2874 px still was shrunk 2x or
       // more by the GPU, which blurs it (sharp again during transitions).
       function ajuste() {
         var w = Math.round(toile.clientWidth * (window.devicePixelRatio || 1));
-        w = Math.max(1916, Math.min(2874, w));
+        w = Math.max(SEQ_W, Math.min(ARRET_W, w));
         if (toile.width === w) return;
         toile.width = w;
-        toile.height = Math.round(w * 1028 / 1916);
+        toile.height = Math.round(w * SEQ_H / SEQ_W);
         pinceau.imageSmoothingQuality = 'high';
         fondDessine = -1;       // resizing clears the canvas: repaint the still
       }
