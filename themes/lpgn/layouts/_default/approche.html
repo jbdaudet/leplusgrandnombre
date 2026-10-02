@@ -48,7 +48,7 @@
   {{- with .Params.etapes }}
   <section class="mission">
     <h2 class="approche__h2 reveal">{{ $.Params.mission_titre }}</h2>
-    {{- with $.Params.mission_intro }}<p class="mission__intro reveal">{{ . }}</p>{{ end }}
+    {{- with $.Params.mission_intro }}<p class="mission__intro reveal">{{ . | safeHTML }}</p>{{ end }}
     <ol class="mission__etapes">
       {{- range $i, $e := . }}
       <li class="etape reveal reveal--delay-{{ add $i 1 }}">

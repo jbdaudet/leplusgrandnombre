@@ -26,7 +26,7 @@ principes:
 
 # 5. A mission over time
 mission_titre: "Comment ça se passe"
-mission_intro: "Pas de produit miracle qui marche pour tout le monde. Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs."
+mission_intro: "Pas de produit miracle qui marche pour tout le monde.<br>Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs."
 etapes:
   - temps: "30 minutes"
     titre: "On regarde votre situation"
