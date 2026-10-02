@@ -1,6 +1,6 @@
 ---
 title: "Mon approche"
-description: "L'expertise data des grands comptes, pour les entreprises qui n'ont pas d'équipe data. Ce que je crois, comment je travaille, et comment se passe une mission."
+description: "Ce que je crois, comment je travaille, et pourquoi ça change quelque chose."
 layout: "approche"
 
 # 1. The manifesto line, then the story behind the name

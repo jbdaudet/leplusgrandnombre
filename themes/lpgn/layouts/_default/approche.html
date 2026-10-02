@@ -10,6 +10,9 @@
   <header class="approche__tete">
     <p class="approche__label reveal">// {{ .Title }}</p>
     <h1 class="approche__manifeste reveal reveal--from-bottom">{{ .Params.manifeste }}</h1>
+    {{- with .Description }}
+    <p class="approche__sous-titre reveal">// {{ . }}</p>
+    {{- end }}
     <div class="approche__recit reveal reveal--delay-1">
       {{- range .Params.recit }}
       <p>{{ . }}</p>

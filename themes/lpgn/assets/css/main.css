@@ -4244,7 +4244,16 @@ pre.mermaid svg .cluster-label {
   letter-spacing: -0.03em;
   max-width: 18em;
   text-wrap: balance;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-5);
+}
+
+/* the page's own subtitle, as on the other pages */
+.approche__sous-titre {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-12);
 }
 
 .approche__recit {
