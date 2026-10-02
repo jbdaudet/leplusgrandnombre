@@ -1,0 +1,102 @@
+{{ define "main" }}
+{{/* "Mon approche", after the about page of Le Grand Continent: a manifesto
+     line, big figures, the principles, the questions clients come with, a
+     mission over time, then the call to action. Texts in the front matter of
+     content/about.md. Everything on the logo's axis, like "Points de vue". */}}
+{{- $rdv := site.Params.rdv -}}
+<div class="approche">
+
+  {{/* 1. Manifesto: the page name as a small label, the line as the title */}}
+  <header class="approche__tete">
+    <p class="approche__label reveal">// {{ .Title }}</p>
+    <h1 class="approche__manifeste reveal reveal--from-bottom">{{ .Params.manifeste }}</h1>
+    <div class="approche__recit reveal reveal--delay-1">
+      {{- range .Params.recit }}
+      <p>{{ . }}</p>
+      {{- end }}
+    </div>
+  </header>
+
+  {{/* 2. Big figures */}}
+  {{- with .Params.chiffres }}
+  <section class="chiffres" aria-label="En chiffres">
+    {{- range $i, $c := . }}
+    {{- $classe := printf "chiffre reveal reveal--delay-%d" (add (mod $i 3) 1) }}
+    {{- if $c.lien }}
+    <a class="{{ $classe }}" href="{{ $c.lien }}">
+      <span class="chiffre__valeur">{{ $c.valeur }}</span>
+      <span class="chiffre__legende">{{ $c.legende }}&nbsp;→</span>
+    </a>
+    {{- else }}
+    <div class="{{ $classe }}">
+      <span class="chiffre__valeur">{{ $c.valeur }}</span>
+      <span class="chiffre__legende">{{ $c.legende }}</span>
+    </div>
+    {{- end }}
+    {{- end }}
+  </section>
+  {{- end }}
+
+  {{/* 3. Principles, side by side */}}
+  {{- with .Params.principes }}
+  <section class="principes">
+    {{- range $i, $p := . }}
+    <article class="principe reveal reveal--delay-{{ add $i 1 }}">
+      <span class="principe__num">{{ printf "%02d" (add $i 1) }}</span>
+      <h2 class="principe__titre">{{ $p.titre }}</h2>
+      {{- range $p.texte }}
+      <p>{{ . }}</p>
+      {{- end }}
+    </article>
+    {{- end }}
+  </section>
+  {{- end }}
+
+  {{/* 4. The questions clients come with */}}
+  {{- with .Params.questions }}
+  <section class="questions">
+    <h2 class="approche__h2 reveal">{{ $.Params.questions_titre }}</h2>
+    <ul class="questions__liste">
+      {{- range . }}
+      <li class="reveal">{{ partial "titre-insecable.html" . }}</li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{/* 5. A mission over time: three steps on a line */}}
+  {{- with .Params.etapes }}
+  <section class="mission">
+    <h2 class="approche__h2 reveal">{{ $.Params.mission_titre }}</h2>
+    {{- with $.Params.mission_intro }}<p class="mission__intro reveal">{{ . }}</p>{{ end }}
+    <ol class="mission__etapes">
+      {{- range $i, $e := . }}
+      <li class="etape reveal reveal--delay-{{ add $i 1 }}">
+        <span class="etape__temps">{{ $e.temps }}</span>
+        <h3 class="etape__titre">{{ $e.titre }}</h3>
+        <p class="etape__texte">{{ $e.texte }}</p>
+        {{- with $e.lien }}
+        {{- $href := cond (eq . "rdv") $rdv . }}
+        {{- $externe := hasPrefix $href "http" }}
+        <a class="etape__lien" href="{{ $href }}"{{ if $externe }} target="_blank" rel="noopener noreferrer"{{ end }}{{ if hasSuffix $href ".pdf" }} download{{ end }}>{{ $e.lien_texte }}&nbsp;→</a>
+        {{- end }}
+      </li>
+      {{- end }}
+    </ol>
+  </section>
+  {{- end }}
+
+  {{/* 6. Call to action */}}
+  <section class="approche__fin reveal">
+    <h2 class="approche__h2">{{ .Params.fin_titre }}</h2>
+    {{- with .Params.fin_texte }}<p>{{ . }}</p>{{ end }}
+    <div class="approche__actions">
+      {{- with $rdv }}
+      <a href="{{ . }}" class="btn" target="_blank" rel="noopener noreferrer">Réserver 30 minutes&nbsp;→</a>
+      {{- end }}
+      <a href="/contact/" class="approche__ecrire">Ou m'écrire</a>
+    </div>
+  </section>
+
+</div>
+{{ end }}
