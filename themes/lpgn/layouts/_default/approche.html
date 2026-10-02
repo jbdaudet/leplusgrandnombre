@@ -1,17 +1,19 @@
 {{ define "main" }}
 {{/* "Mon approche", after the about page of Le Grand Continent: a manifesto
      line and the story behind the name, the convictions side by side, a
-     mission over time, then the call to action. Texts in the front matter of content/about.md.
-     Everything on the logo's axis, like "Points de vue". */}}
+     mission over time, then the call to action. Texts in the front matter of
+     content/about.md. Everything on the logo's axis, like "Points de vue".
+     Motion only on the manifesto (on load) and on the convictions and the
+     mission steps (on scroll, one after the other); the rest stays still. */}}
 {{- $rdv := site.Params.rdv -}}
 <div class="approche">
 
   {{/* 1. Manifesto: the page name as a small label, the line as the title */}}
   <header class="approche__tete">
-    <p class="approche__label reveal">// {{ .Title }}</p>
+    <p class="approche__label">// {{ .Title }}</p>
     <h1 class="approche__manifeste reveal reveal--from-bottom">{{ .Params.manifeste | safeHTML }}</h1>
     {{- /* framed with the L-bracket corners of the site's "Assembly" style */}}
-    <div class="approche__recit reveal reveal--delay-1">
+    <div class="approche__recit">
       <svg class="assembly__joint assembly__joint--tl" width="20" height="20" aria-hidden="true"><path d="M0 20 L0 0 L20 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
       <svg class="assembly__joint assembly__joint--tr" width="20" height="20" aria-hidden="true"><path d="M20 20 L20 0 L0 0" fill="none" stroke="currentColor" stroke-width="1"/></svg>
       <svg class="assembly__joint assembly__joint--bl" width="20" height="20" aria-hidden="true"><path d="M0 0 L0 20 L20 20" fill="none" stroke="currentColor" stroke-width="1"/></svg>
@@ -26,9 +28,9 @@
        and the page's subtitle */}}
   {{- with .Params.principes }}
   <section class="convictions">
-    <h2 class="approche__h2 reveal">{{ len . }} convictions</h2>
+    <h2 class="approche__h2">{{ len . }} convictions</h2>
     {{- with $.Description }}
-    <p class="approche__sous-titre reveal">// {{ . }}</p>
+    <p class="approche__sous-titre">// {{ . }}</p>
     {{- end }}
     <div class="principes">
       {{- range $i, $p := . }}
@@ -44,14 +46,14 @@
   </section>
   {{- end }}
 
-  {{/* 5. A mission over time: three steps on a line */}}
+  {{/* 3. A mission over time: three steps on a line */}}
   {{- with .Params.etapes }}
   <section class="mission">
-    <h2 class="approche__h2 reveal">{{ $.Params.mission_titre }}</h2>
+    <h2 class="approche__h2">{{ $.Params.mission_titre }}</h2>
     {{- with $.Params.mission_sous_titre }}
-    <p class="approche__sous-titre reveal">// {{ . }}</p>
+    <p class="approche__sous-titre">// {{ . }}</p>
     {{- end }}
-    {{- with $.Params.mission_intro }}<p class="mission__intro reveal">{{ . | safeHTML }}</p>{{ end }}
+    {{- with $.Params.mission_intro }}<p class="mission__intro">{{ . | safeHTML }}</p>{{ end }}
     <ol class="mission__etapes">
       {{- range $i, $e := . }}
       <li class="etape reveal reveal--delay-{{ add $i 1 }}">
@@ -69,8 +71,8 @@
   </section>
   {{- end }}
 
-  {{/* 6. Call to action */}}
-  <section class="approche__fin reveal">
+  {{/* 4. Call to action */}}
+  <section class="approche__fin">
     <h2 class="approche__h2">{{ .Params.fin_titre }}</h2>
     {{- with .Params.fin_texte }}<p>{{ . }}</p>{{ end }}
     <div class="approche__actions">
