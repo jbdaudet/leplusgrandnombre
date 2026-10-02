@@ -1,5 +1,5 @@
 ---
-title: "Mes convictions"
+title: "Mon approche"
 description: "Ce que je crois, comment je travaille, et pourquoi ça change quelque chose."
 showTableOfContents: false
 layout: "convictions"

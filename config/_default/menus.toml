@@ -4,7 +4,7 @@
   weight = 5
 
 [[main]]
-  name = "Mes convictions"
+  name = "Mon approche"
   pageRef = "about"
   weight = 10
 
