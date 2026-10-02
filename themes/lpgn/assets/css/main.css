@@ -4290,13 +4290,16 @@ pre.mermaid svg .cluster-label {
   gap: var(--space-12);
 }
 
+/* big outlined orange numbers, as in "Points de vue" */
 .principe__num {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-accent);
-  margin-bottom: var(--space-3);
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: 300;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-accent);
+  margin-bottom: var(--space-5);
 }
 
 .principe__titre {
