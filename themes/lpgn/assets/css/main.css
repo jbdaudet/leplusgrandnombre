@@ -1188,8 +1188,13 @@ th {
   color: var(--color-accent);
 }
 
+/* centred on the line of text rather than sitting on its baseline; middle
+   aligns on the lowercase letters, nudged up to the capitals and the "?" */
 .manifesto__cta {
   display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  top: -0.15em;
   margin-left: var(--space-3);
   padding: var(--space-2) var(--space-5);
   background: var(--color-text);
