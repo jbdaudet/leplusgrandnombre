@@ -31,13 +31,18 @@
 <meta property="og:url" content="{{ .Permalink }}">
 <meta property="og:site_name" content="{{ .Site.Title }}">
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
-<meta property="og:image" content="{{ .Site.BaseURL }}NN.png">
+{{- /* Share preview: the logo centred on a white 1200x630 card */ -}}
+{{- $og := resources.Get "img/logo_lpgn.png" -}}
+{{- $og = $og.Resize "x420" -}}
+{{- $og = $og.Filter (images.Padding 105 285 105 285 "#ffffff") -}}
+{{- $og = $og.Process "jpg q85 #ffffff" -}}
+<meta property="og:image" content="{{ $og.Permalink }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ .Title }}">
 {{ with $desc }}<meta name="twitter:description" content="{{ . }}">{{ end }}
-<meta name="twitter:image" content="{{ .Site.BaseURL }}NN.png">
+<meta name="twitter:image" content="{{ $og.Permalink }}">
 <meta name="twitter:domain" content="leplusgrandnombre.fr">
 
 <link rel="sitemap" type="application/xml" href="/sitemap.xml">
