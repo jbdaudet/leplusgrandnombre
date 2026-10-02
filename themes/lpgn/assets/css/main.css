@@ -4284,8 +4284,14 @@ pre.mermaid svg .cluster-label {
   margin-bottom: var(--space-24);
 }
 
-.convictions .approche__h2 {
+/* a section title with its // subtitle right below */
+.convictions .approche__h2,
+.mission .approche__h2 {
   margin-bottom: var(--space-3);
+}
+
+.mission .approche__sous-titre {
+  margin-bottom: var(--space-8);
 }
 
 .approche__sous-titre {
