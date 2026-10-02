@@ -12,7 +12,7 @@
     <h1 class="approche__manifeste reveal reveal--from-bottom">{{ .Params.manifeste }}</h1>
     <div class="approche__recit reveal reveal--delay-1">
       {{- range .Params.recit }}
-      <p>{{ . }}</p>
+      <p>{{ . | safeHTML }}</p>
       {{- end }}
     </div>
   </header>
