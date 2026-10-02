@@ -691,17 +691,27 @@ th {
   opacity: 1;
 }
 
-/* the LinkedIn logo before the word, on the same line */
-.site-footer__link--linkedin {
+/* an icon before the word (LinkedIn, cookies), on the same line,
+   taking the link colour so it turns orange on hover too */
+.site-footer__link--icone {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
 }
 
-.site-footer__link--linkedin svg {
+.site-footer__link--icone svg {
   width: 1em;
   height: 1em;
   fill: currentColor;
+}
+
+/* line icons: drawn with a stroke instead of a fill */
+.site-footer__link--icone svg.icone-trait {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ============================================================
