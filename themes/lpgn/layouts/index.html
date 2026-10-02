@@ -24,7 +24,7 @@
      Hugo; question tiles link to the matching case. */}}
 {{- with .Site.Data.mosaique }}
 <section class="mosaique" aria-label="Les questions qu'on nous pose">
-  {{- range .cases }}
+  {{- range $i, $case := .cases }}
   {{- $classe := printf "mosaique__case mosaique__case--%s%s" .type (cond (default false .large) " mosaique__case--large" "") }}
   {{- if eq .type "question" }}
   <a class="{{ $classe }}" href="{{ .lien }}" style="--fond: {{ .fond | safeCSS }}">
@@ -35,13 +35,24 @@
   {{- $alt := .alt }}
   <div class="{{ $classe }}">
     {{- with .image }}{{ with resources.Get . }}
-    {{- /* square visuals, edge to edge: squared off, never upscaled */}}
+    {{- /* square visuals, edge to edge. Fine charts blur when shrunk: one
+         Lanczos resize per likely tile width (never upscaled), so that the
+         browser picks one within a few pixels and barely rescales it */}}
+    {{- $src := . }}
     {{- $c := cond (lt .Width .Height) .Width .Height }}
-    {{- $grand := cond (lt $c 1200) $c 1200 }}
-    {{- $a := .Fill "600x600 Center webp q85" }}
-    {{- $b := .Fill (printf "%dx%d Center webp q85" $grand $grand) }}
-    <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 600w, {{ $b.RelPermalink }} {{ $b.Width }}w"
-         sizes="(min-width: 900px) 25vw, 50vw" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ $alt }}" loading="lazy">
+    {{- $tailles := slice }}
+    {{- range slice 320 400 480 560 640 720 800 900 1000 1100 1200 }}{{ if le . $c }}{{ $tailles = $tailles | append . }}{{ end }}{{ end }}
+    {{- if lt (index (last 1 $tailles) 0) $c }}{{ $tailles = $tailles | append $c }}{{ end }}
+    {{- $set := slice }}{{ $defaut := "" }}
+    {{- range $tailles }}
+    {{- $v := $src.Fill (printf "%dx%d Center Lanczos webp q92" . .) }}
+    {{- $set = $set | append (printf "%s %dw" $v.RelPermalink .) }}
+    {{- if eq . 640 }}{{ $defaut = $v }}{{ end }}
+    {{- end }}
+    {{- if not $defaut }}{{ $defaut = $src.Fill (printf "%dx%d Center Lanczos webp q92" $c $c) }}{{ end }}
+    <img src="{{ $defaut.RelPermalink }}" srcset="{{ delimit $set ", " }}"
+         sizes="(min-width: 900px) calc((100vw - 30px) / 4), {{ if eq $i 1 }}100vw{{ else }}calc((100vw - 10px) / 2){{ end }}"
+         width="{{ $defaut.Width }}" height="{{ $defaut.Height }}" alt="{{ $alt }}" loading="lazy">
     {{- end }}{{ end }}
   </div>
   {{- end }}
