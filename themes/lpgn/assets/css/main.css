@@ -2324,6 +2324,12 @@ a.etapes__item.is-active:hover {
   color: var(--color-text);
 }
 
+/* LinkedIn after the contact link, in grey */
+.fondateur__cta--second {
+  margin-left: var(--space-6);
+  color: var(--color-text-tertiary);
+}
+
 /* the collage: photo and cards share a 12-column grid and overlap */
 .fondateur__collage {
   display: grid;

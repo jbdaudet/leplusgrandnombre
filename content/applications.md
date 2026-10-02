@@ -73,7 +73,7 @@ Deux moteurs distincts — un chatbot qui pense comme le coach, et un outil de r
 
 Un chatbot classique (RAG) fonctionne ainsi : l'utilisateur pose une question → on cherche les passages similaires dans le corpus → on les envoie à l'IA pour formuler une réponse. **Le problème** : si le coach n'a jamais écrit sur le sujet, il n'y a rien à retrouver.
 
-Notre approche ajoute une **couche structurelle** entre le corpus brut et le chatbot :
+Mon approche ajoute une **couche structurelle** entre le corpus brut et le chatbot :
 
 {{< mermaid >}}
 flowchart TB

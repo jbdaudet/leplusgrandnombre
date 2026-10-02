@@ -1,6 +1,6 @@
 ---
-title: "Nos convictions"
-description: "Ce qu'on croit, comment on travaille, et pourquoi ça change quelque chose."
+title: "Mes convictions"
+description: "Ce que je crois, comment je travaille, et pourquoi ça change quelque chose."
 showTableOfContents: false
 layout: "convictions"
 ---
@@ -15,11 +15,11 @@ La data et l'IA sont des outils formidables. Mais un outil mal orienté produit 
 
 Chaque entreprise a son marché, sa culture, ses contraintes, son vocabulaire. Un artisan menuisier ne pense pas comme un coach, qui ne pense pas comme un stratège de marque.
 
-Notre travail commence toujours par là : écouter vos envies, comprendre votre métier, identifier ce qui coince. La solution technique vient après, et elle est toujours différente, parce que le contexte l'est aussi.
+Mon travail commence toujours par là : écouter vos envies, comprendre votre métier, identifier ce qui coince. La solution technique vient après, et elle est toujours différente, parce que le contexte l'est aussi.
 
 ## La data au service du projet, pas l'inverse
 
-On ne vend pas de la data science. On ne vend pas de l'IA. On utilise ces outils quand ils sont le bon levier pour résoudre un problème concret :
+Je ne vends pas de la data science. Je ne vends pas de l'IA. J'utilise ces outils quand ils sont le bon levier pour résoudre un problème concret :
 
 - Croiser des données publiques pour **objectiver une décision d'implantation**
 - Analyser un corpus de 918 documents pour **capturer la voix d'un expert**
@@ -27,13 +27,13 @@ On ne vend pas de la data science. On ne vend pas de l'IA. On utilise ces outils
 - Fouiller l'actualité pour **trouver l'angle créatif qui résonne**
 - Rendre des données mondiales accessibles **en langage naturel**
 
-Cinq envies différentes, cinq secteurs différents, cinq approches différentes. Le point commun : à chaque fois, on a commencé par comprendre le contexte avant de toucher au code.
+Cinq envies différentes, cinq secteurs différents, cinq approches différentes. Le point commun : à chaque fois, j'ai commencé par comprendre le contexte avant de toucher au code.
 
 ## Pas de solution générique
 
-On ne croit pas au produit miracle qui marche pour tout le monde. On croit à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
+Je ne crois pas au produit miracle qui marche pour tout le monde. Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
-Nos [applications](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
+Mes [applications](/applications/) le prouvent : les mêmes compétences s'appliquent à un artisan du bâtiment, à un coach, à une marque, à un analyste énergie. Ce qui change, c'est le cadre. Ce qui reste, c'est la méthode : écouter, comprendre, construire.
 
 ## Pourquoi "Le Plus Grand Nombre"
 

@@ -62,8 +62,9 @@
   "knowsLanguage": "fr",
   "serviceType": ["Data Analytics", "Marketing Intelligence", "AI Solutions"],
   "founder": {
-    "@type": "Organization",
-    "name": "Le Plus Grand Nombre"
+    "@type": "Person",
+    "name": "Jean-Baptiste Daudet"{{ with .Site.Params.linkedin }},
+    "sameAs": ["{{ . }}"]{{ end }}
   }
 }
 </script>
@@ -93,9 +94,10 @@
   "datePublished": "{{ .Date.Format "2006-01-02" }}",
   {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02" }}",{{ end }}
   "author": {
-    "@type": "Organization",
-    "name": "Le Plus Grand Nombre",
-    "url": "{{ .Site.BaseURL }}"
+    "@type": "Person",
+    "name": "Jean-Baptiste Daudet",
+    "url": "{{ .Site.BaseURL }}"{{ with .Site.Params.linkedin }},
+    "sameAs": ["{{ . }}"]{{ end }}
   },
   "publisher": {
     "@type": "Organization",
