@@ -24,7 +24,7 @@
      Hugo; question tiles link to the matching case. */}}
 {{- with .Site.Data.mosaique }}
 <section class="mosaique" aria-label="Les questions qu'on nous pose">
-  {{- range $i, $case := .cases }}
+  {{- range $case := .cases }}
   {{- $classe := printf "mosaique__case mosaique__case--%s%s" .type (cond (default false .large) " mosaique__case--large" "") }}
   {{- if eq .type "question" }}
   <a class="{{ $classe }}" href="{{ .lien }}" style="--fond: {{ .fond | safeCSS }}">
@@ -53,7 +53,7 @@
     {{- end }}
     {{- if not $defaut }}{{ $defaut = $src.Fill (printf "%dx%d Center Lanczos webp q92" $c $c) }}{{ end }}
     <img src="{{ $defaut.RelPermalink }}" srcset="{{ delimit $set ", " }}"
-         sizes="(min-width: 900px) calc((100vw - 30px) / 4), {{ if eq $i 1 }}100vw{{ else }}calc((100vw - 10px) / 2){{ end }}"
+         sizes="(min-width: 900px) calc((100vw - 30px) / 4), calc((100vw - 10px) / 2)"
          width="{{ $defaut.Width }}" height="{{ $defaut.Height }}" alt="{{ $alt }}" loading="lazy">
     {{- end }}{{ end }}
   </div>
