@@ -223,7 +223,7 @@
       <span class="fondateur__filet" aria-hidden="true"></span>
       <p class="fondateur__intro">{{ .intro }}</p>
       {{- with .cta }}
-      <a class="fondateur__cta" href="{{ .url }}">{{ .label }}</a>
+      <a class="fondateur__cta" href="{{ .url }}"{{ if hasPrefix .url "http" }} target="_blank" rel="noopener noreferrer me"{{ end }}>{{ .label }}</a>
       {{- end }}
       {{- with site.Params.linkedin }}
       <a class="fondateur__linkedin" href="{{ . }}" target="_blank" rel="noopener noreferrer me" aria-label="Mon profil LinkedIn">

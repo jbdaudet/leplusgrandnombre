@@ -6,7 +6,7 @@ nom: "Jean-Baptiste Daudet"
 intro: "20 ans à mettre la data au service du marketing, des deux côtés de la table : en agence (OgilvyOne, Proximity/TBWA) et chez l'annonceur (Louis Vuitton). Des projets dans le luxe, la grande conso, l'aérien, l'automobile, le retail, et aussi l'humanitaire et l'enseignement."
 cta:
   label: "Échanger avec moi"
-  url: "/contact/"
+  url: "https://www.linkedin.com/in/jbdaudet/"
 cartes:
   - titre: "Ce qui relie ces missions"
     texte: "Arriver sans recette, repartir avec un outil qui sert vraiment les équipes. Deux prix CB News en 2025."

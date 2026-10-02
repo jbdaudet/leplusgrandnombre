@@ -2330,12 +2330,12 @@ a.etapes__item.is-active:hover {
   color: var(--color-text);
 }
 
-/* LinkedIn icon after the contact link, in grey */
+/* LinkedIn icon after the contact link, same orange */
 .fondateur__linkedin {
   display: inline-block;
   margin-left: var(--space-5);
   vertical-align: middle;
-  color: var(--color-text-tertiary);
+  color: var(--color-accent);
   line-height: 0;
   transition: color var(--transition-base);
 }
