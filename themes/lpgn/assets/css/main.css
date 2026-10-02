@@ -691,6 +691,19 @@ th {
   opacity: 1;
 }
 
+/* the LinkedIn logo before the word, on the same line */
+.site-footer__link--linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.site-footer__link--linkedin svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
 /* ============================================================
    HOMEPAGE — HERO
    ============================================================ */
