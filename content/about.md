@@ -33,7 +33,7 @@ Le point commun : à chaque fois, une réponse chiffrée en euros, pour savoir q
 
 Je ne crois pas au produit miracle qui marche pour tout le monde. Je crois à la solution construite pour un contexte précis, et assez bien pensée pour que la logique soit réutilisable ailleurs.
 
-Je ne me contente pas de recommander : je construis les outils que je conseille. Plusieurs sont en ligne, et vous pouvez les [tester](/applications/). Chacun répond à une question différente, mais tous suivent la même méthode : écouter, comprendre, construire.
+C'est pour ça que tout commence par un diagnostic. Δelta fait ressortir les causes et les chiffre en euros. Ensuite, selon ce qui en ressort, je vous propose un accompagnement sur mesure pour mettre en place les solutions.
 
 ## Pourquoi "Le Plus Grand Nombre"
 
