@@ -1,8 +1,9 @@
 {{ define "main" }}
 {{/* "Mon approche", after the about page of Le Grand Continent: a manifesto
-     line, big figures, the principles, the questions clients come with, a
-     mission over time, then the call to action. Texts in the front matter of
-     content/about.md. Everything on the logo's axis, like "Points de vue". */}}
+     line and the story behind the name, a grey band announcing the
+     convictions, the convictions side by side, a mission over time, then the
+     call to action. Texts in the front matter of content/about.md.
+     Everything on the logo's axis, like "Points de vue". */}}
 {{- $rdv := site.Params.rdv -}}
 <div class="approche">
 
@@ -17,53 +18,29 @@
     </div>
   </header>
 
-  {{/* 2. Big figures */}}
-  {{- with .Params.chiffres }}
-  <section class="chiffres" aria-label="En chiffres">
-    {{- range $i, $c := . }}
-    {{- $classe := printf "chiffre reveal reveal--delay-%d" (add (mod $i 3) 1) }}
-    {{- if $c.lien }}
-    <a class="{{ $classe }}" href="{{ $c.lien }}">
-      <span class="chiffre__valeur">{{ $c.valeur }}</span>
-      <span class="chiffre__legende">{{ $c.legende }}&nbsp;→</span>
-    </a>
-    {{- else }}
-    <div class="{{ $classe }}">
-      <span class="chiffre__valeur">{{ $c.valeur }}</span>
-      <span class="chiffre__legende">{{ $c.legende }}</span>
-    </div>
-    {{- end }}
+  {{/* 2. Grey band: how many convictions, the page's subtitle beside them,
+       each under a rule; the convictions follow */}}
+  {{- with .Params.principes }}
+  <section class="bandeau">
+    <h2 class="bandeau__titre reveal">{{ len . }} convictions</h2>
+    {{- with $.Description }}
+    <p class="bandeau__texte reveal reveal--delay-1">// {{ . }}</p>
     {{- end }}
   </section>
   {{- end }}
 
-  {{/* 3. Principles, side by side, introduced by the page's subtitle */}}
-  {{- with .Description }}
-  <p class="approche__sous-titre reveal">// {{ . }}</p>
-  {{- end }}
+  {{/* 3. The convictions, side by side */}}
   {{- with .Params.principes }}
   <section class="principes">
     {{- range $i, $p := . }}
     <article class="principe reveal reveal--delay-{{ add $i 1 }}">
       <span class="principe__num">{{ printf "%02d" (add $i 1) }}</span>
-      <h2 class="principe__titre">{{ $p.titre }}</h2>
+      <h3 class="principe__titre">{{ $p.titre }}</h3>
       {{- range $p.texte }}
       <p>{{ . }}</p>
       {{- end }}
     </article>
     {{- end }}
-  </section>
-  {{- end }}
-
-  {{/* 4. The questions clients come with */}}
-  {{- with .Params.questions }}
-  <section class="questions">
-    <h2 class="approche__h2 reveal">{{ $.Params.questions_titre }}</h2>
-    <ul class="questions__liste">
-      {{- range . }}
-      <li class="reveal">{{ partial "titre-insecable.html" . }}</li>
-      {{- end }}
-    </ul>
   </section>
   {{- end }}
 

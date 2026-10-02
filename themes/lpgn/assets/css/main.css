@@ -4247,15 +4247,6 @@ pre.mermaid svg .cluster-label {
   margin-bottom: var(--space-10);
 }
 
-/* the page's own subtitle, as on the other pages, above the principles */
-.approche__sous-titre {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.08em;
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-10);
-}
-
 .approche__recit {
   display: grid;
   gap: var(--space-4);
@@ -4275,49 +4266,37 @@ pre.mermaid svg .cluster-label {
   margin-bottom: var(--space-8);
 }
 
-/* --- big figures: a grey band across the page --- */
-.chiffres {
+/* --- grey band across the page: how many convictions, the subtitle
+       beside them, each under a dark rule --- */
+.bandeau {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-8) var(--space-6);
-  margin: var(--space-20) calc(-1 * var(--axe));
+  gap: var(--space-8) var(--space-12);
+  margin: var(--space-20) calc(-1 * var(--axe)) var(--space-16);
   padding: var(--space-16) var(--axe);
   background: var(--color-surface);
 }
 
-.chiffre {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+.bandeau__titre,
+.bandeau__texte {
   padding-top: var(--space-4);
   border-top: 2px solid var(--color-text);
-  color: var(--color-text);
+  margin: 0;
 }
 
-a.chiffre:hover {
-  opacity: 1;
-  border-top-color: var(--color-accent);
-}
-
-a.chiffre:hover .chiffre__legende {
-  color: var(--color-accent);
-}
-
-.chiffre__valeur {
+.bandeau__titre {
   font-family: var(--font-heading);
   font-size: var(--text-4xl);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
-  white-space: nowrap;
 }
 
-.chiffre__legende {
+.bandeau__texte {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
+  line-height: 1.6;
   color: var(--color-text-secondary);
-  transition: color var(--transition-base);
 }
 
 /* --- principles: side by side, a small orange number on top --- */
@@ -4349,40 +4328,6 @@ a.chiffre:hover .chiffre__legende {
   font-size: var(--text-base);
   line-height: 1.65;
   color: var(--color-text-secondary);
-}
-
-/* --- the questions clients come with: big lines, an orange dash --- */
-.questions {
-  margin-bottom: var(--space-24);
-}
-
-.questions__liste {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: var(--space-5);
-  max-width: 48rem;
-}
-
-.questions__liste li {
-  position: relative;
-  padding-left: var(--space-10);
-  font-family: var(--font-heading);
-  font-size: var(--text-xl);
-  font-weight: 500;
-  line-height: 1.3;
-  color: var(--color-text);
-}
-
-.questions__liste li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.65em;
-  width: var(--space-6);
-  height: 2px;
-  background: var(--color-accent);
 }
 
 /* --- a mission over time: stacked on phones, a timeline on desktop --- */
@@ -4507,11 +4452,12 @@ a.chiffre:hover .chiffre__legende {
     column-gap: var(--space-12);
   }
 
-  .chiffres {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* the count on the left, the subtitle beside it */
+  .bandeau {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .chiffre__valeur {
+  .bandeau__titre {
     font-size: var(--text-5xl);
   }
 }

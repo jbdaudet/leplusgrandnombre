@@ -9,18 +9,6 @@ recit:
   - "Pendant 20 ans, j'ai mis la data au service du marketing de grands comptes : le luxe, l'aérien, l'automobile, la grande consommation. Ces entreprises ont des équipes data, des outils, des années d'historique. Elles savent ce que leur rapporte chaque euro dépensé. (En principe.)"
   - "Avec la digitalisation, votre marque a souvent autant de données, mais personne en interne pour les faire parler. C'est pour vous que j'ai créé Le Plus Grand Nombre.<br>Avec l'aide de l'IA, ce qui demandait une équipe et des temps longs, je le fais aujourd'hui en moins d'un mois."
 
-# 2. Big figures (only facts already public)
-chiffres:
-  - valeur: "20 ans"
-    legende: "de data au service du marketing"
-  - valeur: "2"
-    legende: "prix CB News en 2025"
-  - valeur: "< 1 mois"
-    legende: "pour un diagnostic Δelta"
-  - valeur: "5"
-    legende: "démos en ligne à tester"
-    lien: "/applications/"
-
 # 3. Principles
 principes:
   - titre: "Le problème n'est jamais technique"
@@ -35,15 +23,6 @@ principes:
     texte:
       - "Je ne vends pas de la data science. Je ne vends pas de l'IA. J'utilise ces outils quand ils sont le bon levier pour répondre à une question concrète."
       - "À chaque fois, une réponse chiffrée en euros, pour savoir quoi corriger en premier."
-
-# 4. The questions clients come with
-questions_titre: "Les questions auxquelles je réponds"
-questions:
-  - "Pourquoi mes ventes reculent alors que mon budget pub augmente ?"
-  - "Quelles dépenses rapportent vraiment, et lesquelles couper ?"
-  - "Où mes visiteurs décrochent-ils entre la première visite et l'achat ?"
-  - "Quels clients ne reviennent pas, et pourquoi ?"
-  - "Comment mettre ces réponses dans les mains de mes équipes, sans passer par un expert ?"
 
 # 5. A mission over time
 mission_titre: "Comment ça se passe"
