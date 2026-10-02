@@ -1,33 +1,34 @@
 # Mosaic between the hero and the manifesto: analysis visuals and the
 # questions clients ask, on square tiles (4 columns x 2 rows on desktop,
 # 2 columns on phones). Questions and visuals alternate like a chequerboard.
-# type: question | visuel ; fond: background colour.
-# Visuals: `image` (path under themes/lpgn/assets/), optional; a visual tile
-# without one stays an empty colour tile. Cropping options: `etapes` are
-# successive crops ("WxH anchor"), then a 3:2 fill anchored on `ancre`;
-# `inverse` flips a dark slide. Images are shown in monochrome, multiplied
-# onto the tile colour (tone on tone).
+# type: question | visuel ; fond: background colour of a question tile.
+# Visuals: `image` (path under themes/lpgn/assets/), square, shown edge to
+# edge on white, as is.
 cases:
   - type: question
     texte: "Pourquoi mes ventes stagnent alors que je dépense plus en pub ?"
     lien: "#demo"
     fond: "#c8643f"
   - type: visuel
-    fond: "#e3dccd"
+    image: "img/mosaique/visuel3.jpg"
+    alt: "Graphe des parcours de navigation vers l'achat"
   - type: question
     texte: "Où ouvrir ma prochaine boutique ?"
     lien: "/applications/#geomarketing"
     fond: "#1f2a3a"
   - type: visuel
-    fond: "#d6d4cf"
+    image: "img/mosaique/visuel4.jpg"
+    alt: "Carte des flux piétons estimés autour d'un emplacement"
   - type: visuel
-    fond: "#d6d4cf"
+    image: "img/mosaique/visuel1.jpg"
+    alt: "Frise des réglementations sur la protection des données et des taux de consentement"
   - type: question
     texte: "Quel message va vraiment toucher mes clients ?"
     lien: "/applications/#signal"
     fond: "#3b3340"
   - type: visuel
-    fond: "#e3dccd"
+    image: "img/mosaique/visuel2.jpg"
+    alt: "Enrichissement progressif des données clients et cercle vertueux CRM"
   - type: question
     texte: "Mes indicateurs m'aident-ils vraiment à décider ?"
     lien: "/applications/#theshiftproject"
