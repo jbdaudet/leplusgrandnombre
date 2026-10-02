@@ -4270,12 +4270,24 @@ pre.mermaid svg .cluster-label {
   color: var(--color-accent);
 }
 
+/* section titles: big, with the short thick orange rule of the home's
+   founder block below them */
 .approche__h2 {
   font-family: var(--font-heading);
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   margin-bottom: var(--space-8);
+}
+
+.approche__h2::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 4px;
+  margin-top: var(--space-5);
+  background: var(--color-accent);
 }
 
 /* --- convictions: a title like the mission's, the page's subtitle below --- */
@@ -4287,7 +4299,7 @@ pre.mermaid svg .cluster-label {
 /* a section title with its // subtitle right below */
 .convictions .approche__h2,
 .mission .approche__h2 {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
 }
 
 .mission .approche__sous-titre {
