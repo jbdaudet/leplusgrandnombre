@@ -4417,7 +4417,6 @@ pre.mermaid svg .cluster-label {
 .approche__fin p {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
-  max-width: 40rem;
   margin-bottom: var(--space-8);
 }
 
