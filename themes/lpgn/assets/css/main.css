@@ -4252,7 +4252,6 @@ pre.mermaid svg .cluster-label {
   position: relative;
   display: grid;
   gap: var(--space-4);
-  max-width: 68rem;
   padding: var(--space-8);
   border: 1px solid var(--color-border);
   transition: border-color var(--transition-base);
