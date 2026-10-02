@@ -44,5 +44,5 @@ etapes:
 
 # 6. Closing call to action
 fin_titre: "Parlons de votre situation"
-fin_texte: "Vos ventes stagnent, vos dépenses pub augmentent, ou vous avez simplement une question sur vos données ?"
+fin_texte: "Vous avez un problème, ou simplement une question sur vos données ? Sur l'IA ?"
 ---
