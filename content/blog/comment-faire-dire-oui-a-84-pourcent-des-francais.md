@@ -1,9 +1,10 @@
 ---
-title: "Soutenez-vous les forces de l'ordre ?"
+title: "Comment faire dire oui à 84 % des Français ?"
 date: 2026-10-21
+aliases: ["/blog/soutenez-vous-les-forces-de-l-ordre/"]
 draft: false
 citation: "La manière dont on pose la question, c'est déjà obtenir la réponse."   # quote on the poster beside the front page of "Points de vue"
-description: "84 % des Français soutiendraient les forces de l'ordre, selon un sondage CSA. Trois biais, de la capture de la donnée à la conclusion qu'on laisse au lecteur, montrent comment la question fabrique la réponse."
+description: "Trois biais, de la capture de la donnée à la conclusion qu'on laisse au lecteur, montrent comment la question fabrique la réponse."
 categories: ["data", "société"]
 ---
 
