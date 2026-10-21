@@ -18,4 +18,4 @@ categories: ["data", "société"]
 
 Mettons ça sur le compte de la maladresse des médias Bolloré (CSA, JDD, Europe 1 et CNews, qui ont commandé, mis en place et relayé ce sondage). Pour d'autres chiffres sur le regard des Français sur la police et les violences en manifestation, [c'est par ici](https://lnkd.in/ebuFyHin).
 
-Et aux étudiants qui descendent dans la rue, malgré l'inquiétude qu'un quart des Français ressentent désormais face aux forces de l'ordre (Ifop), je vous dis du fond du cœur, merci : mon fils a fait sa première rentrée cette année, et ce que vous arracherez par votre lutte, il n'aura pas à se battre pour l'obtenir.
+Merci aux étudiants qui descendent dans la rue, malgré l'inquiétude qu'un quart des Français ressentent désormais face aux forces de l'ordre (Ifop) : mon fils a fait sa première rentrée cette année, et ce que vous arracherez par votre lutte, il n'aura pas à se battre pour l'obtenir.
