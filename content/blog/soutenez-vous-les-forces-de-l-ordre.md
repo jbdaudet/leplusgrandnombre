@@ -7,7 +7,7 @@ description: "84 % des Français soutiendraient les forces de l'ordre, selon un 
 categories: ["data", "société"]
 ---
 
-« Selon un sondage CSA, 84 % des Français soutiennent les forces de l'ordre. » Vraiment ? La manière dont on pose la question, c'est déjà obtenir la réponse.
+« [Selon un sondage CSA, 84 % des Français soutiennent les forces de l'ordre.](https://www.lejdd.fr/Societe/sondage-84-des-francais-soutiennent-les-forces-de-lordre-186171) » Vraiment ? La manière dont on pose la question, c'est déjà obtenir la réponse.
 
 **Biais #1 : la capture de la donnée.** Tout a l'air irréprochable : échantillon de 1 010 personnes âgées de 18 ans et plus, corrigé selon le sexe, l'âge, la profession, la région, la taille de ville et le vote au premier tour de la présidentielle 2022. Mais la formulation exacte, c'est : « Soutenez-vous les forces de l'ordre (police et gendarmerie) ? », avec seulement oui ou non comme réponses possibles. On a oublié de donner aux sondés la possibilité de répondre « je n'ai pas d'opinion », « je suis partagé », « oui aux CRS, mais non à la police non formée à la gestion des foules », ou bien encore « est-ce vraiment la bonne question à se poser là maintenant ? ».
 
